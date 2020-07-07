@@ -1,0 +1,7 @@
+{
+  "name": "bokari",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ]
+}
