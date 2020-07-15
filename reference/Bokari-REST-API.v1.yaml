@@ -1,0 +1,98 @@
+openapi: 3.0.0
+info:
+  title: Bókari REST API
+  version: 1.0.0
+servers:
+  - url: 'http://localhost:3000'
+paths:
+  /:
+    get:
+      summary: API Server info
+      tags: []
+      responses: {}
+      operationId: get-info
+      security: []
+  /auth:
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses: {}
+      operationId: get-auth
+      security: []
+  /users:
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses: {}
+      operationId: get-users
+  '/users/{userId}':
+    parameters:
+      - schema:
+          type: string
+        name: userId
+        in: path
+        required: true
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses: {}
+      operationId: get-users-userId
+  '/projects/{projectId}':
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses: {}
+      operationId: get-contracts
+    parameters:
+      - schema:
+          type: string
+        name: projectId
+        in: path
+        required: true
+  /projects:
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses: {}
+      operationId: get-projects
+components:
+  schemas:
+    User:
+      title: User
+      type: object
+      x-examples: {}
+      properties:
+        id:
+          type: integer
+        username:
+          type: string
+        bio:
+          type: object
+          properties:
+            firstName:
+              type: string
+            lastName:
+              type: string
+            email:
+              type: string
+              format: email
+        preferences:
+          type: object
+          properties:
+            locale:
+              type: string
+              enum:
+                - en
+                - cs
+            theme:
+              type: string
+              enum:
+                - light
+                - dark
+  securitySchemes:
+    authToken:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+  - authToken: []

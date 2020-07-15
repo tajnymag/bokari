@@ -1,0 +1,78 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model addresses {
+  city_name     String
+  id            Int           @default(autoincrement()) @id
+  street_name   String
+  street_number String
+  zip           String
+  biographies   biographies[]
+}
+
+model biographies {
+  address_id Int?
+  email      String?
+  full_name  String
+  id         Int        @default(autoincrement()) @id
+  addresses  addresses? @relation(fields: [address_id], references: [id])
+  users      users[]
+}
+
+model company_settings {
+  id      Int    @id
+  locale  String @default("en")
+  logo_id Int
+  name    String
+  files   files  @relation(fields: [logo_id], references: [id])
+}
+
+model contract_assignees {
+  contract_id Int
+  user_id     Int
+
+  @@id([user_id, contract_id])
+}
+
+model contracts {
+  code                                       String
+  id                                         Int    @default(autoincrement()) @id
+  made_by_id                                 Int
+  responsible_user_id                        Int
+  users_contracts_made_by_idTousers          users  @relation("contracts_made_by_idTousers", fields: [made_by_id], references: [id])
+  users_contracts_responsible_user_idTousers users  @relation("contracts_responsible_user_idTousers", fields: [responsible_user_id], references: [id])
+}
+
+model files {
+  hash             String
+  id               Int                @default(autoincrement()) @id
+  name             String
+  uploaded_by_id   Int
+  users            users              @relation(fields: [uploaded_by_id], references: [id])
+  company_settings company_settings[]
+}
+
+model preferences {
+  id               Int     @default(autoincrement()) @id
+  preferred_locale String  @default("en")
+  users            users[]
+}
+
+model users {
+  biography_id                                   Int
+  id                                             Int         @default(autoincrement()) @id
+  password_hash                                  String
+  preferences_id                                 Int
+  username                                       String
+  biographies                                    biographies @relation(fields: [biography_id], references: [id])
+  preferences                                    preferences @relation(fields: [preferences_id], references: [id])
+  contracts_contracts_made_by_idTousers          contracts[] @relation("contracts_made_by_idTousers")
+  contracts_contracts_responsible_user_idTousers contracts[] @relation("contracts_responsible_user_idTousers")
+  files                                          files[]
+}

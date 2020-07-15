@@ -1,0 +1,33 @@
+@startuml
+
+skinparam linetype ortho
+
+class WorkLog {
+    from_date
+    to_date
+    note
+}
+WorkLog }o--|| Contract: done on >
+
+class Contract {
+    code
+    name
+    description
+    finished
+    created_date
+    start_date
+    deadline_date
+}
+
+class Expense {
+    description
+}
+Expense ||--|{ MonetaryValue: costs >
+Expense }o--|| Contract: spent on >
+
+class MonetaryValue {
+    amount
+    currency
+}
+
+@enduml
