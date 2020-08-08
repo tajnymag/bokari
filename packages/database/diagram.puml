@@ -1,33 +1,135 @@
 @startuml
 
-skinparam linetype ortho
+skinparam LineType zz
+skinparam nodesep 100
+skinparam ranksep 100
 
 class WorkLog {
-    from_date
-    to_date
+    * from_date
+    * to_date
     note
 }
-WorkLog }o--|| Contract: done on >
 
 class Contract {
-    code
-    name
+    * code
+    * name
     description
-    finished
-    created_date
-    start_date
-    deadline_date
+    * is_done
+    * created_date
+    * start_date
+    * deadline_date
 }
 
 class Expense {
-    description
+    * description
+    * amount
 }
-Expense ||--|{ MonetaryValue: costs >
-Expense }o--|| Contract: spent on >
 
-class MonetaryValue {
-    amount
-    currency
+class Currency {
+    * name
 }
+
+class Comment {
+    * content
+    * created_date
+}
+
+class OrgUser {
+    * name
+    * password_hash
+}
+
+class File {
+    * name
+    * extension
+    * hash
+}
+
+class OrgPermission {
+    * name
+    * bit
+}
+
+class OrgUserGroup {
+    * name
+}
+
+class Contact {
+    description
+    email
+    phone_number
+    * is_primary
+}
+
+class Address {
+    * city
+    * street
+    * zip_code
+    * state
+}
+
+class SubContract {
+    * deadline_date
+    * is_done
+    note
+}
+
+class Profession {
+    * name
+    * color
+}
+
+class Supplier {
+    name
+}
+
+class Client {
+    name
+}
+
+class Company {
+    name
+}
+
+class WorkType {
+    name
+}
+
+class WorkLevel {
+    name
+    deadline_date
+    is_done
+}
+
+class Wage {
+    amount
+    as_of_date
+}
+
+WorkLog }o--|| Contract: done on >
+Contract }o--|{ OrgUser: created by >
+Contract }o--|{ OrgUser: working on <
+Contract }|--|{ File: attached to <
+Expense }o--|| Contract: spent on >
+Expense }o--|| Currency: in currency >
+Comment }|--o| Contract: written under >
+Comment }o--|| OrgUser: written by >
+OrgUser }o..o| File: has file as avatar >
+OrgUser ||--o{ Contact: contact to the user >
+OrgUserGroup }|--o{ OrgUser: is in group <
+OrgUserGroup }o..o{ OrgPermission: gives permission >
+Contact }|--o| Address: physical address >
+SubContract }o..o{ File: attached to <
+SubContract ||--|{ Profession: falls under professions >
+SubContract }|--|| Supplier: responsible supplier >
+Supplier ||--|{ Contact: contact of <
+Client ||--|{ Contact: has contacts >
+Client ||--|{ Contract: client <
+Company ||--|{ Contact: has contacts >
+Supplier }o..o| Company: belongs to company >
+WorkType ||--|{ WorkLog: is of type <
+Contract }o--|{ WorkLevel: has these levels >
+Wage }o--|| Currency: in currency >
+Wage ||--|| OrgUser: has wage <
 
 @enduml

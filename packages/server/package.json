@@ -3,20 +3,29 @@
   "version": "0.0.0",
   "description": "The backend API of bokari",
   "main": "dist/index.js",
+  "scripts": {
+    "start": "node dist/index.js",
+    "build": "tsc",
+    "generate:schema": "prisma introspect && prisma-schema-transformer prisma/schema.prisma"
+  },
   "license": "MIT",
   "private": true,
   "dependencies": {
+    "@bokari/types": "^1.0.0",
     "@curveball/http-errors": "^0.3.0",
     "@koa/multer": "^3.0.0",
     "@koa/router": "^9.3.1",
-    "@prisma/client": "^2.2.0",
+    "@prisma/client": "^2.3.0",
     "argon2": "^0.26.2",
+    "class-validator": "^0.12.2",
     "koa": "^2.13.0",
     "koa-bodyparser": "^4.3.0"
   },
   "devDependencies": {
-    "@prisma/cli": "^2.2.0",
-    "prisma-schema-transformer": "^0.2.1",
+    "@prisma/cli": "^2.3.0",
+    "glob": "^7.1.6",
+    "prisma-schema-transformer": "^0.3.0",
+    "ts-node": "^8.10.2",
     "typescript": "^3.9.6"
   }
 }
