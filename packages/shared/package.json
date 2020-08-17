@@ -1,17 +1,19 @@
 {
-  "name": "@bokari/types",
+  "name": "@bokari/shared",
   "version": "1.0.0",
+  "private": true,
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
   "license": "MIT",
   "scripts": {
-    "build": "tsc --project tsconfig.cjs.json && tsc --project tsconfig.esm.json"
+    "build": "ttsc --project tsconfig.cjs.json && ttsc --project tsconfig.esm.json"
   },
   "devDependencies": {
+    "ttypescript": "^1.5.10",
     "typescript": "^3.9.7"
   },
   "dependencies": {
-    "class-validator": "^0.12.2"
+    "typescript-is": "^0.16.3"
   }
 }

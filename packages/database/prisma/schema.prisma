@@ -1,16 +1,23 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
 generator client {
   provider = "prisma-client-js"
+
+
 }
 
 model Address {
-  city      String
-  countryId Int       @map("country_id")
-  id        Int       @id @default(autoincrement())
-  state     String?
-  street    String
-  zip       String
-  country   Country   @relation(name: "addressesTocountries", fields: [countryId], references: [id])
-  contacts  Contact[] @relation(name: "addressesTocontacts")
+  id          Int       @id @default(autoincrement())
+  city        String
+  street      String
+  state       String?
+  zip         String
+  countryCode String    @map("country_code")
+  country     Country   @relation(name: "addressesTocountries", fields: [countryCode], references: [isoCode])
+  contacts    Contact[] @relation(name: "addressesTocontacts")
 
   @@map("addresses")
 
@@ -48,11 +55,11 @@ model Client {
 }
 
 model Comment {
-  authorId            Int                  @map("author_id")
+  id                  Int                  @id @default(autoincrement())
   content             String
   createdAt           DateTime?            @default(now()) @map("created_at")
-  id                  Int                  @id @default(autoincrement())
   updatedAt           DateTime?            @default(now()) @updatedAt @map("updated_at")
+  authorId            Int                  @map("author_id")
   user                User                 @relation(name: "commentsTousers", fields: [authorId], references: [id])
   contractComments    ContractComment[]    @relation(name: "commentsTocontract_comments")
   subcontractComments SubcontractComment[] @relation(name: "commentsTosubcontract_comments")
@@ -62,14 +69,14 @@ model Comment {
 }
 
 model Contact {
-  addressId      Int?            @map("address_id")
-  createdAt      DateTime?       @default(now()) @map("created_at")
   createdById    Int?            @map("created_by_id")
-  email          String?
-  id             Int             @id @default(autoincrement())
-  note           String?
-  phone          String?
   updatedById    Int?            @map("updated_by_id")
+  createdAt      DateTime?       @default(now()) @map("created_at")
+  id             Int             @id @default(autoincrement())
+  email          String?
+  phone          String?
+  note           String?
+  addressId      Int?            @map("address_id")
   address        Address?        @relation(name: "addressesTocontacts", fields: [addressId], references: [id])
   personContacts PersonContact[] @relation(name: "contactsToperson_contacts")
 
@@ -78,25 +85,25 @@ model Contact {
 }
 
 model ContactsChange {
-  addressId   Int?      @map("address_id")
-  createdAt   DateTime? @map("created_at")
-  createdById Int?      @map("created_by_id")
-  email       String?
-  id          Int
-  isDeleted   Boolean?  @default(false) @map("is_deleted")
   logId       Int       @id @default(autoincrement()) @map("log_id")
-  note        String?
-  phone       String?
   updatedAt   DateTime? @default(now()) @updatedAt @map("updated_at")
+  isDeleted   Boolean?  @default(false) @map("is_deleted")
+  createdById Int?      @map("created_by_id")
   updatedById Int?      @map("updated_by_id")
+  createdAt   DateTime? @map("created_at")
+  id          Int
+  email       String?
+  phone       String?
+  note        String?
+  addressId   Int?      @map("address_id")
 
   @@map("contacts_changes")
 
 }
 
 model ContractComment {
-  commentId  Int      @map("comment_id")
   contractId Int      @map("contract_id")
+  commentId  Int      @map("comment_id")
   comment    Comment  @relation(name: "commentsTocontract_comments", fields: [commentId], references: [id])
   contract   Contract @relation(name: "contract_commentsTocontracts", fields: [contractId], references: [id])
 
@@ -105,11 +112,11 @@ model ContractComment {
 }
 
 model ContractFile {
-  contractId  Int       @map("contract_id")
-  createdAt   DateTime? @default(now()) @map("created_at")
   createdById Int?      @map("created_by_id")
-  fileId      Int       @map("file_id")
   updatedById Int?      @map("updated_by_id")
+  createdAt   DateTime? @default(now()) @map("created_at")
+  contractId  Int       @map("contract_id")
+  fileId      Int       @map("file_id")
   contract    Contract  @relation(name: "contract_filesTocontracts", fields: [contractId], references: [id])
   file        File      @relation(name: "contract_filesTofiles", fields: [fileId], references: [id])
 
@@ -118,29 +125,29 @@ model ContractFile {
 }
 
 model ContractFilesChange {
-  contractId  Int       @map("contract_id")
-  createdAt   DateTime? @map("created_at")
-  createdById Int?      @map("created_by_id")
-  fileId      Int       @map("file_id")
-  isDeleted   Boolean?  @default(false) @map("is_deleted")
   logId       Int       @id @default(autoincrement()) @map("log_id")
   updatedAt   DateTime? @default(now()) @updatedAt @map("updated_at")
+  isDeleted   Boolean?  @default(false) @map("is_deleted")
+  createdById Int?      @map("created_by_id")
   updatedById Int?      @map("updated_by_id")
+  createdAt   DateTime? @map("created_at")
+  contractId  Int       @map("contract_id")
+  fileId      Int       @map("file_id")
 
   @@map("contract_files_changes")
 
 }
 
 model ContractLevel {
-  contractId        Int?               @map("contract_id")
-  createdAt         DateTime?          @default(now()) @map("created_at")
   createdById       Int?               @map("created_by_id")
-  deadlineAt        DateTime           @map("deadline_at")
+  updatedById       Int?               @map("updated_by_id")
+  createdAt         DateTime?          @default(now()) @map("created_at")
   id                Int                @id @default(autoincrement())
-  isDone            Boolean?           @default(false) @map("is_done")
+  contractId        Int?               @map("contract_id")
   levelId           Int?               @map("level_id")
   startAt           DateTime?          @default(now()) @map("start_at")
-  updatedById       Int?               @map("updated_by_id")
+  deadlineAt        DateTime           @map("deadline_at")
+  isDone            Boolean?           @default(false) @map("is_done")
   contract          Contract?          @relation(name: "contract_levelsTocontracts", fields: [contractId], references: [id])
   level             Level?             @relation(name: "contract_levelsTolevels", fields: [levelId], references: [id])
   subcontractLevels SubcontractLevel[] @relation(name: "contract_levelsTosubcontract_levels")
@@ -150,30 +157,30 @@ model ContractLevel {
 }
 
 model ContractLevelsChange {
-  contractId  Int?      @map("contract_id")
-  createdAt   DateTime? @map("created_at")
-  createdById Int?      @map("created_by_id")
-  deadlineAt  DateTime  @map("deadline_at")
-  id          Int
-  isDeleted   Boolean?  @default(false) @map("is_deleted")
-  isDone      Boolean?  @map("is_done")
-  levelId     Int?      @map("level_id")
   logId       Int       @id @default(autoincrement()) @map("log_id")
-  startAt     DateTime? @map("start_at")
   updatedAt   DateTime? @default(now()) @updatedAt @map("updated_at")
+  isDeleted   Boolean?  @default(false) @map("is_deleted")
+  createdById Int?      @map("created_by_id")
   updatedById Int?      @map("updated_by_id")
+  createdAt   DateTime? @map("created_at")
+  id          Int
+  contractId  Int?      @map("contract_id")
+  levelId     Int?      @map("level_id")
+  startAt     DateTime? @map("start_at")
+  deadlineAt  DateTime  @map("deadline_at")
+  isDone      Boolean?  @map("is_done")
 
   @@map("contract_levels_changes")
 
 }
 
 model Contractor {
-  businessId   Int?          @map("business_id")
-  createdAt    DateTime?     @default(now()) @map("created_at")
   createdById  Int?          @map("created_by_id")
+  updatedById  Int?          @map("updated_by_id")
+  createdAt    DateTime?     @default(now()) @map("created_at")
   id           Int           @id @default(autoincrement())
   personId     Int?          @map("person_id")
-  updatedById  Int?          @map("updated_by_id")
+  businessId   Int?          @map("business_id")
   business     Business?     @relation(name: "businessesTocontractors", fields: [businessId], references: [id])
   person       Person?       @relation(name: "contractorsTopeople", fields: [personId], references: [id])
   subcontracts Subcontract[] @relation(name: "contractorsTosubcontracts")
@@ -183,34 +190,34 @@ model Contractor {
 }
 
 model ContractorsChange {
-  businessId  Int?      @map("business_id")
-  createdAt   DateTime? @map("created_at")
-  createdById Int?      @map("created_by_id")
-  id          Int
-  isDeleted   Boolean?  @default(false) @map("is_deleted")
   logId       Int       @id @default(autoincrement()) @map("log_id")
-  personId    Int?      @map("person_id")
   updatedAt   DateTime? @default(now()) @updatedAt @map("updated_at")
+  isDeleted   Boolean?  @default(false) @map("is_deleted")
+  createdById Int?      @map("created_by_id")
   updatedById Int?      @map("updated_by_id")
+  createdAt   DateTime? @map("created_at")
+  id          Int
+  personId    Int?      @map("person_id")
+  businessId  Int?      @map("business_id")
 
   @@map("contractors_changes")
 
 }
 
 model Contract {
-  clientId          Int               @map("client_id")
-  code              String            @unique
-  createdAt         DateTime?         @default(now()) @map("created_at")
   createdById       Int?              @map("created_by_id")
-  deadlineAt        DateTime          @map("deadline_at")
-  description       String?
+  updatedById       Int?              @map("updated_by_id")
+  createdAt         DateTime?         @default(now()) @map("created_at")
   id                Int               @id @default(autoincrement())
-  isDone            Boolean?          @default(false) @map("is_done")
+  code              String            @unique
+  startAt           DateTime?         @default(now()) @map("start_at")
+  deadlineAt        DateTime          @map("deadline_at")
   name              String
+  description       String?
+  isDone            Boolean?          @default(false) @map("is_done")
   priceId           Int               @map("price_id")
   responsibleUserId Int               @map("responsible_user_id")
-  startAt           DateTime?         @default(now()) @map("start_at")
-  updatedById       Int?              @map("updated_by_id")
+  clientId          Int               @map("client_id")
   client            Client            @relation(name: "clientsTocontracts", fields: [clientId], references: [id])
   monetaryValue     MonetaryValue     @relation(name: "contractsTomonetary_values", fields: [priceId], references: [id])
   user              User              @relation(name: "contractsTousers", fields: [responsibleUserId], references: [id])
@@ -225,31 +232,29 @@ model Contract {
 }
 
 model ContractsChange {
-  clientId          Int       @map("client_id")
-  code              String
-  createdAt         DateTime? @map("created_at")
-  createdById       Int?      @map("created_by_id")
-  deadlineAt        DateTime  @map("deadline_at")
-  description       String?
-  id                Int
-  isDeleted         Boolean?  @default(false) @map("is_deleted")
-  isDone            Boolean?  @map("is_done")
   logId             Int       @id @default(autoincrement()) @map("log_id")
+  updatedAt         DateTime? @default(now()) @updatedAt @map("updated_at")
+  isDeleted         Boolean?  @default(false) @map("is_deleted")
+  createdById       Int?      @map("created_by_id")
+  updatedById       Int?      @map("updated_by_id")
+  createdAt         DateTime? @map("created_at")
+  id                Int
+  code              String
+  startAt           DateTime? @map("start_at")
+  deadlineAt        DateTime  @map("deadline_at")
   name              String
+  description       String?
+  isDone            Boolean?  @map("is_done")
   priceId           Int       @map("price_id")
   responsibleUserId Int       @map("responsible_user_id")
-  startAt           DateTime? @map("start_at")
-  updatedAt         DateTime? @default(now()) @updatedAt @map("updated_at")
-  updatedById       Int?      @map("updated_by_id")
+  clientId          Int       @map("client_id")
 
   @@map("contracts_changes")
 
 }
 
 model Country {
-  id        Int       @id @default(autoincrement())
-  name      String
-  shortName String    @map("short_name")
+  isoCode   String    @id @map("iso_code")
   addresses Address[] @relation(name: "addressesTocountries")
 
   @@map("countries")
@@ -257,9 +262,7 @@ model Country {
 }
 
 model Currency {
-  id             Int             @id @default(autoincrement())
-  name           String
-  shortName      String          @map("short_name")
+  isoCode        String          @id @map("iso_code")
   monetaryValues MonetaryValue[] @relation(name: "currenciesTomonetary_values")
 
   @@map("currencies")
@@ -267,11 +270,11 @@ model Currency {
 }
 
 model Expense {
+  id            Int           @id @default(autoincrement())
+  description   String
   amountId      Int           @map("amount_id")
   authorId      Int           @map("author_id")
   contractId    Int?          @map("contract_id")
-  description   String
-  id            Int           @id @default(autoincrement())
   monetaryValue MonetaryValue @relation(name: "expensesTomonetary_values", fields: [amountId], references: [id])
   user          User          @relation(name: "expensesTousers", fields: [authorId], references: [id])
   contract      Contract?     @relation(name: "contractsToexpenses", fields: [contractId], references: [id])
@@ -281,12 +284,15 @@ model Expense {
 }
 
 model File {
-  authorId         Int               @map("author_id")
-  createdAt        DateTime?         @default(now()) @map("created_at")
-  hash             String
   id               Int               @id @default(autoincrement())
   name             String
+  hash             String
+  blurhash         String?
+  createdAt        DateTime?         @default(now()) @map("created_at")
+  type             String
+  authorId         Int               @map("author_id")
   user             User              @relation(name: "filesTousers", fields: [authorId], references: [id])
+  mimeType         MimeType          @relation(name: "filesTomime_types", fields: [type], references: [name])
   contractFiles    ContractFile[]    @relation(name: "contract_filesTofiles")
   subcontractFiles SubcontractFile[] @relation(name: "filesTosubcontract_files")
 
@@ -305,8 +311,8 @@ model GroupPermission {
 }
 
 model GroupUser {
-  groupId Int   @map("group_id")
   userId  Int   @map("user_id")
+  groupId Int   @map("group_id")
   group   Group @relation(name: "group_usersTogroups", fields: [groupId], references: [id])
   user    User  @relation(name: "group_usersTousers", fields: [userId], references: [id])
 
@@ -334,20 +340,28 @@ model Level {
 }
 
 model LogTable {
-  isDeleted Boolean?  @default(false) @map("is_deleted")
   logId     Int       @id @default(autoincrement()) @map("log_id")
   updatedAt DateTime? @default(now()) @updatedAt @map("updated_at")
+  isDeleted Boolean?  @default(false) @map("is_deleted")
 
   @@map("log_table")
 
 }
 
+model MimeType {
+  name  String @id
+  files File[] @relation(name: "filesTomime_types")
+
+  @@map("mime_types")
+
+}
+
 model MonetaryValue {
+  id           Int           @id @default(autoincrement())
   amount       Float
   createdAt    DateTime      @map("created_at")
-  currencyId   Int           @map("currency_id")
-  id           Int           @id @default(autoincrement())
-  currency     Currency      @relation(name: "currenciesTomonetary_values", fields: [currencyId], references: [id])
+  currencyCode String        @map("currency_code")
+  currency     Currency      @relation(name: "currenciesTomonetary_values", fields: [currencyCode], references: [isoCode])
   contracts    Contract[]    @relation(name: "contractsTomonetary_values")
   expenses     Expense[]     @relation(name: "expensesTomonetary_values")
   subcontracts Subcontract[] @relation(name: "monetary_valuesTosubcontracts")
@@ -370,9 +384,9 @@ model Person {
 }
 
 model Permission {
-  bit              Int
   id               Int               @id @default(autoincrement())
   name             String            @unique
+  bit              Int
   groupPermissions GroupPermission[] @relation(name: "group_permissionsTopermissions")
 
   @@map("permissions")
@@ -380,8 +394,8 @@ model Permission {
 }
 
 model PersonContact {
-  contactId Int     @map("contact_id")
   personId  Int     @map("person_id")
+  contactId Int     @map("contact_id")
   contact   Contact @relation(name: "contactsToperson_contacts", fields: [contactId], references: [id])
   person    Person  @relation(name: "peopleToperson_contacts", fields: [personId], references: [id])
 
@@ -399,8 +413,8 @@ model Profession {
 }
 
 model SubcontractComment {
-  commentId     Int         @map("comment_id")
   subcontractId Int         @map("subcontract_id")
+  commentId     Int         @map("comment_id")
   comment       Comment     @relation(name: "commentsTosubcontract_comments", fields: [commentId], references: [id])
   subcontract   Subcontract @relation(name: "subcontract_commentsTosubcontracts", fields: [subcontractId], references: [id])
 
@@ -409,11 +423,11 @@ model SubcontractComment {
 }
 
 model SubcontractFile {
-  createdAt     DateTime?   @default(now()) @map("created_at")
   createdById   Int?        @map("created_by_id")
-  fileId        Int         @map("file_id")
-  subcontractId Int         @map("subcontract_id")
   updatedById   Int?        @map("updated_by_id")
+  createdAt     DateTime?   @default(now()) @map("created_at")
+  subcontractId Int         @map("subcontract_id")
+  fileId        Int         @map("file_id")
   file          File        @relation(name: "filesTosubcontract_files", fields: [fileId], references: [id])
   subcontract   Subcontract @relation(name: "subcontract_filesTosubcontracts", fields: [subcontractId], references: [id])
 
@@ -422,26 +436,26 @@ model SubcontractFile {
 }
 
 model SubcontractFilesChange {
-  createdAt     DateTime? @map("created_at")
-  createdById   Int?      @map("created_by_id")
-  fileId        Int       @map("file_id")
-  isDeleted     Boolean?  @default(false) @map("is_deleted")
   logId         Int       @id @default(autoincrement()) @map("log_id")
-  subcontractId Int       @map("subcontract_id")
   updatedAt     DateTime? @default(now()) @updatedAt @map("updated_at")
+  isDeleted     Boolean?  @default(false) @map("is_deleted")
+  createdById   Int?      @map("created_by_id")
   updatedById   Int?      @map("updated_by_id")
+  createdAt     DateTime? @map("created_at")
+  subcontractId Int       @map("subcontract_id")
+  fileId        Int       @map("file_id")
 
   @@map("subcontract_files_changes")
 
 }
 
 model SubcontractLevel {
-  contractLevelId Int?           @map("contract_level_id")
-  createdAt       DateTime?      @default(now()) @map("created_at")
   createdById     Int?           @map("created_by_id")
-  id              Int            @id @default(autoincrement())
-  subcontractId   Int?           @map("subcontract_id")
   updatedById     Int?           @map("updated_by_id")
+  createdAt       DateTime?      @default(now()) @map("created_at")
+  id              Int            @id @default(autoincrement())
+  contractLevelId Int?           @map("contract_level_id")
+  subcontractId   Int?           @map("subcontract_id")
   contractLevel   ContractLevel? @relation(name: "contract_levelsTosubcontract_levels", fields: [contractLevelId], references: [id])
   subcontract     Subcontract?   @relation(name: "subcontract_levelsTosubcontracts", fields: [subcontractId], references: [id])
   @@unique([contractLevelId, subcontractId])
@@ -450,32 +464,32 @@ model SubcontractLevel {
 }
 
 model SubcontractLevelsChange {
-  contractLevelId Int?      @map("contract_level_id")
-  createdAt       DateTime? @map("created_at")
-  createdById     Int?      @map("created_by_id")
-  id              Int
-  isDeleted       Boolean?  @default(false) @map("is_deleted")
   logId           Int       @id @default(autoincrement()) @map("log_id")
-  subcontractId   Int?      @map("subcontract_id")
   updatedAt       DateTime? @default(now()) @updatedAt @map("updated_at")
+  isDeleted       Boolean?  @default(false) @map("is_deleted")
+  createdById     Int?      @map("created_by_id")
   updatedById     Int?      @map("updated_by_id")
+  createdAt       DateTime? @map("created_at")
+  id              Int
+  contractLevelId Int?      @map("contract_level_id")
+  subcontractId   Int?      @map("subcontract_id")
 
   @@map("subcontract_levels_changes")
 
 }
 
 model Subcontract {
-  contractorId        Int                  @map("contractor_id")
-  createdAt           DateTime?            @default(now()) @map("created_at")
   createdById         Int?                 @map("created_by_id")
-  deadlineAt          DateTime             @map("deadline_at")
-  description         String?
-  id                  Int                  @id @default(autoincrement())
-  isDone              Boolean?             @default(false) @map("is_done")
-  name                String?
-  priceId             Int                  @map("price_id")
-  startAt             DateTime?            @default(now()) @map("start_at")
   updatedById         Int?                 @map("updated_by_id")
+  createdAt           DateTime?            @default(now()) @map("created_at")
+  id                  Int                  @id @default(autoincrement())
+  startAt             DateTime?            @default(now()) @map("start_at")
+  deadlineAt          DateTime             @map("deadline_at")
+  name                String?
+  description         String?
+  isDone              Boolean?             @default(false) @map("is_done")
+  priceId             Int                  @map("price_id")
+  contractorId        Int                  @map("contractor_id")
   contractor          Contractor           @relation(name: "contractorsTosubcontracts", fields: [contractorId], references: [id])
   monetaryValue       MonetaryValue        @relation(name: "monetary_valuesTosubcontracts", fields: [priceId], references: [id])
   subcontractComments SubcontractComment[] @relation(name: "subcontract_commentsTosubcontracts")
@@ -487,20 +501,20 @@ model Subcontract {
 }
 
 model SubcontractsChange {
-  contractorId Int       @map("contractor_id")
-  createdAt    DateTime? @map("created_at")
-  createdById  Int?      @map("created_by_id")
-  deadlineAt   DateTime  @map("deadline_at")
-  description  String?
-  id           Int
-  isDeleted    Boolean?  @default(false) @map("is_deleted")
-  isDone       Boolean?  @map("is_done")
   logId        Int       @id @default(autoincrement()) @map("log_id")
-  name         String?
-  priceId      Int       @map("price_id")
-  startAt      DateTime? @map("start_at")
   updatedAt    DateTime? @default(now()) @updatedAt @map("updated_at")
+  isDeleted    Boolean?  @default(false) @map("is_deleted")
+  createdById  Int?      @map("created_by_id")
   updatedById  Int?      @map("updated_by_id")
+  createdAt    DateTime? @map("created_at")
+  id           Int
+  startAt      DateTime? @map("start_at")
+  deadlineAt   DateTime  @map("deadline_at")
+  name         String?
+  description  String?
+  isDone       Boolean?  @map("is_done")
+  priceId      Int       @map("price_id")
+  contractorId Int       @map("contractor_id")
 
   @@map("subcontracts_changes")
 
@@ -508,9 +522,9 @@ model SubcontractsChange {
 
 model User {
   id           Int         @id @default(autoincrement())
+  username     String      @unique
   passwordHash String      @map("password_hash")
   personId     Int         @map("person_id")
-  username     String      @unique
   person       Person      @relation(name: "peopleTousers", fields: [personId], references: [id])
   comments     Comment[]   @relation(name: "commentsTousers")
   contracts    Contract[]  @relation(name: "contractsTousers")
@@ -524,12 +538,12 @@ model User {
 }
 
 model Wage {
-  createdAt     DateTime?     @default(now()) @map("created_at")
   createdById   Int?          @map("created_by_id")
-  employeeId    Int           @map("employee_id")
-  id            Int           @id @default(autoincrement())
   updatedById   Int?          @map("updated_by_id")
+  createdAt     DateTime?     @default(now()) @map("created_at")
+  id            Int           @id @default(autoincrement())
   wageId        Int           @map("wage_id")
+  employeeId    Int           @map("employee_id")
   user          User          @relation(name: "usersTowages", fields: [employeeId], references: [id])
   monetaryValue MonetaryValue @relation(name: "monetary_valuesTowages", fields: [wageId], references: [id])
 
@@ -538,13 +552,13 @@ model Wage {
 }
 
 model WorkLog {
-  contractId  Int?      @map("contract_id")
-  createdAt   DateTime? @default(now()) @map("created_at")
   createdById Int?      @map("created_by_id")
-  endedAt     DateTime  @map("ended_at")
+  updatedById Int?      @map("updated_by_id")
+  createdAt   DateTime? @default(now()) @map("created_at")
   id          Int       @id @default(autoincrement())
   startedAt   DateTime  @map("started_at")
-  updatedById Int?      @map("updated_by_id")
+  endedAt     DateTime  @map("ended_at")
+  contractId  Int?      @map("contract_id")
   contract    Contract? @relation(name: "contractsTowork_logs", fields: [contractId], references: [id])
 
   @@map("work_logs")
@@ -552,16 +566,16 @@ model WorkLog {
 }
 
 model WorkLogsChange {
-  contractId  Int?      @map("contract_id")
-  createdAt   DateTime? @map("created_at")
-  createdById Int?      @map("created_by_id")
-  endedAt     DateTime  @map("ended_at")
-  id          Int
-  isDeleted   Boolean?  @default(false) @map("is_deleted")
   logId       Int       @id @default(autoincrement()) @map("log_id")
-  startedAt   DateTime  @map("started_at")
   updatedAt   DateTime? @default(now()) @updatedAt @map("updated_at")
+  isDeleted   Boolean?  @default(false) @map("is_deleted")
+  createdById Int?      @map("created_by_id")
   updatedById Int?      @map("updated_by_id")
+  createdAt   DateTime? @map("created_at")
+  id          Int
+  startedAt   DateTime  @map("started_at")
+  endedAt     DateTime  @map("ended_at")
+  contractId  Int?      @map("contract_id")
 
   @@map("work_logs_changes")
 

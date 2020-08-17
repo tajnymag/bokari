@@ -1,5 +1,5 @@
 {
-  "name": "@bokari/ui",
+  "name": "@bokari/client",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -9,6 +9,7 @@
     "i18n:report": "vue-cli-service i18n:report --src './src/**/*.?(js|vue)' --locales '../locales/**/*.json'"
   },
   "dependencies": {
+    "@bokari/shared": "^1.0.0",
     "core-js": "^3.6.5",
     "material-design-icons-iconfont": "^5.0.1",
     "roboto-fontface": "*",

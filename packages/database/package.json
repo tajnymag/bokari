@@ -1,0 +1,24 @@
+{
+  "name": "@bokari/database",
+  "version": "1.0.0",
+  "private": true,
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/esm/index.d.ts",
+  "license": "MIT",
+  "scripts": {
+    "build": "yarn build:prisma && yarn build:ts",
+    "build:prisma": "yarn generate:schema && yarn generate:client",
+    "build:ts": "tsc --project tsconfig.cjs.json && tsc --project tsconfig.esm.json",
+    "generate:schema": "prisma introspect && prisma-schema-transformer prisma/schema.prisma",
+    "generate:client": "prisma generate"
+  },
+  "devDependencies": {
+    "@prisma/cli": "^2.4.1",
+    "prisma-schema-transformer": "^0.4.0",
+    "typescript": "^3.9.7"
+  },
+  "dependencies": {
+    "@prisma/client": "^2.4.1"
+  }
+}

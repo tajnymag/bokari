@@ -1,17 +1,18 @@
-import {PrismaClient} from '@prisma/client';
-import {validateOrReject} from 'class-validator';
-import {User} from "@bokari/types";
+require('dotenv').config();
 
-const prisma = new PrismaClient();
+import {isUser, User} from "@bokari/shared";
+import {DatabaseClient} from "@bokari/database";
+
+const db = new DatabaseClient();
 
 (async () => {
-	const user = new User();
-	Object.assign(user, { password: 'abc' })
+	await db.address.findOne({where: { id: 1 }});
+	const user: any = { password: 'abc' };
 
-	try {
-		await validateOrReject(user);
-	} catch(err) {
-		console.dir(err);
+	if (isUser(user)) {
+		console.log(user.password);
+	} else {
+		console.log(user.address);
 	}
 }
 )();
