@@ -22,7 +22,7 @@
     "koa-bodyparser": "^4.3.0"
   },
   "devDependencies": {
-    "@prisma/cli": "^2.3.0",
+    "@prisma/cli": "^2.4.1",
     "glob": "^7.1.6",
     "prisma-schema-transformer": "^0.3.0",
     "ts-node": "^8.10.2",

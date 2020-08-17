@@ -13,3 +13,5 @@ INSERT INTO contractors (created_by_id, updated_by_id, person_id, business_id) V
 
 UPDATE contractors SET business_id = 2 WHERE id = 1;
 UPDATE contractors SET business_id = 3 WHERE id = 1;
+
+INSERT INTO mime_types VALUES ()

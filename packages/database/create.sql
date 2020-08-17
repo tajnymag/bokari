@@ -46,15 +46,17 @@ CREATE TABLE businesses (
 );
 
 CREATE TABLE currencies (
-    id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    short_name text NOT NULL,
-    name text NOT NULL
+    iso_code text PRIMARY KEY CHECK (length(iso_code) = 3)
 );
+COMMENT ON COLUMN currencies.iso_code IS 'Code of the currency according to ISO 4217';
 
 CREATE TABLE countries (
-    id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    short_name text NOT NULL,
-    name text NOT NULL
+    iso_code text PRIMARY KEY CHECK (length(iso_code) = 2)
+);
+COMMENT ON COLUMN countries.iso_code IS 'Code of the country according to ISO 3166-1 Alpha-2';
+
+CREATE TABLE mime_types (
+    name text PRIMARY KEY CHECK (name ~ $$^\w+/\w+\Z$$)
 );
 
 CREATE TABLE addresses (
@@ -63,7 +65,7 @@ CREATE TABLE addresses (
     street text NOT NULL,
     state text,
     zip text NOT NULL,
-    country_id integer REFERENCES countries(id) NOT NULL
+    country_code text REFERENCES countries(iso_code) NOT NULL
 );
 
 CREATE TABLE groups (
@@ -141,7 +143,7 @@ CREATE TABLE monetary_values (
     id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     amount numeric NOT NULL,
     created_at timestamptz NOT NULL,
-    currency_id integer REFERENCES currencies(id) NOT NULL,
+    currency_code text REFERENCES currencies(iso_code) NOT NULL,
     CONSTRAINT positive_amount CHECK (amount > 0)
 );
 
@@ -184,7 +186,9 @@ CREATE TABLE files (
     id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     name text NOT NULL,
     hash text NOT NULL,
+    blurhash text,
     created_at timestamptz DEFAULT now(),
+    type text REFERENCES mime_types(name) NOT NULL,
     author_id integer REFERENCES users(id) NOT NULL
 );
 
