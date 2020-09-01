@@ -1,5 +1,8 @@
-import {Entity} from "./entity";
+import { Entity } from './entity';
 
+/**
+ * @tsoaModel
+ */
 export interface Address extends Entity {
 	city: string;
 	street: string;

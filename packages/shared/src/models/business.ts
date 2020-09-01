@@ -1,5 +1,5 @@
-import {Entity} from "./entity";
-import {Profession} from "./profession";
+import { Entity } from './entity';
+import { Profession } from './profession';
 
 export interface Business extends Entity {
 	name: string;

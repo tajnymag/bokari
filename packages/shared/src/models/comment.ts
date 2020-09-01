@@ -1,5 +1,5 @@
-import {User} from "./user";
-import {Entity} from "./entity";
+import { User } from './user';
+import { Entity } from './entity';
 
 export interface Comment extends Entity {
 	content: string;

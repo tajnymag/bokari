@@ -1,5 +1,5 @@
-import { Address } from "./address";
-import {Entity} from "./entity";
+import { Address } from './address';
+import { Entity } from './entity';
 
 export interface Contact extends Entity {
 	email?: string;

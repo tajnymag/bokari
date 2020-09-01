@@ -359,7 +359,7 @@ model MimeType {
 model MonetaryValue {
   id           Int           @id @default(autoincrement())
   amount       Float
-  createdAt    DateTime      @map("created_at")
+  createdAt    DateTime?     @default(now()) @map("created_at")
   currencyCode String        @map("currency_code")
   currency     Currency      @relation(name: "currenciesTomonetary_values", fields: [currencyCode], references: [isoCode])
   contracts    Contract[]    @relation(name: "contractsTomonetary_values")

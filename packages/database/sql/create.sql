@@ -142,7 +142,7 @@ CREATE TABLE business_professions (
 CREATE TABLE monetary_values (
     id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     amount numeric NOT NULL,
-    created_at timestamptz NOT NULL,
+    created_at timestamptz DEFAULT now(),
     currency_code text REFERENCES currencies(iso_code) NOT NULL,
     CONSTRAINT positive_amount CHECK (amount > 0)
 );
