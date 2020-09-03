@@ -11,6 +11,7 @@ export class UsersService {
 						name: user.name
 					}
 				},
+				passwordHash: '6c8a5cbf92f5e5942cdb6e5f1bd25fb0',
 				wages: {
 					create: {
 						createdById: 0,
