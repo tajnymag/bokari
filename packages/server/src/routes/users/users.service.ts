@@ -1,5 +1,5 @@
 import { User, UserInsertable } from '@bokari/shared';
-import { db } from '../../services/db';
+import { db } from '../../common/db';
 
 export class UsersService {
 	static async createUser(user: UserInsertable) {
