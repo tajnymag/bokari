@@ -1,3 +1,3 @@
-import { DatabaseClient } from '@bokari/database';
+import { PrismaClient } from '@bokari/database';
 
-export const db = new DatabaseClient();
+export const db = new PrismaClient();

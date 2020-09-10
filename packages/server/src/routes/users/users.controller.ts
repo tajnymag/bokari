@@ -1,5 +1,7 @@
 import { Body, Controller, Get, Path, Post, Query, Route, SuccessResponse } from 'tsoa';
-import { User } from '@bokari/shared';
+import { User, UserInsertable } from '@bokari/shared';
+
+import * as UserService from './users.service';
 
 @Route('users')
 export class UsersController extends Controller {
@@ -21,10 +23,9 @@ export class UsersController extends Controller {
 		};
 	}
 
-	@SuccessResponse('201', 'Created') // Custom success response
+	@SuccessResponse('201', 'Created')
 	@Post()
-	public async createUser(@Body() requestBody: Pick<User, 'name'>): Promise<void> {
-		this.setStatus(201); // set return status 201
-		return;
+	public async createUser(@Body() requestBody: UserInsertable): Promise<User> {
+		return UserService.createUser(requestBody);
 	}
 }
