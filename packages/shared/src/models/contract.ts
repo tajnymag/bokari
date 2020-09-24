@@ -6,6 +6,9 @@ import { File } from './file';
 import { Level } from './level';
 import { Subcontract } from './subcontract';
 
+/**
+ * @tsoaModel
+ */
 export interface Contract extends Entity {
 	code: string;
 	startAt: Date;

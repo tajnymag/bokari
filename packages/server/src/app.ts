@@ -5,7 +5,7 @@ import { errorHandler } from './middlewares/error-handler';
 
 const app = express();
 
-app.use(bodyParser.urlencoded());
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 RegisterRoutes(app);

@@ -1,5 +1,6 @@
 import { Response as ExResponse, Request as ExRequest, NextFunction } from 'express';
 import { ValidateError } from 'tsoa';
+import { HttpError, HttpProblem, isHttpError, isHttpProblem } from '@curveball/http-errors';
 
 export function errorHandler(
 	err: unknown,
@@ -12,6 +13,20 @@ export function errorHandler(
 		return res.status(422).json({
 			message: 'Validation Failed',
 			details: err?.fields
+		});
+	}
+
+	if (isHttpProblem(<Error>err)) {
+		const httpProblem = err as HttpProblem;
+		return res.status(httpProblem.httpStatus).json({
+			message: httpProblem.message
+		});
+	}
+
+	if (isHttpError(<Error>err)) {
+		const httpError = err as HttpError;
+		return res.status(httpError.httpStatus).json({
+			message: httpError.message
 		});
 	}
 
