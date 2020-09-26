@@ -412,6 +412,17 @@ model Profession {
 
 }
 
+model RefreshToken {
+  id        Int      @id @default(autoincrement())
+  token     String
+  userId    Int      @map("user_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  user      User     @relation(name: "refresh_tokensTousers", fields: [userId], references: [id])
+
+  @@map("refresh_tokens")
+
+}
+
 model SubcontractComment {
   subcontractId Int         @map("subcontract_id")
   commentId     Int         @map("comment_id")
@@ -521,17 +532,18 @@ model SubcontractsChange {
 }
 
 model User {
-  id           Int         @id @default(autoincrement())
-  username     String      @unique
-  passwordHash String      @map("password_hash")
-  personId     Int         @map("person_id")
-  person       Person      @relation(name: "peopleTousers", fields: [personId], references: [id])
-  comments     Comment[]   @relation(name: "commentsTousers")
-  contracts    Contract[]  @relation(name: "contractsTousers")
-  expenses     Expense[]   @relation(name: "expensesTousers")
-  files        File[]      @relation(name: "filesTousers")
-  groupUsers   GroupUser[] @relation(name: "group_usersTousers")
-  wages        Wage[]      @relation(name: "usersTowages")
+  id            Int            @id @default(autoincrement())
+  username      String         @unique
+  passwordHash  String         @map("password_hash")
+  personId      Int            @map("person_id")
+  person        Person         @relation(name: "peopleTousers", fields: [personId], references: [id])
+  comments      Comment[]      @relation(name: "commentsTousers")
+  contracts     Contract[]     @relation(name: "contractsTousers")
+  expenses      Expense[]      @relation(name: "expensesTousers")
+  files         File[]         @relation(name: "filesTousers")
+  groupUsers    GroupUser[]    @relation(name: "group_usersTousers")
+  refreshTokens RefreshToken[] @relation(name: "refresh_tokensTousers")
+  wages         Wage[]         @relation(name: "usersTowages")
 
   @@map("users")
 

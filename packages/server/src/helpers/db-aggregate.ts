@@ -1,3 +1,4 @@
+import { compareDesc } from 'date-fns';
 import { Address, Contact, User, MonetaryValue, Permission } from '@bokari/shared';
 import {
 	Address as AddressPayload,
@@ -6,7 +7,6 @@ import {
 	MonetaryValue as MonetaryValuePayload,
 	Permission as PermissionPayload
 } from '@bokari/database';
-import { query } from 'express';
 
 export function normalizeAddressQuery(queryResult: AddressPayload): Address {
 	return {
@@ -86,7 +86,7 @@ export function normalizeUserQuery(
 	}>
 ): User & { passwordHash: string } {
 	const wage = queryResult.wages
-		.sort((wa, wb) => wa.createdAt.valueOf() - wb.createdAt.valueOf())
+		.sort((wa, wb) => compareDesc(wa.createdAt, wb.createdAt))
 		.map((w) => normalizeMonetaryValueQuery(w.monetaryValue))[0];
 
 	const permissions = queryResult.groupUsers
