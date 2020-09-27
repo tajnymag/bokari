@@ -4,9 +4,17 @@
   "controllerPathGlobs": ["src/**/*.controller.ts"],
   "spec": {
     "outputDirectory": "openapi",
-    "specVersion": 3
+    "specVersion": 3,
+    "securityDefinitions": {
+      "jwt_access": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
   },
   "routes": {
+    "authenticationModule": "src/middlewares/authentication.ts",
     "routesDir": "src/generated"
   }
 }

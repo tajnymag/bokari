@@ -225,7 +225,13 @@
 				"$ref": "#/components/schemas/Pick_Required_User_.name-or-username-or-password-or-permissions-or-wage_"
 			}
 		},
-		"securitySchemes": {}
+		"securitySchemes": {
+			"jwt_access": {
+				"type": "http",
+				"scheme": "bearer",
+				"bearerFormat": "JWT"
+			}
+		}
 	},
 	"info": {
 		"title": "@bokari/server",
