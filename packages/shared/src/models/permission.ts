@@ -2,10 +2,10 @@
  * @tsoaModel
  */
 export enum Permission {
-	USERS_READ = 1,
-	USERS_WRITE = 2,
-	FINANCES_READ = 4,
-	FINANCES_WRITE = 8,
-	CONTRACTS_READ = 16,
-	CONTRACTS_WRITE = 32
+	USERS_READ = 'users_read',
+	USERS_WRITE = 'users_write',
+	FINANCES_READ = 'finances_read',
+	FINANCES_WRITE = 'finances_write',
+	CONTRACTS_READ = 'contracts_read',
+	CONTRACTS_WRITE = 'contracts_write'
 }

@@ -41,11 +41,11 @@ export function normalizeMonetaryValueQuery(queryResult: MonetaryValuePayload): 
 }
 
 export function normalizePermissionQuery(queryResult: PermissionPayload): Permission {
-	if (!Permission[queryResult.bit]) {
-		throw new RangeError(`Unknown permission bit for permission ${JSON.stringify(queryResult)}!`);
+	if (!Object.values(Permission).includes(queryResult.name as Permission)) {
+		throw new RangeError(`Unknown permission name for permission ${JSON.stringify(queryResult)}!`);
 	}
 
-	return queryResult.bit as Permission;
+	return queryResult.name as Permission;
 }
 
 export function normalizeUserQuery(
