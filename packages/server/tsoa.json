@@ -9,7 +9,16 @@
       "jwt_access": {
         "type": "http",
         "scheme": "bearer",
-        "bearerFormat": "JWT"
+        "bearerFormat": "JWT",
+        "flow": "implicit",
+        "scopes": {
+          "users_read": "",
+          "users_write": "",
+          "finances_read": "",
+          "finances_write": "",
+          "contracts_read": "",
+          "contracts_write": ""
+        }
       }
     }
   },

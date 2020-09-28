@@ -2,13 +2,18 @@ import * as jwt from 'jsonwebtoken';
 import { SignOptions } from 'jsonwebtoken';
 import { Permission, User } from '@bokari/shared';
 
-export interface AccessTokenPayload {
+export interface JwtPayload {
+	type: string;
 	user: Pick<User, 'id' | 'username'>;
+}
+
+export interface AccessTokenPayload extends JwtPayload {
+	type: 'access';
 	scopes: Permission[];
 }
 
-export interface RefreshTokenPayload {
-	user: Pick<User, 'id' | 'username'>;
+export interface RefreshTokenPayload extends JwtPayload {
+	type: 'refresh';
 }
 
 export function issueToken(

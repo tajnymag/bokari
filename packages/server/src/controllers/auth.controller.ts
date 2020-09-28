@@ -1,7 +1,8 @@
-import { Body, Controller, Post, Route, Header } from 'tsoa';
+import { Body, Controller, Post, Route, Request } from 'tsoa';
 import { InternalServerError, Unauthorized } from '@curveball/http-errors';
 import * as argon2 from 'argon2';
 
+import { Request as ExpressRequest } from 'express';
 import { db } from '../common/db';
 import { normalizePermissionQuery } from '../helpers/db-aggregate';
 import { issueToken, verifyToken, RefreshTokenPayload } from '../common/jwt';
@@ -25,7 +26,10 @@ export type RefreshResponse = Pick<LoginResponse, 'accessToken'>;
 @Route('auth')
 export class AuthController extends Controller {
 	@Post('login')
-	public async login(@Body() requestBody: LoginRequest): Promise<LoginResponse> {
+	public async login(
+		@Request() request: ExpressRequest,
+		@Body() requestBody: LoginRequest
+	): Promise<LoginResponse> {
 		const login = requestBody;
 
 		const user = await db.user.findOne({
@@ -71,7 +75,7 @@ export class AuthController extends Controller {
 		);
 
 		const tokenQueryResult = await db.refreshToken.create({
-			data: { user: { connect: { id: user.id } }, token: refreshToken }
+			data: { user: { connect: { id: user.id } }, token: refreshToken, ip: request.ip }
 		});
 
 		if (!tokenQueryResult) {
@@ -125,14 +129,6 @@ export class AuthController extends Controller {
 			{ user: { id: user.id, username: user.username }, scopes: permissions },
 			{ expiresIn: '15m' }
 		);
-
-		const tokenQueryResult = await db.refreshToken.create({
-			data: { user: { connect: { id: oldRefreshToken.user.id } }, token: newAccessToken }
-		});
-
-		if (!tokenQueryResult) {
-			throw new Error('Could not save refresh token to database!');
-		}
 
 		return {
 			accessToken: newAccessToken
