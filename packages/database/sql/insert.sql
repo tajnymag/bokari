@@ -31,6 +31,27 @@ VALUES (1, 'USERS_READ', 1),
        (5, 'CONTRACTS_READ', 16),
        (6, 'CONTRACTS_WRITE', 32);
 
+INSERT INTO groups (id, name)
+VALUES (1, 'Administrators'),
+       (2, 'Employee'),
+       (3, 'Accountants');
+
+INSERT INTO group_permissions (group_id, permission_id)
+VALUES (1, 1),
+       (1, 2),
+       (1, 3),
+       (1, 4),
+       (1, 5),
+       (1, 6),
+       (2, 5),
+       (2, 6),
+       (3, 3),
+       (3, 4);
+
+INSERT INTO group_users (user_id, group_id)
+VALUES (1, 1),
+       (2, 2);
+
 UPDATE contractors
 SET business_id = 2
 WHERE person_id = 3;

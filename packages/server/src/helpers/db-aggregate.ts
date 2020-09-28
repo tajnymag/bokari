@@ -41,7 +41,7 @@ export function normalizeMonetaryValueQuery(queryResult: MonetaryValuePayload): 
 }
 
 export function normalizePermissionQuery(queryResult: PermissionPayload): Permission {
-	if (!Object.values(Permission).includes(queryResult.name as Permission)) {
+	if (!Object.values(Permission).includes(queryResult.name.toLowerCase() as Permission)) {
 		throw new RangeError(`Unknown permission name for permission ${JSON.stringify(queryResult)}!`);
 	}
 

@@ -120,14 +120,14 @@
 			},
 			"Permission": {
 				"enum": [
-					1,
-					2,
-					4,
-					8,
-					16,
-					32
+					"users_read",
+					"users_write",
+					"finances_read",
+					"finances_write",
+					"contracts_read",
+					"contracts_write"
 				],
-				"type": "number"
+				"type": "string"
 			},
 			"MonetaryValue": {
 				"properties": {
@@ -229,7 +229,16 @@
 			"jwt_access": {
 				"type": "http",
 				"scheme": "bearer",
-				"bearerFormat": "JWT"
+				"bearerFormat": "JWT",
+				"flow": "implicit",
+				"scopes": {
+					"users_read": "",
+					"users_write": "",
+					"finances_read": "",
+					"finances_write": "",
+					"contracts_read": "",
+					"contracts_write": ""
+				}
 			}
 		}
 	},
@@ -302,6 +311,55 @@
 				}
 			}
 		},
+		"/users": {
+			"get": {
+				"operationId": "GetAllUsers",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/User"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": []
+			},
+			"post": {
+				"operationId": "CreateUser",
+				"responses": {
+					"201": {
+						"description": "Created",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/User"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UserInsertable"
+							}
+						}
+					}
+				}
+			}
+		},
 		"/users/{userId}": {
 			"get": {
 				"operationId": "GetUser",
@@ -329,35 +387,6 @@
 						}
 					}
 				]
-			}
-		},
-		"/users": {
-			"post": {
-				"operationId": "CreateUser",
-				"responses": {
-					"201": {
-						"description": "Created",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/User"
-								}
-							}
-						}
-					}
-				},
-				"security": [],
-				"parameters": [],
-				"requestBody": {
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/UserInsertable"
-							}
-						}
-					}
-				}
 			}
 		}
 	},

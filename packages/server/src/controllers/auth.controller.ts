@@ -1,11 +1,11 @@
 import { Body, Controller, Post, Route, Request } from 'tsoa';
-import { InternalServerError, Unauthorized } from '@curveball/http-errors';
+import { BadRequest, InternalServerError, Unauthorized } from '@curveball/http-errors';
 import * as argon2 from 'argon2';
-
 import { Request as ExpressRequest } from 'express';
+
 import { db } from '../common/db';
 import { normalizePermissionQuery } from '../helpers/db-aggregate';
-import { issueToken, verifyToken, RefreshTokenPayload } from '../common/jwt';
+import { issueToken, verifyToken } from '../common/jwt';
 
 export interface LoginRequest {
 	username: string;
@@ -66,11 +66,11 @@ export class AuthController extends Controller {
 			.flatMap((gp) => gp.map((p) => normalizePermissionQuery(p.permission)));
 
 		const accessToken = await issueToken(
-			{ user: { id: user.id, username: user.username }, scopes: permissions },
+			{ type: 'access', user: { id: user.id, username: user.username }, scopes: permissions },
 			{ expiresIn: '15m' }
 		);
 		const refreshToken = await issueToken(
-			{ user: { id: user.id, username: user.username } },
+			{ type: 'refresh', user: { id: user.id, username: user.username } },
 			{ expiresIn: '7d' }
 		);
 
@@ -90,12 +90,10 @@ export class AuthController extends Controller {
 
 	@Post('refresh_token')
 	public async refreshToken(@Body() requestBody: RefreshRequest): Promise<RefreshResponse> {
-		let oldRefreshToken: RefreshTokenPayload | null = null;
+		const oldRefreshToken = await verifyToken(requestBody.refreshToken);
 
-		try {
-			oldRefreshToken = await verifyToken(requestBody.refreshToken);
-		} catch (e) {
-			throw new Unauthorized('Invalid refresh token!');
+		if (oldRefreshToken.type !== 'refresh') {
+			throw new BadRequest('Bad token provided!');
 		}
 
 		const user = await db.user.findOne({
@@ -126,7 +124,7 @@ export class AuthController extends Controller {
 			.flatMap((gp) => gp.map((p) => normalizePermissionQuery(p.permission)));
 
 		const newAccessToken = await issueToken(
-			{ user: { id: user.id, username: user.username }, scopes: permissions },
+			{ type: 'access', user: { id: user.id, username: user.username }, scopes: permissions },
 			{ expiresIn: '15m' }
 		);
 

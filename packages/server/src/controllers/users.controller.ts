@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Path, Post, Route, SuccessResponse } from 'tsoa';
+import { Body, Controller, Get, Path, Post, Query, Route, SuccessResponse } from 'tsoa';
 import { User } from '@bokari/shared';
 
 import { UserWhereUniqueInput } from '@bokari/database';
@@ -12,44 +12,68 @@ export type UserInsertable = Pick<
 	'name' | 'username' | 'password' | 'permissions' | 'wage'
 >;
 
+const RICH_USER_INCLUDE = {
+	wages: {
+		include: {
+			monetaryValue: true
+		}
+	},
+	person: {
+		include: {
+			personContacts: {
+				include: {
+					contact: {
+						include: {
+							address: true
+						}
+					}
+				}
+			}
+		}
+	},
+	groupUsers: {
+		include: {
+			group: {
+				include: {
+					groupPermissions: {
+						include: {
+							permission: true
+						}
+					}
+				}
+			}
+		}
+	}
+};
+
 @Route('users')
 export class UsersController extends Controller {
+	@Get()
+	public async getAllUsers(): Promise<User[]> {
+		const queryResult = await db.user.findMany({
+			include: {
+				...RICH_USER_INCLUDE
+			}
+		});
+
+		const users = queryResult ? queryResult?.map(normalizeUserQuery) : [];
+
+		return users.map((user) => ({
+			id: user.id,
+			name: user.name,
+			permissions: user.permissions,
+			contacts: user.contacts,
+			username: user.username,
+			wage: user.wage
+		}));
+	}
+
 	@Get('{userId}')
 	public async getUser(@Path() userId: number): Promise<User> {
 		const queryResult = await db.user.findOne({
 			where: { id: userId },
 			include: {
-				wages: {
-					include: {
-						monetaryValue: true
-					}
-				},
-				person: {
-					include: {
-						personContacts: {
-							include: {
-								contact: {
-									include: {
-										address: true
-									}
-								}
-							}
-						}
-					}
-				},
-				groupUsers: {
-					include: {
-						group: {
-							include: {
-								groupPermissions: {
-									include: {
-										permission: true
-									}
-								}
-							}
-						}
-					}
-				}
+				...RICH_USER_INCLUDE
 			}
 		});
 
