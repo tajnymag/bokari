@@ -415,6 +415,7 @@ model Profession {
 model RefreshToken {
   id        Int      @id @default(autoincrement())
   token     String
+  ip        String
   userId    Int      @map("user_id")
   createdAt DateTime @default(now()) @map("created_at")
   user      User     @relation(name: "refresh_tokensTousers", fields: [userId], references: [id])
