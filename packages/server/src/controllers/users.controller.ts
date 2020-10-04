@@ -95,9 +95,7 @@ export class UsersController extends Controller {
 
 	@SuccessResponse('201', 'Created')
 	@Post()
-	public async createUser(@Body() requestBody: UserInsertable): Promise<User> {
-		const user = requestBody;
-
+	public async createUser(@Body() user: UserInsertable): Promise<User> {
 		if (await this.existsUser({ username: user.username })) {
 			throw new Forbidden('A user with such username already exists!');
 		}
@@ -128,7 +126,7 @@ export class UsersController extends Controller {
 
 	private async existsUser(query: UserWhereUniqueInput): Promise<boolean> {
 		const foundId = await db.user.findOne({
-			where: { username: query.username },
+			where: query,
 			select: { id: true }
 		});
 
