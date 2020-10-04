@@ -1843,15 +1843,20 @@
   resolved "https://registry.yarnpkg.com/@prisma/ci-info/-/ci-info-2.1.2.tgz#3da64f54584bde0aaf4b42f298a6c63f025aeb3f"
   integrity sha512-RhAHY+wp6Nqu89Tp3zfUVkpGfqk4TfngeOWaMGgmhP7mB2ASDtOl8dkwxHmI8eN4edo+luyjPmbJBC4kST321A==
 
-"@prisma/cli@^2.4.1", "@prisma/cli@^2.7.0":
+"@prisma/cli@^2.4.1":
   version "2.7.1"
   resolved "https://registry.yarnpkg.com/@prisma/cli/-/cli-2.7.1.tgz#98f2cb434bb931341e6c6292c7bab601e5f842f8"
   integrity sha512-0uA+gWkNQ35DveVHDPltiTCTr4wcXtEhnPs463IEM+Xn8dTv9x0gtZiYHSuQM3t7uwlOxj1rurBsqSbiljynfQ==
 
-"@prisma/client@^2.7.0":
-  version "2.7.1"
-  resolved "https://registry.yarnpkg.com/@prisma/client/-/client-2.7.1.tgz#0a37ddff7fe80ae3a86dfa620c1141c8607be6c2"
-  integrity sha512-IEWDCuvIaQTira8/jAyf+uY+AuPPUFDIXMSN4zEA/gvoJv2woq7RmkaubS+NQVgDbbyOR6F3UcXLiFTYQDzZkQ==
+"@prisma/cli@^2.8.0":
+  version "2.8.0"
+  resolved "https://registry.yarnpkg.com/@prisma/cli/-/cli-2.8.0.tgz#919d7f66023affa76d14823212b62a8512cfd37d"
+  integrity sha512-Kg1C47d75jdEIMmJif8TMlv/2Ihx08E1qWp0euwoZhjd807HGnjgC9tJYjTfkdf+NMJSAUbvoPXKInEX0HoOMw==
+
+"@prisma/client@^2.8.0":
+  version "2.8.0"
+  resolved "https://registry.yarnpkg.com/@prisma/client/-/client-2.8.0.tgz#a0f7247786c9b6ee804437acf8215854c5eb3946"
+  integrity sha512-5+GzRTkPnmv4OEV2tB8kwQt/xLLxBR/daJBcMt6pnnonJvrREsu0tSTdz2LJNPaj3kTT0fSS/OaeGMMdfVYSpw==
   dependencies:
     pkg-up "^3.1.0"
 
@@ -1999,6 +2004,32 @@
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/@tootallnate/once/-/once-1.1.2.tgz#ccb91445360179a04e7fe6aff78c00ffc1eeaf82"
   integrity sha512-RbzJvlNzmRq5c3O09UipeuXno4tA1FE6ikOjxZK0tuxVv3412l64l5t1W5pj4+rJq9vpkm/kwiR07aZXnsKPxw==
+
+"@tsoa/cli@^3.3.0":
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/@tsoa/cli/-/cli-3.3.0.tgz#0c193e38da38af35c74c2b2c0af30ad6d686955a"
+  integrity sha512-hLvhNN0jYqXMnKlM/8SFd6cixP+UGlInPP19ogY1f8KF+IQYjlKldYjOcIPnUudCsycmBz5D8tQqvWP95ddsIA==
+  dependencies:
+    "@tsoa/runtime" "^3.3.0"
+    deepmerge "^4.2.2"
+    fs-extra "^8.1.0"
+    glob "^7.1.6"
+    handlebars "^4.7.6"
+    merge "^1.2.1"
+    minimatch "^3.0.4"
+    moment "^2.24.0"
+    typescript "^3.9.2"
+    validator "^12.2.0"
+    yamljs "^0.3.0"
+    yargs "^14.0.0"
+
+"@tsoa/runtime@^3.3.0":
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/@tsoa/runtime/-/runtime-3.3.0.tgz#9ebc0f31653a9833c7bfa6f87ef6118866366cc5"
+  integrity sha512-ZZXhQk/KaolHD3x8d1+oJx5Q0ylm2R29G9CXIzufaZ6FDM39Y0INZiW6ya/AxZOs65GsYvg6rv19cVkm/SgX0A==
+  dependencies:
+    moment "^2.24.0"
+    validator "^12.2.0"
 
 "@types/anymatch@*":
   version "1.3.1"
@@ -4125,11 +4156,6 @@ commander@~2.19.0:
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.19.0.tgz#f6198aa84e5b83c46054b94ddedbfed5ee9ff12a"
   integrity sha512-6tvAOO+D6OENvRAh524Dh9jcfKTYDQAqvqezbCW82xj5X0pSrcpxtvRKHLG0yBY6SD7PSDrJaj+0AiOcKVd1Xg==
 
-commandpost@^1.0.0:
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/commandpost/-/commandpost-1.4.0.tgz#89218012089dfc9b67a337ba162f15c88e0f1048"
-  integrity sha512-aE2Y4MTFJ870NuB/+2z1cXBhSBBzRydVVjzhFC4gtenEhpnj15yu0qptWGJsO9YGrcPZ3ezX8AWb1VA391MKpQ==
-
 commondir@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/commondir/-/commondir-1.0.1.tgz#ddd800da0c66127393cca5950ea968a3aaf1253b"
@@ -5146,16 +5172,6 @@ ecdsa-sig-formatter@1.0.11:
   integrity sha512-nagl3RYrbNv6kQkeJIpt6NJZy8twLB/2vtz6yN9Z4vRKHN4/QZJIEbqohALSgwKdnksuY3k5Addp5lg8sVoVcQ==
   dependencies:
     safe-buffer "^5.0.1"
-
-editorconfig@^0.15.0:
-  version "0.15.3"
-  resolved "https://registry.yarnpkg.com/editorconfig/-/editorconfig-0.15.3.tgz#bef84c4e75fb8dcb0ce5cee8efd51c15999befc5"
-  integrity sha512-M9wIMFx96vq0R4F+gRpY3o2exzb8hEj/n9S8unZtHSvYjibBp/iMufSzvmOcV/laG0ZtuTVGtiJggPOSW2r93g==
-  dependencies:
-    commander "^2.19.0"
-    lru-cache "^4.1.5"
-    semver "^5.6.0"
-    sigmund "^1.0.1"
 
 ee-first@1.1.1:
   version "1.1.1"
@@ -8096,7 +8112,7 @@ lower-case@^1.1.1:
   resolved "https://registry.yarnpkg.com/lower-case/-/lower-case-1.1.4.tgz#9a2cabd1b9e8e0ae993a4bf7d5875c39c42e8eac"
   integrity sha1-miyr0bno4K6ZOkv31YdcOcQujqw=
 
-lru-cache@^4.0.1, lru-cache@^4.1.2, lru-cache@^4.1.5:
+lru-cache@^4.0.1, lru-cache@^4.1.2:
   version "4.1.5"
   resolved "https://registry.yarnpkg.com/lru-cache/-/lru-cache-4.1.5.tgz#8bbe50ea85bed59bc9e33dcab8235ee9bcf443cd"
   integrity sha512-sWZlbEP2OsHNkXrMl5GYk/jKk70MBng6UU4YI/qGDYbgf6YbP4EvmqISbXCoJiRKs+1bSpFHVgQxvJ17F2li5g==
@@ -10946,11 +10962,6 @@ shelljs@^0.8.3:
     interpret "^1.0.0"
     rechoir "^0.6.2"
 
-sigmund@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/sigmund/-/sigmund-1.0.1.tgz#3ff21f198cad2175f9f3b781853fd94d0d19b590"
-  integrity sha1-P/IfGYytIXX587eBhT/ZTQ0ZtZA=
-
 signal-exit@^3.0.0, signal-exit@^3.0.2:
   version "3.0.3"
   resolved "https://registry.yarnpkg.com/signal-exit/-/signal-exit-3.0.3.tgz#a1410c2edd8f077b08b4e253c8eacfcaf057461c"
@@ -11924,23 +11935,13 @@ tslint@^5.20.1:
     tslib "^1.8.0"
     tsutils "^2.29.0"
 
-tsoa@^3.2.1:
-  version "3.2.1"
-  resolved "https://registry.yarnpkg.com/tsoa/-/tsoa-3.2.1.tgz#5ad50f6331a8c080dedb494858c43333e2a2324c"
-  integrity sha512-Liq5T84wzMw0wZ9pVlDHGN15m3E95caj1zzz7ZsTnFm6wrtO7pVDWLZFJ88nV+zRywPUsO9yzrwybhH86FQS9g==
+tsoa@^3.3.0:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/tsoa/-/tsoa-3.3.0.tgz#873212fb397f85aa7b72b2a2460472b6cf9766d2"
+  integrity sha512-1BB2aK0g9GcgZPKfmT1XWJ4dDaoqHig5r/+bHDd9kClbevaWc+OVu0WPx1TepUtj8jWxH7wsQT7G2LVJJq+Mvg==
   dependencies:
-    deepmerge "^4.2.2"
-    fs-extra "^8.1.0"
-    glob "^7.1.6"
-    handlebars "^4.7.6"
-    merge "^1.2.1"
-    minimatch "^3.0.4"
-    moment "^2.24.0"
-    typescript "^3.9.2"
-    typescript-formatter "^7.2.2"
-    validator "^12.2.0"
-    yamljs "^0.3.0"
-    yargs "^14.0.0"
+    "@tsoa/cli" "^3.3.0"
+    "@tsoa/runtime" "^3.3.0"
 
 tsutils@^2.29.0:
   version "2.29.0"
@@ -12029,14 +12030,6 @@ typedarray@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
-
-typescript-formatter@^7.2.2:
-  version "7.2.2"
-  resolved "https://registry.yarnpkg.com/typescript-formatter/-/typescript-formatter-7.2.2.tgz#a147181839b7bb09c2377b072f20f6336547c00a"
-  integrity sha512-V7vfI9XArVhriOTYHPzMU2WUnm5IMdu9X/CPxs8mIMGxmTBFpDABlbkBka64PZJ9/xgQeRpK8KzzAG4MPzxBDQ==
-  dependencies:
-    commandpost "^1.0.0"
-    editorconfig "^0.15.0"
 
 typescript-is@^0.16.3:
   version "0.16.3"
