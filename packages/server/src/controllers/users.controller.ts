@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Path, Post, Query, Route, SuccessResponse } from 'tsoa';
+import { Body, Controller, Get, Path, Post, Route, SuccessResponse } from 'tsoa';
 import { User } from '@bokari/shared';
 
 import { UserWhereUniqueInput } from '@bokari/database';
@@ -7,10 +7,10 @@ import * as argon2 from 'argon2';
 import { db } from '../common/db';
 import { normalizeUserQuery } from '../helpers/db-aggregate';
 
-export type UserInsertable = Pick<
-	Required<User>,
-	'name' | 'username' | 'password' | 'permissions' | 'wage'
->;
+export interface UserInsertable
+	extends Pick<Required<User>, 'name' | 'username' | 'password' | 'wage'> {
+	groups?: number[];
+}
 
 const RICH_USER_INCLUDE = {
 	wages: {
@@ -110,7 +110,16 @@ export class UsersController extends Controller {
 						name: user.name
 					}
 				},
-				passwordHash
+				passwordHash,
+				groupUsers: {
+					create: user?.groups?.map((groupId) => ({
+						group: {
+							connect: {
+								id: groupId
+							}
+						}
+					}))
+				}
 			},
 			include: {
 				person: true

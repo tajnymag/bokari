@@ -7,12 +7,12 @@ export class ContractsController extends Controller {
 	public async getAllContracts(): Promise<Contract[]> {
 		const rawContracts = await db.contract.findMany({
 			include: {
-				user: {
+				responsibleUser: {
 					include: {
 						person: true
 					}
 				},
-				monetaryValue: true,
+				price: true,
 				client: {
 					include: {
 						person: true
@@ -49,14 +49,14 @@ export class ContractsController extends Controller {
 			levels: [],
 			subcontracts: [],
 			price: {
-				createdAt: rc.monetaryValue.createdAt,
-				amount: rc.monetaryValue.amount,
-				currency: rc.monetaryValue.currencyCode
+				createdAt: rc.price.createdAt,
+				amount: rc.price.amount,
+				currency: rc.price.currencyCode
 			},
 			responsibleUser: {
 				id: rc.responsibleUserId,
-				username: rc.user.username,
-				name: rc.user.person.name
+				username: rc.responsibleUser.username,
+				name: rc.responsibleUser.person.name
 			},
 			client: { id: rc.client.id, name: rc.client.person.name }
 		}));

@@ -5,6 +5,8 @@ import { Permission, User } from '@bokari/shared';
 export interface JwtPayload {
 	type: string;
 	user: Pick<User, 'id' | 'username'>;
+	iat?: number;
+	exp?: number;
 }
 
 export interface AccessTokenPayload extends JwtPayload {

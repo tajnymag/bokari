@@ -1838,27 +1838,35 @@
   resolved "https://registry.yarnpkg.com/@phc/format/-/format-1.0.0.tgz#b5627003b3216dc4362125b13f48a4daa76680e4"
   integrity sha512-m7X9U6BG2+J+R1lSOdCiITLLrxm+cWlNI3HUFA92oLO77ObGNzaKdh8pMLqdZcshtkKuV84olNNXDfMc4FezBQ==
 
+"@prisma/bar@^0.0.0":
+  version "0.0.0"
+  resolved "https://registry.yarnpkg.com/@prisma/bar/-/bar-0.0.0.tgz#9daff159a1a09abf7665a8b6e40ddc1fdc1ed4f7"
+  integrity sha512-3nez9n/vMyAr4+nmqj6Xh3cGZbreYHr3RWX0vgtrFRpiN6otuCzL+9HW8MW/DfZNuFz5YyIdfwnRSPueUZPoWQ==
+
 "@prisma/ci-info@2.1.2":
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/@prisma/ci-info/-/ci-info-2.1.2.tgz#3da64f54584bde0aaf4b42f298a6c63f025aeb3f"
   integrity sha512-RhAHY+wp6Nqu89Tp3zfUVkpGfqk4TfngeOWaMGgmhP7mB2ASDtOl8dkwxHmI8eN4edo+luyjPmbJBC4kST321A==
+
+"@prisma/cli@^2.10.0":
+  version "2.10.0"
+  resolved "https://registry.yarnpkg.com/@prisma/cli/-/cli-2.10.0.tgz#a51baf3a38c9e12c7fec489b675c1d4efc8aff05"
+  integrity sha512-qJl891HvroM1oEWYeG8+h/JJ+wNi4MCyh7x+HAnmrIYGFW45QAsCWjHbn0mUuCSXCy3KwiN/iAwaY2Fr7ZNJEw==
+  dependencies:
+    "@prisma/bar" "^0.0.0"
+    "@prisma/engines" "2.10.0-16-af1ae11a423edfb5d24092a85be11fa77c5e499c"
 
 "@prisma/cli@^2.4.1":
   version "2.7.1"
   resolved "https://registry.yarnpkg.com/@prisma/cli/-/cli-2.7.1.tgz#98f2cb434bb931341e6c6292c7bab601e5f842f8"
   integrity sha512-0uA+gWkNQ35DveVHDPltiTCTr4wcXtEhnPs463IEM+Xn8dTv9x0gtZiYHSuQM3t7uwlOxj1rurBsqSbiljynfQ==
 
-"@prisma/cli@^2.8.0":
-  version "2.8.0"
-  resolved "https://registry.yarnpkg.com/@prisma/cli/-/cli-2.8.0.tgz#919d7f66023affa76d14823212b62a8512cfd37d"
-  integrity sha512-Kg1C47d75jdEIMmJif8TMlv/2Ihx08E1qWp0euwoZhjd807HGnjgC9tJYjTfkdf+NMJSAUbvoPXKInEX0HoOMw==
-
-"@prisma/client@^2.8.0":
-  version "2.8.0"
-  resolved "https://registry.yarnpkg.com/@prisma/client/-/client-2.8.0.tgz#a0f7247786c9b6ee804437acf8215854c5eb3946"
-  integrity sha512-5+GzRTkPnmv4OEV2tB8kwQt/xLLxBR/daJBcMt6pnnonJvrREsu0tSTdz2LJNPaj3kTT0fSS/OaeGMMdfVYSpw==
+"@prisma/client@^2.10.0":
+  version "2.10.0"
+  resolved "https://registry.yarnpkg.com/@prisma/client/-/client-2.10.0.tgz#967223bb1e1b21ddea9a098dc9758f7ace03d828"
+  integrity sha512-TZoT5SYmCkVqMt8rKp3NAUm6UTqjNUMp2W94IcVn2d5DVkOR5TZGkxP/u8KuSoY3KQWIG+KQy/azIKetKxc+LQ==
   dependencies:
-    pkg-up "^3.1.0"
+    "@prisma/engines-version" "2.10.0-16-af1ae11a423edfb5d24092a85be11fa77c5e499c"
 
 "@prisma/debug@2.7.1":
   version "2.7.1"
@@ -1884,6 +1892,16 @@
     p-retry "^4.2.0"
     terminal-link "^2.1.1"
     undici "git://github.com/nodejs/undici.git#e76f6a37836537f08c2d9b7d8805d6ff21d1e744"
+
+"@prisma/engines-version@2.10.0-16-af1ae11a423edfb5d24092a85be11fa77c5e499c":
+  version "2.10.0-16-af1ae11a423edfb5d24092a85be11fa77c5e499c"
+  resolved "https://registry.yarnpkg.com/@prisma/engines-version/-/engines-version-2.10.0-16-af1ae11a423edfb5d24092a85be11fa77c5e499c.tgz#4d02db85e5a7250676a648d3eab0d579455c1eea"
+  integrity sha512-8dW/oSDBv3fovNzTn2sjpITgD4IhHYPnmkbPp4Gv4rqjB14tpB0OuU1xkygVRIRJisTBRoYyjfiVaaWea/e57A==
+
+"@prisma/engines@2.10.0-16-af1ae11a423edfb5d24092a85be11fa77c5e499c":
+  version "2.10.0-16-af1ae11a423edfb5d24092a85be11fa77c5e499c"
+  resolved "https://registry.yarnpkg.com/@prisma/engines/-/engines-2.10.0-16-af1ae11a423edfb5d24092a85be11fa77c5e499c.tgz#3a981953cef6fc0524fd7a8f8c5d714202b9c26b"
+  integrity sha512-59htYpsqdVVe7aElozUZ3/eV/ujwrUvaE+KVcNyzFh0yFIL7FLbSly55KWlyUdDWyB+0eTyd/yV7E/iKYnOF/Q==
 
 "@prisma/fetch-engine@2.7.1":
   version "2.7.1"
@@ -2005,12 +2023,12 @@
   resolved "https://registry.yarnpkg.com/@tootallnate/once/-/once-1.1.2.tgz#ccb91445360179a04e7fe6aff78c00ffc1eeaf82"
   integrity sha512-RbzJvlNzmRq5c3O09UipeuXno4tA1FE6ikOjxZK0tuxVv3412l64l5t1W5pj4+rJq9vpkm/kwiR07aZXnsKPxw==
 
-"@tsoa/cli@^3.3.0":
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/@tsoa/cli/-/cli-3.3.0.tgz#0c193e38da38af35c74c2b2c0af30ad6d686955a"
-  integrity sha512-hLvhNN0jYqXMnKlM/8SFd6cixP+UGlInPP19ogY1f8KF+IQYjlKldYjOcIPnUudCsycmBz5D8tQqvWP95ddsIA==
+"@tsoa/cli@^3.4.0":
+  version "3.4.0"
+  resolved "https://registry.yarnpkg.com/@tsoa/cli/-/cli-3.4.0.tgz#4534eb097455a5e70c3cc793e444326b6ecd862e"
+  integrity sha512-GQ2Ik8JMjaE35ppyUjQUfkYtFliFQnhqibW4qe4Ub/upF+U85ElYGiwIXHS5DMkFocf457sEJ7bth9rXVZga1w==
   dependencies:
-    "@tsoa/runtime" "^3.3.0"
+    "@tsoa/runtime" "^3.4.0"
     deepmerge "^4.2.2"
     fs-extra "^8.1.0"
     glob "^7.1.6"
@@ -2023,10 +2041,10 @@
     yamljs "^0.3.0"
     yargs "^14.0.0"
 
-"@tsoa/runtime@^3.3.0":
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/@tsoa/runtime/-/runtime-3.3.0.tgz#9ebc0f31653a9833c7bfa6f87ef6118866366cc5"
-  integrity sha512-ZZXhQk/KaolHD3x8d1+oJx5Q0ylm2R29G9CXIzufaZ6FDM39Y0INZiW6ya/AxZOs65GsYvg6rv19cVkm/SgX0A==
+"@tsoa/runtime@^3.4.0":
+  version "3.4.0"
+  resolved "https://registry.yarnpkg.com/@tsoa/runtime/-/runtime-3.4.0.tgz#71e2d143904bb5a14dd51d574c1e321096e915af"
+  integrity sha512-MupTlxiDgvj8qyukYdzD2xNEUL4rgZTwYWkySEDxVJ/9rgLAiu27chY9ceEkFqpQp0z51a/Ts/Y3a+WpwtiCMw==
   dependencies:
     moment "^2.24.0"
     validator "^12.2.0"
@@ -8561,9 +8579,9 @@ modify-values@^1.0.0:
   integrity sha512-xV2bxeN6F7oYjZWTe/YPAy6MN2M+sL4u/Rlm2AHCIVGfo2p1yGmBHQ6vHehl4bRTZBdHu3TSkWdYgkwpYzAGSw==
 
 moment@^2.24.0:
-  version "2.28.0"
-  resolved "https://registry.yarnpkg.com/moment/-/moment-2.28.0.tgz#cdfe73ce01327cee6537b0fafac2e0f21a237d75"
-  integrity sha512-Z5KOjYmnHyd/ukynmFd/WwyXHd7L4J9vTI/nn5Ap9AVUgaAE15VvQ9MOGmJJygEUklupqIrFnor/tjTwRU+tQw==
+  version "2.29.1"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.1.tgz#b2be769fa31940be9eeea6469c075e35006fa3d3"
+  integrity sha512-kHmoybcPV8Sqy59DwNDY3Jefr64lK/by/da0ViFcuA4DH0vQg5Q6Ze5VimxkfQNSC+Mls/Kx53s7TjP1RhFEDQ==
 
 move-concurrently@^1.0.1:
   version "1.0.1"
@@ -9596,13 +9614,6 @@ pkg-dir@^4.1.0:
   integrity sha512-HRDzbaKjC+AOWVXxAU/x54COGeIv9eb+6CkDSQoNTt4XyWoIJvuPsXizxu/Fr23EiekbtZwmh1IcIG/l/a10GQ==
   dependencies:
     find-up "^4.0.0"
-
-pkg-up@^3.1.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/pkg-up/-/pkg-up-3.1.0.tgz#100ec235cc150e4fd42519412596a28512a0def5"
-  integrity sha512-nDywThFk1i4BQK4twPQ6TA4RT8bDY96yeuCVBWL3ePARCiEKDRSrNGbFIgUJpLp+XeIR65v8ra7WuJOFUBtkMA==
-  dependencies:
-    find-up "^3.0.0"
 
 please-upgrade-node@^3.1.1:
   version "3.2.0"
@@ -11935,13 +11946,13 @@ tslint@^5.20.1:
     tslib "^1.8.0"
     tsutils "^2.29.0"
 
-tsoa@^3.3.0:
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/tsoa/-/tsoa-3.3.0.tgz#873212fb397f85aa7b72b2a2460472b6cf9766d2"
-  integrity sha512-1BB2aK0g9GcgZPKfmT1XWJ4dDaoqHig5r/+bHDd9kClbevaWc+OVu0WPx1TepUtj8jWxH7wsQT7G2LVJJq+Mvg==
+tsoa@^3.4.0:
+  version "3.4.0"
+  resolved "https://registry.yarnpkg.com/tsoa/-/tsoa-3.4.0.tgz#60ac05652acba0ab830aa41d00573b62ee17fd6d"
+  integrity sha512-S6sfTGVqbLIUj7B2doQRjycr0xKogC43BfYumnigLLk8gF24XHgLDZX7kc0/nljDH2XQ05dWfZjYQe1vLyBU0Q==
   dependencies:
-    "@tsoa/cli" "^3.3.0"
-    "@tsoa/runtime" "^3.3.0"
+    "@tsoa/cli" "^3.4.0"
+    "@tsoa/runtime" "^3.4.0"
 
 tsutils@^2.29.0:
   version "2.29.0"

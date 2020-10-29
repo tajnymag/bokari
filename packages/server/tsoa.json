@@ -3,6 +3,8 @@
   "noImplicitAdditionalProperties": "throw-on-extras",
   "controllerPathGlobs": ["src/**/*.controller.ts"],
   "spec": {
+    "basePath": "",
+    "host": "localhost:3000",
     "outputDirectory": "openapi",
     "specVersion": 3,
     "securityDefinitions": {

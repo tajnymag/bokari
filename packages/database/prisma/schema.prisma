@@ -60,7 +60,7 @@ model Comment {
   createdAt           DateTime             @default(now()) @map("created_at")
   updatedAt           DateTime             @default(now()) @updatedAt @map("updated_at")
   authorId            Int                  @map("author_id")
-  user                User                 @relation(name: "commentsTousers", fields: [authorId], references: [id])
+  author              User                 @relation(name: "commentsTousers", fields: [authorId], references: [id])
   contractComments    ContractComment[]    @relation(name: "commentsTocontract_comments")
   subcontractComments SubcontractComment[] @relation(name: "commentsTosubcontract_comments")
 
@@ -219,8 +219,8 @@ model Contract {
   responsibleUserId Int               @map("responsible_user_id")
   clientId          Int               @map("client_id")
   client            Client            @relation(name: "clientsTocontracts", fields: [clientId], references: [id])
-  monetaryValue     MonetaryValue     @relation(name: "contractsTomonetary_values", fields: [priceId], references: [id])
-  user              User              @relation(name: "contractsTousers", fields: [responsibleUserId], references: [id])
+  price             MonetaryValue     @relation(name: "contractsTomonetary_values", fields: [priceId], references: [id])
+  responsibleUser              User              @relation(name: "contractsTousers", fields: [responsibleUserId], references: [id])
   contractComments  ContractComment[] @relation(name: "contract_commentsTocontracts")
   contractFiles     ContractFile[]    @relation(name: "contract_filesTocontracts")
   contractLevels    ContractLevel[]   @relation(name: "contract_levelsTocontracts")
@@ -272,11 +272,11 @@ model Currency {
 model Expense {
   id            Int           @id @default(autoincrement())
   description   String
-  amountId      Int           @map("amount_id")
+  monetaryValueId  Int        @map("monetary_value_id")
   authorId      Int           @map("author_id")
   contractId    Int?          @map("contract_id")
-  monetaryValue MonetaryValue @relation(name: "expensesTomonetary_values", fields: [amountId], references: [id])
-  user          User          @relation(name: "expensesTousers", fields: [authorId], references: [id])
+  monetaryValue MonetaryValue @relation(name: "expensesTomonetary_values", fields: [monetaryValueId], references: [id])
+  author        User          @relation(name: "expensesTousers", fields: [authorId], references: [id])
   contract      Contract?     @relation(name: "contractsToexpenses", fields: [contractId], references: [id])
 
   @@map("expenses")
@@ -291,7 +291,7 @@ model File {
   createdAt        DateTime          @default(now()) @map("created_at")
   type             String
   authorId         Int               @map("author_id")
-  user             User              @relation(name: "filesTousers", fields: [authorId], references: [id])
+  author             User              @relation(name: "filesTousers", fields: [authorId], references: [id])
   mimeType         MimeType          @relation(name: "filesTomime_types", fields: [type], references: [name])
   contractFiles    ContractFile[]    @relation(name: "contract_filesTofiles")
   subcontractFiles SubcontractFile[] @relation(name: "filesTosubcontract_files")
@@ -503,7 +503,7 @@ model Subcontract {
   priceId             Int                  @map("price_id")
   contractorId        Int                  @map("contractor_id")
   contractor          Contractor           @relation(name: "contractorsTosubcontracts", fields: [contractorId], references: [id])
-  monetaryValue       MonetaryValue        @relation(name: "monetary_valuesTosubcontracts", fields: [priceId], references: [id])
+  price               MonetaryValue        @relation(name: "monetary_valuesTosubcontracts", fields: [priceId], references: [id])
   subcontractComments SubcontractComment[] @relation(name: "subcontract_commentsTosubcontracts")
   subcontractFiles    SubcontractFile[]    @relation(name: "subcontract_filesTosubcontracts")
   subcontractLevels   SubcontractLevel[]   @relation(name: "subcontract_levelsTosubcontracts")
@@ -555,10 +555,10 @@ model Wage {
   updatedById   Int?          @map("updated_by_id")
   createdAt     DateTime      @default(now()) @map("created_at")
   id            Int           @id @default(autoincrement())
-  wageId        Int           @map("wage_id")
+  monetaryValueId   Int       @map("monetary_value_id")
   employeeId    Int           @map("employee_id")
   user          User          @relation(name: "usersTowages", fields: [employeeId], references: [id])
-  monetaryValue MonetaryValue @relation(name: "monetary_valuesTowages", fields: [wageId], references: [id])
+  monetaryValue MonetaryValue @relation(name: "monetary_valuesTowages", fields: [monetaryValueId], references: [id])
 
   @@map("wages")
 

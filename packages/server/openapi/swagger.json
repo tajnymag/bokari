@@ -65,6 +65,52 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"Profession": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"name"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Business": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"registrationNumber": {
+						"type": "string"
+					},
+					"professions": {
+						"items": {
+							"$ref": "#/components/schemas/Profession"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"name",
+					"registrationNumber",
+					"professions"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"BusinessInsertable": {
+				"$ref": "#/components/schemas/Business"
+			},
 			"Address": {
 				"properties": {
 					"id": {
@@ -193,7 +239,7 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"Pick_Required_User_.name-or-username-or-password-or-permissions-or-wage_": {
+			"UserInsertable": {
 				"properties": {
 					"name": {
 						"type": "string"
@@ -204,14 +250,15 @@
 					"password": {
 						"type": "string"
 					},
-					"permissions": {
-						"items": {
-							"$ref": "#/components/schemas/Permission"
-						},
-						"type": "array"
-					},
 					"wage": {
 						"$ref": "#/components/schemas/MonetaryValue"
+					},
+					"groups": {
+						"items": {
+							"type": "number",
+							"format": "double"
+						},
+						"type": "array"
 					}
 				},
 				"required": [
@@ -219,10 +266,7 @@
 					"username"
 				],
 				"type": "object",
-				"description": "From T, pick a set of properties whose keys are in the union K"
-			},
-			"UserInsertable": {
-				"$ref": "#/components/schemas/Pick_Required_User_.name-or-username-or-password-or-permissions-or-wage_"
+				"additionalProperties": false
 			}
 		},
 		"securitySchemes": {
@@ -311,6 +355,55 @@
 				}
 			}
 		},
+		"/businesses": {
+			"get": {
+				"operationId": "GetAllBusinesses",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/Business"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": []
+			},
+			"post": {
+				"operationId": "CreateBusiness",
+				"responses": {
+					"201": {
+						"description": "Created",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Business"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/BusinessInsertable"
+							}
+						}
+					}
+				}
+			}
+		},
 		"/users": {
 			"get": {
 				"operationId": "GetAllUsers",
@@ -392,7 +485,7 @@
 	},
 	"servers": [
 		{
-			"url": "/"
+			"url": "https://localhost:3000/"
 		}
 	]
 }

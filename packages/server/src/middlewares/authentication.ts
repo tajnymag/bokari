@@ -13,6 +13,22 @@ export async function expressAuthentication(
 	scopes?: Permission[]
 ): Promise<AuthenticationPayload> {
 	if (securityName === 'jwt_access') {
+		// TODO: remove when implemented authentication
+		if (!process.env.NON_EXISTENT) {
+			return {
+				jwt: {
+					type: 'access',
+					user: {
+						id: 3,
+						username: 'admin'
+					},
+					scopes: [],
+					iat: 1603983296,
+					exp: 1603984196
+				}
+			};
+		}
+
 		const authorizationHeader = request.headers.authorization;
 		const token = authorizationHeader?.replace(/^Bearer/i, '').trim();
 
