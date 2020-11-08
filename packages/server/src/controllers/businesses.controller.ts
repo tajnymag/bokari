@@ -1,10 +1,8 @@
 import { Body, Controller, Get, Route, Post, SuccessResponse } from 'tsoa';
-import { Business } from '@bokari/shared';
+import { Business, BusinessInsertable } from '@bokari/shared';
 import { BusinessWhereUniqueInput } from '@bokari/database';
 import { Forbidden } from '@curveball/http-errors';
 import { db } from '../common/db';
-
-export type BusinessInsertable = Business;
 
 @Route('businesses')
 export class BusinessesController extends Controller {

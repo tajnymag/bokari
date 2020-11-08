@@ -1,6 +1,7 @@
+import { Override } from '../helpers';
 import { Person } from './person';
 import { Business } from './business';
-import { Entity } from './entity';
+import { Entity, Linkable } from './entity';
 
 /**
  * @tsoaModel
@@ -8,3 +9,5 @@ import { Entity } from './entity';
 export interface Contractor extends Person, Entity {
 	business: Business;
 }
+
+export type ContractorInsertable = Override<Contractor, { business: Linkable<Business> }>;

@@ -1,14 +1,16 @@
-import { Request } from 'express';
+import { Request as ExpressRequest } from 'express';
 import { Permission } from '@bokari/shared';
 import { BadRequest, Unauthorized } from '@curveball/http-errors';
 import { AccessTokenPayload, verifyToken } from '../common/jwt';
+
+export type TsoaRequest = ExpressRequest & AuthenticationPayload;
 
 export interface AuthenticationPayload {
 	jwt?: AccessTokenPayload;
 }
 
 export async function expressAuthentication(
-	request: Request,
+	request: ExpressRequest,
 	securityName: string,
 	scopes?: Permission[]
 ): Promise<AuthenticationPayload> {

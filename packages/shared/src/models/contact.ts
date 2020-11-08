@@ -10,3 +10,5 @@ export interface Contact extends Entity {
 	note?: string;
 	address?: Address;
 }
+
+export type ContactInsertable = Contact;

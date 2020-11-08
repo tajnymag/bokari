@@ -9,3 +9,5 @@ export interface Business extends Entity {
 	registrationNumber: string;
 	professions: Profession[];
 }
+
+export type BusinessInsertable = Business;

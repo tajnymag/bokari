@@ -1,5 +1,6 @@
+import { Override } from '../helpers';
 import { User } from './user';
-import { Entity } from './entity';
+import { Entity, Linkable } from './entity';
 
 /**
  * @tsoaModel
@@ -10,3 +11,5 @@ export interface Comment extends Entity {
 	updatedAt: Date;
 	author: User;
 }
+
+export type CommentInsertable = Override<Comment, { author: Linkable<User> }>;

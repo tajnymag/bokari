@@ -10,3 +10,5 @@ export interface Address extends Entity {
 	zip: string;
 	country: string;
 }
+
+export type AddressInsertable = Address;

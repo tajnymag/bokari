@@ -1,7 +1,7 @@
 import { Body, Controller, Post, Route, Request } from 'tsoa';
 import { BadRequest, InternalServerError, Unauthorized } from '@curveball/http-errors';
 import * as argon2 from 'argon2';
-import { Request as ExpressRequest } from 'express';
+import { TsoaRequest } from '../middlewares/authentication';
 
 import { db } from '../common/db';
 import { normalizePermissionQuery } from '../helpers/db-aggregate';
@@ -27,7 +27,7 @@ export type RefreshResponse = Pick<LoginResponse, 'accessToken'>;
 export class AuthController extends Controller {
 	@Post('login')
 	public async login(
-		@Request() request: ExpressRequest,
+		@Request() request: TsoaRequest,
 		@Body() requestBody: LoginRequest
 	): Promise<LoginResponse> {
 		const login = requestBody;

@@ -1,16 +1,11 @@
 import { Body, Controller, Get, Path, Post, Route, SuccessResponse } from 'tsoa';
-import { User } from '@bokari/shared';
+import { User, UserInsertable } from '@bokari/shared';
 
 import { UserWhereUniqueInput } from '@bokari/database';
 import { Forbidden, NotFound } from '@curveball/http-errors';
 import * as argon2 from 'argon2';
 import { db } from '../common/db';
 import { normalizeUserQuery } from '../helpers/db-aggregate';
-
-export interface UserInsertable
-	extends Pick<Required<User>, 'name' | 'username' | 'password' | 'wage'> {
-	groups?: number[];
-}
 
 const RICH_USER_INCLUDE = {
 	wages: {
