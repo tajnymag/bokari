@@ -7,6 +7,7 @@ export * from './contract';
 export * from './contractor';
 export * from './entity';
 export * from './file';
+export * from './group';
 export * from './level';
 export * from './monetary-value';
 export * from './permission';

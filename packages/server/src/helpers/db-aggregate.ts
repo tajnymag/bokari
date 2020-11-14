@@ -89,6 +89,8 @@ export function normalizeUserQuery(
 		.sort((wa, wb) => compareDesc(wa.createdAt, wb.createdAt))
 		.map((w) => normalizeMonetaryValueQuery(w.monetaryValue))[0];
 
+	const groups = queryResult.groupUsers.map((gu) => gu.group).map((g) => g.name);
+
 	const permissions = queryResult.groupUsers
 		.map((gu) => gu.group)
 		.map((g) => g.groupPermissions)
@@ -103,8 +105,9 @@ export function normalizeUserQuery(
 		name: queryResult.person.name,
 		username: queryResult.username,
 		passwordHash: queryResult.passwordHash,
-		wage: wage,
-		permissions: permissions,
-		contacts: contacts
+		groups: groups,
+		permissions: [...new Set(permissions)],
+		contacts: contacts,
+		wage: wage
 	};
 }

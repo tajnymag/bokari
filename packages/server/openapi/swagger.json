@@ -239,34 +239,53 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"UserInsertable": {
-				"properties": {
-					"name": {
-						"type": "string"
-					},
-					"username": {
-						"type": "string"
-					},
-					"password": {
-						"type": "string"
-					},
-					"wage": {
-						"$ref": "#/components/schemas/MonetaryValue"
-					},
-					"groups": {
-						"items": {
-							"type": "number",
-							"format": "double"
-						},
-						"type": "array"
-					}
-				},
-				"required": [
-					"name",
-					"username"
-				],
+			"Pick_User.Exclude_keyofUser.keyofR__": {
+				"properties": {},
 				"type": "object",
-				"additionalProperties": false
+				"description": "From T, pick a set of properties whose keys are in the union K"
+			},
+			"Omit_User.keyof_password-string--__": {
+				"$ref": "#/components/schemas/Pick_User.Exclude_keyofUser.keyofR__"
+			},
+			"Override_User._password-string--__": {
+				"allOf": [
+					{
+						"$ref": "#/components/schemas/Omit_User.keyof_password-string--__"
+					},
+					{
+						"properties": {
+							"password": {
+								"type": "string"
+							}
+						},
+						"required": [
+							"password"
+						],
+						"type": "object"
+					}
+				]
+			},
+			"UserInsertable": {
+				"allOf": [
+					{
+						"$ref": "#/components/schemas/Override_User._password-string--__"
+					},
+					{
+						"properties": {
+							"groups": {
+								"items": {
+									"type": "number",
+									"format": "double"
+								},
+								"type": "array"
+							}
+						},
+						"required": [
+							"groups"
+						],
+						"type": "object"
+					}
+				]
 			}
 		},
 		"securitySchemes": {

@@ -5,7 +5,7 @@ import { UserWhereUniqueInput } from '@bokari/database';
 import { Forbidden, NotFound } from '@curveball/http-errors';
 import * as argon2 from 'argon2';
 import { db } from '../common/db';
-import { normalizeUserQuery } from '../helpers/db-aggregate';
+import { normalizePermissionQuery, normalizeUserQuery } from '../helpers/db-aggregate';
 
 const RICH_USER_INCLUDE = {
 	wages: {
@@ -57,6 +57,7 @@ export class UsersController extends Controller {
 			id: user.id,
 			name: user.name,
 			permissions: user.permissions,
+			groups: user.groups,
 			contacts: user.contacts,
 			username: user.username,
 			wage: user.wage
@@ -82,6 +83,7 @@ export class UsersController extends Controller {
 			id: user.id,
 			name: user.name,
 			permissions: user.permissions,
+			groups: user.groups,
 			contacts: user.contacts,
 			username: user.username,
 			wage: user.wage
@@ -107,24 +109,34 @@ export class UsersController extends Controller {
 				},
 				passwordHash,
 				groupUsers: {
-					create: user?.groups?.map((groupId) => ({
+					create: user.groups.map((groupName) => ({
 						group: {
 							connect: {
-								id: groupId
+								name: groupName
 							}
 						}
 					}))
 				}
 			},
 			include: {
-				person: true
+				...RICH_USER_INCLUDE,
+				person: true,
+				wages: false
 			}
 		});
 
+		const permissions = createdUser.groupUsers
+			.map((gu) => gu.group)
+			.map((g) => g.groupPermissions)
+			.flatMap((gp) => gp.map((p) => normalizePermissionQuery(p.permission)));
+
 		return {
 			id: createdUser.id,
+			name: createdUser.person.name,
 			username: createdUser.username,
-			name: createdUser.person.name
+			groups: user.groups,
+			permissions: [...new Set(permissions)],
+			contacts: []
 		};
 	}
 

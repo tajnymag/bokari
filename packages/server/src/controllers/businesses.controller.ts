@@ -28,12 +28,12 @@ export class BusinessesController extends Controller {
 	@SuccessResponse('201', 'Created')
 	@Post()
 	public async createBusiness(@Body() business: BusinessInsertable): Promise<Business> {
-		if (
-			await this.existsBusiness({
-				name: business.name,
-				registrationNumber: business.registrationNumber
-			})
-		) {
+		const businessExists = await this.existsBusiness({
+			name: business.name,
+			registrationNumber: business.registrationNumber
+		});
+
+		if (businessExists) {
 			throw new Forbidden('A business with such name and registration number already exists!');
 		}
 
