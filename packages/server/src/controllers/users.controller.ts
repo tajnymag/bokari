@@ -6,6 +6,7 @@ import { Forbidden, NotFound } from '@curveball/http-errors';
 import * as argon2 from 'argon2';
 import { db } from '../common/db';
 import { normalizePermissionQuery, normalizeUserQuery } from '../helpers/db-aggregate';
+import { usersDataService } from '../services/data/users.data';
 
 const RICH_USER_INCLUDE = {
 	wages: {
@@ -99,45 +100,11 @@ export class UsersController extends Controller {
 
 		const passwordHash = await argon2.hash(user.password);
 
-		const createdUser = await db.user.create({
-			data: {
-				username: user.username.toLowerCase(),
-				person: {
-					create: {
-						name: user.name
-					}
-				},
-				passwordHash,
-				groupUsers: {
-					create: user.groups.map((groupName) => ({
-						group: {
-							connect: {
-								name: groupName
-							}
-						}
-					}))
-				}
-			},
-			include: {
-				...RICH_USER_INCLUDE,
-				person: true,
-				wages: false
-			}
-		});
+		const createdUser = await usersDataService.createOne({ ...user, passwordHash });
 
-		const permissions = createdUser.groupUsers
-			.map((gu) => gu.group)
-			.map((g) => g.groupPermissions)
-			.flatMap((gp) => gp.map((p) => normalizePermissionQuery(p.permission)));
+		delete createdUser.passwordHash;
 
-		return {
-			id: createdUser.id,
-			name: createdUser.person.name,
-			username: createdUser.username,
-			groups: user.groups,
-			permissions: [...new Set(permissions)],
-			contacts: []
-		};
+		return createdUser;
 	}
 
 	private async existsUser(query: UserWhereUniqueInput): Promise<boolean> {
