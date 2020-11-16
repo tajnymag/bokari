@@ -222,6 +222,12 @@
 						},
 						"type": "array"
 					},
+					"groups": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
 					"permissions": {
 						"items": {
 							"$ref": "#/components/schemas/Permission"
@@ -239,53 +245,31 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"Pick_User.Exclude_keyofUser.keyofR__": {
+			"Pick_User.Exclude_keyofUser.username-or-password-or-groups__": {
 				"properties": {},
 				"type": "object",
 				"description": "From T, pick a set of properties whose keys are in the union K"
 			},
-			"Omit_User.keyof_password-string--__": {
-				"$ref": "#/components/schemas/Pick_User.Exclude_keyofUser.keyofR__"
+			"Omit_User.username-or-password-or-groups_": {
+				"$ref": "#/components/schemas/Pick_User.Exclude_keyofUser.username-or-password-or-groups__"
 			},
-			"Override_User._password-string--__": {
+			"Required_Pick_User.username-or-password-or-groups__": {
+				"properties": {},
+				"type": "object",
+				"description": "Make all properties in T required"
+			},
+			"SetRequired_User.username-or-password-or-groups_": {
 				"allOf": [
 					{
-						"$ref": "#/components/schemas/Omit_User.keyof_password-string--__"
+						"$ref": "#/components/schemas/Omit_User.username-or-password-or-groups_"
 					},
 					{
-						"properties": {
-							"password": {
-								"type": "string"
-							}
-						},
-						"required": [
-							"password"
-						],
-						"type": "object"
+						"$ref": "#/components/schemas/Required_Pick_User.username-or-password-or-groups__"
 					}
 				]
 			},
 			"UserInsertable": {
-				"allOf": [
-					{
-						"$ref": "#/components/schemas/Override_User._password-string--__"
-					},
-					{
-						"properties": {
-							"groups": {
-								"items": {
-									"type": "number",
-									"format": "double"
-								},
-								"type": "array"
-							}
-						},
-						"required": [
-							"groups"
-						],
-						"type": "object"
-					}
-				]
+				"$ref": "#/components/schemas/SetRequired_User.username-or-password-or-groups_"
 			}
 		},
 		"securitySchemes": {

@@ -102,9 +102,14 @@ export class UsersController extends Controller {
 
 		const createdUser = await usersDataService.createOne({ ...user, passwordHash });
 
-		delete createdUser.passwordHash;
-
-		return createdUser;
+		return {
+			id: createdUser.id,
+			username: createdUser.username,
+			name: createdUser.name,
+			groups: createdUser.groups,
+			permissions: createdUser.permissions,
+			contacts: createdUser.contacts
+		};
 	}
 
 	private async existsUser(query: UserWhereUniqueInput): Promise<boolean> {
