@@ -2,8 +2,7 @@ import { compareDesc } from 'date-fns';
 import { Address, Contact, User, MonetaryValue, Permission } from '@bokari/shared';
 import {
 	Address as AddressPayload,
-	ContactGetPayload,
-	UserGetPayload,
+	Prisma,
 	MonetaryValue as MonetaryValuePayload,
 	Permission as PermissionPayload
 } from '@bokari/database';
@@ -20,7 +19,7 @@ export function normalizeAddressQuery(queryResult: AddressPayload): Address {
 }
 
 export function normalizeContactQuery(
-	queryResult: ContactGetPayload<{ include: { address: true } }>
+	queryResult: Prisma.ContactGetPayload<{ include: { address: true } }>
 ): Contact {
 	return {
 		id: queryResult.id,
@@ -49,7 +48,7 @@ export function normalizePermissionQuery(queryResult: PermissionPayload): Permis
 }
 
 export function normalizeUserQuery(
-	queryResult: UserGetPayload<{
+	queryResult: Prisma.UserGetPayload<{
 		include: {
 			wages: {
 				include: {
