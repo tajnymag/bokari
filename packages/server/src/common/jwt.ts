@@ -27,7 +27,7 @@ export function issueToken(
 			if (err) {
 				reject(err);
 			} else {
-				resolve(encoded);
+				resolve(encoded ?? '');
 			}
 		});
 	});

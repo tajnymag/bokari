@@ -14,6 +14,7 @@ export async function expressAuthentication(
 	securityName: string,
 	scopes?: Permission[]
 ): Promise<AuthenticationPayload> {
+	console.log({scopes});
 	if (securityName === 'jwt_access') {
 		// TODO: remove when implemented authentication
 		if (!process.env.NON_EXISTENT) {
