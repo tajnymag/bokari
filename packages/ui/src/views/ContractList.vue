@@ -15,7 +15,17 @@
 			class="pa-2"
 		/>
 
+<<<<<<< HEAD
 		<v-data-table :headers="headers" :items="contracts" :search="search" @click:row="handleClick" />
+=======
+		<v-data-table
+			:headers="headers"
+			:items="contracts"
+			:search="search"
+			:loading="contracts.length < 1"
+			@click:row="handleClick"
+		/>
+>>>>>>> 66a3d1f (Added Contract view and mocked out some contracts api data)
 	</v-card>
 </template>
 
@@ -23,11 +33,16 @@
 import { defineComponent, ref } from '@vue/composition-api';
 import { Contract } from '@bokari/shared';
 import { useRouter } from '@/router';
+<<<<<<< HEAD
+=======
+import { getAllContracts } from '../../mock/data';
+>>>>>>> 66a3d1f (Added Contract view and mocked out some contracts api data)
 
 export default defineComponent({
 	name: 'ContractList',
 	setup() {
 		const search = ref('');
+<<<<<<< HEAD
 		const contracts = ref<Contract[]>([
 			{
 				id: 1,
@@ -98,6 +113,9 @@ export default defineComponent({
 				subcontracts: []
 			}
 		]);
+=======
+		const contracts = ref<Contract[]>([]);
+>>>>>>> 66a3d1f (Added Contract view and mocked out some contracts api data)
 		const headers = ref([
 			{
 				text: 'Číslo',
@@ -118,7 +136,19 @@ export default defineComponent({
 		]);
 
 		const router = useRouter();
+<<<<<<< HEAD
 		const handleClick = (row) => router.push({ name: 'Contract', params: { id: row.id } });
+=======
+		const handleClick = (row: Contract) => {
+			if (row.id) {
+				router.push({ name: 'Contract', params: { id: row.id.toString() } });
+			}
+		};
+
+		setTimeout(() => {
+			contracts.value = getAllContracts();
+		}, 1000);
+>>>>>>> 66a3d1f (Added Contract view and mocked out some contracts api data)
 
 		return {
 			contracts,

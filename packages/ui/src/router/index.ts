@@ -28,6 +28,10 @@ const routes: Array<RouteConfig> = [
 	{
 		path: '/contracts/:id',
 		name: 'Contract',
+<<<<<<< HEAD
+=======
+		props: (route) => ({ id: parseInt(route.params.id) }),
+>>>>>>> 66a3d1f (Added Contract view and mocked out some contracts api data)
 		component: () => import(/* webpackChunkName: "contract" */ '../views/Contract.vue')
 	},
 	{
