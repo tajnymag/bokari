@@ -2,6 +2,14 @@
 
 Contract tracking app for small businesses
 
+## UI Screenshots (strongly WIP)
+
+![Login screen](https://i.imgur.com/LW1fqFe.png)
+
+![Contract list](https://i.imgur.com/MAGKLAa.png)
+
+![Contract detail](https://i.imgur.com/Oq7JHxR.png)
+
 ## Development setup
 
 ### 1. Install necessary tools
