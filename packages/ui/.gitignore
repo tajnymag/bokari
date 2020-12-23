@@ -1,9 +1,11 @@
 .DS_Store
 node_modules
-dist/
+/dist
 
-# Environment files
-.env
+
+# local env files
+.env.local
+.env.*.local
 
 # Log files
 npm-debug.log*
@@ -19,6 +21,3 @@ pnpm-debug.log*
 *.njsproj
 *.sln
 *.sw?
-
-# Yarn specific files
-.yarn/
