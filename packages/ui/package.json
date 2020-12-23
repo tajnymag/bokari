@@ -12,10 +12,7 @@
     "@mdi/font": "^3.6.95",
     "@vue/composition-api": "^1.0.0-beta.22",
     "core-js": "^3.6.5",
-<<<<<<< HEAD
-=======
     "date-fns": "^2.16.1",
->>>>>>> 66a3d1f (Added Contract view and mocked out some contracts api data)
     "roboto-fontface": "*",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0",

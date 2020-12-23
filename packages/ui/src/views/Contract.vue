@@ -1,14 +1,4 @@
 <template>
-<<<<<<< HEAD
-	<v-card></v-card>
-</template>
-
-<script lang="ts">
-import { defineComponent } from '@vue/composition-api';
-
-export default defineComponent({
-	name: 'Contract'
-=======
 	<v-card v-if="contract">
 		<v-card-title>
 			<h2 class="text-h2">{{ contract.name }}</h2>
@@ -179,7 +169,6 @@ export default defineComponent({
 			contract
 		};
 	}
->>>>>>> 66a3d1f (Added Contract view and mocked out some contracts api data)
 });
 </script>
 
