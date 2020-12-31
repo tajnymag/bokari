@@ -15,9 +15,6 @@
 			class="pa-2"
 		/>
 
-		<<<<<<< HEAD
-		<v-data-table :headers="headers" :items="contracts" :search="search" @click:row="handleClick" />
-		=======
 		<v-data-table
 			:headers="headers"
 			:items="contracts"
@@ -25,7 +22,6 @@
 			:loading="contracts.length < 1"
 			@click:row="handleClick"
 		/>
-		>>>>>>> 66a3d1f (Added Contract view and mocked out some contracts api data)
 	</v-card>
 </template>
 
