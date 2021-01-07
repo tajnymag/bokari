@@ -20,6 +20,7 @@
 			:items="contracts"
 			:search="search"
 			:loading="contracts.length < 1"
+			:item-class="rowClass"
 			@click:row="handleClick"
 		/>
 	</v-card>
@@ -36,6 +37,7 @@ export default defineComponent({
 	setup() {
 		const search = ref('');
 		const contracts = ref<Contract[]>([]);
+		const rowClass = () => 'clickable';
 		const headers = ref([
 			{
 				text: 'Číslo',
@@ -70,7 +72,8 @@ export default defineComponent({
 			contracts,
 			headers,
 			search,
-			handleClick
+			handleClick,
+			rowClass
 		};
 	}
 });

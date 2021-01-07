@@ -87,4 +87,8 @@ export default defineComponent({
 });
 </script>
 
-<style></style>
+<style>
+.clickable {
+	cursor: pointer;
+}
+</style>
