@@ -13,5 +13,4 @@
     "emitDecoratorMetadata": true
   },
   "include": ["src/**/*.ts"],
-  "ignore": ["**/node_modules/@types/node/**"]
 }

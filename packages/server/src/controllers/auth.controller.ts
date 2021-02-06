@@ -1,55 +1,47 @@
-import { Body, Controller, Post, Route, Request } from 'tsoa';
-import { BadRequest, InternalServerError, Unauthorized } from '@curveball/http-errors';
+import {Body, JsonController, Post, Req} from "routing-controllers";
+import {BadRequest, InternalServerError, Unauthorized} from '@curveball/http-errors';
 import * as argon2 from 'argon2';
-import { TsoaRequest } from '../middlewares/authentication';
+import {IsJWT, IsString} from "class-validator";
 
-import { db } from '../common/db';
-import { normalizePermissionQuery } from '../helpers/db-aggregate';
-import { issueToken, verifyToken } from '../common/jwt';
+import {getRepository, RefreshToken, User} from "@bokari/database";
 
-export interface LoginRequest {
-	username: string;
-	password: string;
+import {TsoaRequest} from '../middlewares/authentication';
+import {issueToken, JwtType, verifyToken} from '../common/jwt';
+
+export class LoginRequest {
+	@IsString()
+	username!: string;
+	@IsString()
+	password!: string;
 }
 
-export interface LoginResponse {
-	accessToken: string;
-	refreshToken: string;
+export class LoginResponse {
+	@IsJWT()
+	accessToken!: string;
+	@IsJWT()
+	refreshToken!: string;
 }
 
-export interface RefreshRequest {
-	refreshToken: string;
+export class RefreshRequest {
+	@IsJWT()
+	refreshToken!: string;
 }
 
-export type RefreshResponse = Pick<LoginResponse, 'accessToken'>;
+export class RefreshResponse {
+	@IsJWT()
+	accessToken!: string;
+}
 
-@Route('auth')
-export class AuthController extends Controller {
+@JsonController('auth')
+export class AuthController {
 	@Post('login')
 	public async login(
-		@Request() request: TsoaRequest,
+		@Req() request: TsoaRequest,
 		@Body() requestBody: LoginRequest
 	): Promise<LoginResponse> {
 		const login = requestBody;
 
-		const user = await db.user.findOne({
-			where: { username: login.username },
-			include: {
-				groupUsers: {
-					include: {
-						group: {
-							include: {
-								groupPermissions: {
-									include: {
-										permission: true
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		});
+		const user = await getRepository(User).findOne({where: {username: login.username}});
 
 		if (!user) {
 			throw new Unauthorized('Wrong login credentials!');
@@ -61,24 +53,26 @@ export class AuthController extends Controller {
 			throw new Unauthorized('Wrong login credentials!');
 		}
 
-		const permissions = user.groupUsers
-			.map((gu) => gu.group.groupPermissions)
-			.flatMap((gp) => gp.map((p) => normalizePermissionQuery(p.permission)));
+		const permissions = user.groups.flatMap(group => group.permissions);
 
 		const accessToken = await issueToken(
-			{ type: 'access', user: { id: user.id, username: user.username }, scopes: permissions },
+			{ type: JwtType.ACCESS, user: { id: user.id, username: user.username }, scopes: permissions },
 			{ expiresIn: '15m' }
 		);
 		const refreshToken = await issueToken(
-			{ type: 'refresh', user: { id: user.id, username: user.username } },
+			{ type: JwtType.REFRESH, user: { id: user.id, username: user.username } },
 			{ expiresIn: '7d' }
 		);
 
-		const tokenQueryResult = await db.refreshToken.create({
-			data: { user: { connect: { id: user.id } }, token: refreshToken, ip: request.ip }
-		});
+		const refreshTokenEntity = new RefreshToken();
+		refreshTokenEntity.user = user;
+		refreshTokenEntity.ip = request.ip;
+		refreshTokenEntity.metadata.createdBy = user;
+		refreshTokenEntity.token = refreshToken;
 
-		if (!tokenQueryResult) {
+		const issuedRefreshToken = await getRepository(RefreshToken).create(refreshTokenEntity);
+
+		if (!issuedRefreshToken) {
 			throw new InternalServerError(`Could not save ${user.username}'s to the database!`);
 		}
 
@@ -88,7 +82,7 @@ export class AuthController extends Controller {
 		};
 	}
 
-	@Post('refresh_token')
+	@Post('refresh')
 	public async refreshToken(@Body() requestBody: RefreshRequest): Promise<RefreshResponse> {
 		const oldRefreshToken = await verifyToken(requestBody.refreshToken);
 
@@ -96,35 +90,16 @@ export class AuthController extends Controller {
 			throw new BadRequest('Bad token provided!');
 		}
 
-		const user = await db.user.findOne({
-			where: { id: oldRefreshToken.user.id },
-			include: {
-				groupUsers: {
-					include: {
-						group: {
-							include: {
-								groupPermissions: {
-									include: {
-										permission: true
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		});
+		const user = await getRepository(User).findOne({where: {username: oldRefreshToken.user.username}});
 
 		if (!user) {
 			throw new Unauthorized('The user could not be found in the database!');
 		}
 
-		const permissions = user.groupUsers
-			.map((gu) => gu.group.groupPermissions)
-			.flatMap((gp) => gp.map((p) => normalizePermissionQuery(p.permission)));
+		const permissions = user.groups.flatMap(group => group.permissions);
 
 		const newAccessToken = await issueToken(
-			{ type: 'access', user: { id: user.id, username: user.username }, scopes: permissions },
+			{ type: JwtType.ACCESS, user: { id: user.id, username: user.username }, scopes: permissions },
 			{ expiresIn: '15m' }
 		);
 

@@ -1,21 +1,23 @@
 import * as http from 'http';
-import { AddressInfo } from 'net';
 import { createTerminus } from '@godaddy/terminus';
 import { app } from './app';
+import {connectToDatabase} from "@bokari/database";
 
 export class Server {
-	private server: http.Server | undefined;
+	private server!: http.Server;
 
-	onListening: (address: AddressInfo | string | null | undefined) => void = () => {};
-
-	listen(port = 3000, hostname = '0.0.0.0'): http.Server {
+	async listen(port = 3000, hostname = '0.0.0.0'): Promise<http.Server> {
 		this.server = http.createServer(app);
 
 		createTerminus(this.server);
 
-		return this.server.listen(port, hostname, () => {
-			this.onListening(this.server?.address());
-		});
+		await connectToDatabase();
+
+		return new Promise(resolve => {
+			this.server.listen(port, hostname, () => {
+				resolve(this.server);
+			});
+		})
 	}
 }
 

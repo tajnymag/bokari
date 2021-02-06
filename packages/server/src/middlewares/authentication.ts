@@ -1,11 +1,13 @@
-import { Request as ExpressRequest } from 'express';
-import { Permission } from '@bokari/shared';
-import { BadRequest, Unauthorized } from '@curveball/http-errors';
-import { AccessTokenPayload, verifyToken } from '../common/jwt';
+import {Request as ExpressRequest} from 'express';
+import {Permission} from '@bokari/shared';
+import {BadRequest, Unauthorized} from '@curveball/http-errors';
+import {AccessTokenPayload, JwtType, verifyToken} from '../common/jwt';
+import {IsOptional} from "class-validator";
 
 export type TsoaRequest = ExpressRequest & AuthenticationPayload;
 
-export interface AuthenticationPayload {
+export class AuthenticationPayload {
+	@IsOptional()
 	jwt?: AccessTokenPayload;
 }
 
@@ -20,7 +22,7 @@ export async function expressAuthentication(
 		if (!process.env.NON_EXISTENT) {
 			return {
 				jwt: {
-					type: 'access',
+					type: JwtType.ACCESS,
 					user: {
 						id: 3,
 						username: 'admin'

@@ -8,7 +8,9 @@
     "moduleResolution": "node",
     "module": "CommonJS",
     "rootDir": "./src",
-    "declaration": true
+    "declaration": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
   },
   "include": ["src/**/*.ts"]
 }

@@ -1,21 +1,55 @@
 import * as jwt from 'jsonwebtoken';
 import { SignOptions } from 'jsonwebtoken';
-import { Permission, User } from '@bokari/shared';
+import {
+	Equals,
+	IsEnum,
+	IsInt,
+	IsOptional,
+	IsString,
+	validate, ValidateIf,
+	ValidateNested, validateOrReject
+} from "class-validator";
+import {plainToClass, Type} from 'class-transformer';
 
-export interface JwtPayload {
-	type: string;
-	user: Pick<User, 'id' | 'username'>;
+import {Permission, User} from '@bokari/database';
+
+export enum JwtType {
+	ACCESS = 'access',
+	REFRESH = 'refresh'
+}
+
+export class JwtPayload {
+	@IsEnum(JwtType)
+	type!: JwtType
+
+	@ValidateNested()
+	@Type(() => User)
+	user!: Pick<User, 'id' | 'username'>;
+
+	@IsOptional()
+	@IsInt()
 	iat?: number;
+
+	@IsOptional()
+	@IsInt()
 	exp?: number;
+
+	@ValidateIf(o => o.type === JwtType.ACCESS)
+	@IsEnum(Permission, {each: true})
+	scopes?: Permission[];
 }
 
-export interface AccessTokenPayload extends JwtPayload {
-	type: 'access';
-	scopes: Permission[];
+export class AccessTokenPayload extends JwtPayload {
+	@Equals("access")
+	type!: JwtType.ACCESS;
+
+	@IsEnum(Permission, {each: true})
+	scopes!: Permission[];
 }
 
-export interface RefreshTokenPayload extends JwtPayload {
-	type: 'refresh';
+export class RefreshTokenPayload extends JwtPayload {
+	@Equals("refresh")
+	type!: JwtType.REFRESH;
 }
 
 export function issueToken(
@@ -35,12 +69,16 @@ export function issueToken(
 
 export function verifyToken(token: string): Promise<AccessTokenPayload | RefreshTokenPayload> {
 	return new Promise((resolve, reject) => {
-		jwt.verify(token, 'TODO', (err, decoded) => {
-			if (err) {
-				reject(err);
-			} else {
-				resolve(decoded as AccessTokenPayload);
+		jwt.verify(token, 'TODO', async (err, decoded) => {
+			if ((err !== undefined) || (decoded === undefined)) {
+				return reject(err);
 			}
+
+			await validateOrReject(plainToClass(JwtPayload, decoded), {
+				groups: ["jwt"]
+			});
+
+			resolve(decoded as (AccessTokenPayload | RefreshTokenPayload));
 		});
 	});
 }

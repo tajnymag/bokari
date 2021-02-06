@@ -8,29 +8,34 @@
   "scripts": {
     "debug": "ts-node src/bin.ts",
     "start": "node dist/cjs/bin.js",
-    "build": "tsoa routes && ttsc --project tsconfig.cjs.json && ttsc --project tsconfig.esm.json && tsoa spec"
+    "build": "tsc -b tsconfig.cjs.json tsconfig.esm.json"
   },
   "license": "MIT",
   "private": true,
   "dependencies": {
     "@bokari/database": "^1.0.0",
-    "@bokari/shared": "^1.0.0",
     "@curveball/http-errors": "^0.3.0",
     "@godaddy/terminus": "^4.4.1",
     "argon2": "^0.27.0",
     "body-parser": "^1.19.0",
+    "class-transformer": "^0.3.2",
+    "class-validator": "^0.13.1",
+    "class-validator-jsonschema": "^2.1.1",
     "date-fns": "^2.16.1",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
     "lodash-es": "^4.17.15",
-    "tsoa": "^3.4.0"
+    "multer": "^1.4.2",
+    "routing-controllers": "^0.9.0-alpha.6",
+    "routing-controllers-openapi": "^2.2.0"
   },
   "devDependencies": {
     "@types/body-parser": "^1.19.0",
     "@types/express": "^4.17.8",
     "@types/jsonwebtoken": "^8.5.0",
     "@types/lodash-es": "^4.17.3",
+    "@types/multer": "^1.4.5",
     "@types/node": "^14.11.2",
     "@typescript-eslint/eslint-plugin": "^4.2.0",
     "@typescript-eslint/parser": "^4.2.0",
@@ -39,7 +44,6 @@
     "glob": "^7.1.6",
     "prettier": "^2.1.2",
     "ts-node": "^9.0.0",
-    "ttypescript": "^1.5.12",
-    "typescript": "^4.0.3"
+    "typescript": "^4.1.3"
   }
 }

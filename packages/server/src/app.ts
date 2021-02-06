@@ -1,15 +1,25 @@
-import express from 'express';
-import bodyParser from 'body-parser';
-import { RegisterRoutes } from './generated/routes';
-import { errorHandler } from './middlewares/error-handler';
+import { createExpressServer, getMetadataArgsStorage } from "routing-controllers";
+import { ErrorHandler } from './middlewares/error-handler';
+import { ContractsController } from "./controllers/contracts.controller";
+import { routingControllersToSpec } from "routing-controllers-openapi";
+import {validationMetadatasToSchemas} from "class-validator-jsonschema";
+import { defaultMetadataStorage } from 'class-transformer/cjs/storage';
 
-const app = express();
+const app = createExpressServer({
+	controllers: [ContractsController],
+	middlewares: [ErrorHandler]
+})
 
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+if (process.env.BUILD_SCHEMA) {
+	const storage = getMetadataArgsStorage();
+	const schemas = validationMetadatasToSchemas({
+		classTransformerMetadataStorage: defaultMetadataStorage
+	});
+	const spec = routingControllersToSpec(storage, {}, {
+		components: { schemas }
+	});
 
-RegisterRoutes(app);
-
-app.use(errorHandler);
+	console.debug(JSON.stringify(spec));
+}
 
 export { app };
