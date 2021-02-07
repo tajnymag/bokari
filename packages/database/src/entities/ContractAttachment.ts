@@ -1,8 +1,8 @@
-import {Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn} from "typeorm";
-import {Metadata} from "./Metadata";
-import {File} from "./File";
-import {Contract} from "./Contract";
-import {IsInt, IsOptional, IsString, ValidateNested} from "class-validator";
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Metadata } from './Metadata';
+import { File } from './File';
+import { Contract } from './Contract';
+import { IsInt, IsOptional, IsString, ValidateNested } from 'class-validator';
 
 @Entity()
 export class ContractAttachment {
@@ -10,7 +10,7 @@ export class ContractAttachment {
 	@IsInt()
 	id!: number;
 
-	@OneToOne(() => File)
+	@OneToOne(() => File, { cascade: true })
 	@JoinColumn()
 	@IsOptional()
 	@ValidateNested()

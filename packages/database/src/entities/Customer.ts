@@ -1,6 +1,6 @@
-import {Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn} from "typeorm";
-import {Person} from "./Person";
-import {IsInt, ValidateNested} from "class-validator";
+import { Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Person } from './Person';
+import { IsInt, ValidateNested } from 'class-validator';
 
 @Entity()
 export class Customer {
@@ -8,7 +8,7 @@ export class Customer {
 	@IsInt()
 	id!: number;
 
-	@OneToOne(() => Person, {nullable: false})
+	@OneToOne(() => Person, { nullable: false, cascade: true })
 	@JoinColumn()
 	@ValidateNested()
 	person!: Person;

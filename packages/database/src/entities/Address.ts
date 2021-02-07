@@ -1,5 +1,5 @@
-import {Column, Entity, PrimaryGeneratedColumn} from "typeorm";
-import {IsInt, IsOptional, IsString} from "class-validator";
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { IsInt, IsOptional, IsString } from 'class-validator';
 
 @Entity()
 export class Address {

@@ -1,17 +1,17 @@
-import {CreateDateColumn, DeleteDateColumn, ManyToOne, UpdateDateColumn} from "typeorm";
-import {User} from "./User";
-import {IsDate, IsOptional, ValidateNested} from "class-validator";
+import { CreateDateColumn, DeleteDateColumn, ManyToOne, UpdateDateColumn } from 'typeorm';
+import { IsDate, IsOptional, ValidateNested } from 'class-validator';
+import { User } from './User';
 
 export class Metadata {
-	@CreateDateColumn({ type: "timestamptz" })
+	@CreateDateColumn({ type: 'timestamptz' })
 	@IsDate()
 	createdAt!: Date;
 
-	@UpdateDateColumn({ type: "timestamptz" })
+	@UpdateDateColumn({ type: 'timestamptz' })
 	@IsDate()
 	updatedAt!: Date;
 
-	@DeleteDateColumn({ type: "timestamptz" })
+	@DeleteDateColumn({ type: 'timestamptz' })
 	@IsOptional()
 	@IsDate()
 	deletedAt?: Date;

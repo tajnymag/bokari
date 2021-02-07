@@ -1,8 +1,8 @@
-import {Column, Entity, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
-import {User} from "./User";
-import {Contract} from "./Contract";
-import {Metadata} from "./Metadata";
-import {IsDate, IsInt, IsOptional, IsString, ValidateNested} from "class-validator";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { User } from './User';
+import { Contract } from './Contract';
+import { Metadata } from './Metadata';
+import { IsDate, IsInt, IsOptional, IsString, ValidateNested } from 'class-validator';
 
 @Entity()
 export class WorkLog {
@@ -10,15 +10,15 @@ export class WorkLog {
 	@IsInt()
 	id!: number;
 
-	@Column("timestamptz")
+	@Column('timestamptz')
 	@IsDate()
 	from!: Date;
 
-	@Column("timestamptz")
+	@Column('timestamptz')
 	@IsDate()
 	to!: Date;
 
-	@Column({nullable: true})
+	@Column({ nullable: true })
 	@IsOptional()
 	@IsString()
 	description?: string;
@@ -27,11 +27,19 @@ export class WorkLog {
 	@ValidateNested()
 	metadata!: Metadata;
 
-	@ManyToOne(() => User, user => user.workLogs, {nullable: false})
+	@ManyToOne(
+		() => User,
+		user => user.workLogs,
+		{ nullable: false }
+	)
 	@ValidateNested()
 	user!: User;
 
-	@ManyToOne(() => Contract, contract => contract.workLogs,{nullable: true})
+	@ManyToOne(
+		() => Contract,
+		contract => contract.workLogs,
+		{ nullable: true }
+	)
 	@IsOptional()
 	@ValidateNested()
 	contract?: Contract;

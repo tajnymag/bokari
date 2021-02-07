@@ -1,7 +1,7 @@
-import {Column, Entity, PrimaryGeneratedColumn} from "typeorm";
-import {Metadata} from "./Metadata";
-import {IsAscii, IsInt, IsOptional, IsString, IsUrl, ValidateNested} from "class-validator";
-import {Exclude} from "class-transformer";
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Metadata } from './Metadata';
+import { IsAscii, IsInt, IsOptional, IsString, IsUrl, ValidateNested } from 'class-validator';
+import { Exclude } from 'class-transformer';
 
 @Entity()
 export class File {

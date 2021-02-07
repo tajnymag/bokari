@@ -1,10 +1,10 @@
-import {Column, Entity, OneToMany, PrimaryGeneratedColumn} from "typeorm";
-import {Contact} from "./Contact";
-import {IsInt, IsString, ValidateNested} from "class-validator";
-import {Type} from "class-transformer";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Contact } from './Contact';
+import { IsInt, IsString, ValidateNested } from 'class-validator';
+import { Type } from 'class-transformer';
 
 @Entity()
-export abstract class Person {
+export class Person {
 	@PrimaryGeneratedColumn()
 	@IsInt()
 	id!: number;
@@ -13,7 +13,10 @@ export abstract class Person {
 	@IsString()
 	name!: string;
 
-	@OneToMany(() => Contact, contact => contact.person)
+	@OneToMany(
+		() => Contact,
+		contact => contact.person
+	)
 	@ValidateNested({ each: true })
 	@Type(() => Contact)
 	contacts!: Contact[];

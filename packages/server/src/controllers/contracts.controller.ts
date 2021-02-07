@@ -1,15 +1,26 @@
-import {JsonController, Get, Post, Body, Authorized, Req} from 'routing-controllers';
+import { Request } from 'express';
+import {
+	JsonController,
+	Get,
+	Post,
+	Body,
+	Authorized,
+	Req,
+	CurrentUser,
+	Param
+} from 'routing-controllers';
 import { Forbidden } from '@curveball/http-errors';
-import { TsoaRequest } from '../middlewares/authentication';
-import {Contract, Customer, getRepository, User} from '@bokari/database';
+import { Contract, Customer, getRepository, Permission, User } from '@bokari/database';
+import { classToPlain } from 'class-transformer';
 
-@JsonController("/contracts")
+@JsonController('/contracts')
 export class ContractsController {
-	@Get("")
-	public async getAllContracts() {
+	@Authorized([Permission.CONTRACTS_READ])
+	@Get('')
+	async getAllContracts() {
 		const rawContracts = await getRepository(Contract).find();
 
-		const contracts = rawContracts.map((rc) => ({
+		const contracts = rawContracts.map(rc => ({
 			id: rc.id,
 			isDone: rc.isDone,
 			code: rc.code,
@@ -31,26 +42,40 @@ export class ContractsController {
 		return contracts;
 	}
 
-	@Authorized([])
-	@Post("")
-	public async createContract(@Body() contract: Contract, @Req() request: TsoaRequest) {
-		if (await this.existsContract({code: contract.code})) {
+	@Authorized([Permission.CONTRACTS_READ])
+	@Get("/:code")
+	async getContractByCode(@Param("code") code: string) {
+		const contract = await getRepository(Contract).findOne({where: {code}});
+
+		return contract;
+	}
+
+	@Authorized([Permission.CONTRACTS_WRITE])
+	@Post('')
+	async createContract(
+		@CurrentUser() currentUser: User,
+		@Body() desiredContract: Contract,
+		@Req() request: Request
+	) {
+		if (await this.existsContract({ code: desiredContract.code })) {
 			throw new Forbidden('A contract with such code already exists!');
 		}
 
 		const contractEntity = new Contract();
-		contractEntity.code = contract.code;
-		contractEntity.name = contract.name;
-		contractEntity.deadlineAt = contract.deadlineAt;
-		contractEntity.customer = await getRepository(Customer).findOneOrFail(contract.customer.id);
-		contractEntity.metadata.createdBy = await getRepository(User).findOneOrFail(request.jwt?.user.id);
+		contractEntity.code = desiredContract.code;
+		contractEntity.name = desiredContract.name;
+		contractEntity.deadlineAt = desiredContract.deadlineAt;
+		contractEntity.customer = await getRepository(Customer).findOneOrFail(desiredContract.customer.id);
+		contractEntity.metadata.createdBy = currentUser;
 
-		await getRepository(Contract).save(contractEntity);
+		const createdContract = await getRepository(Contract).save(contractEntity);
+
+		return createdContract;
 	}
 
-	private async existsContract(query: Partial<Contract>): Promise<boolean> {
+	async existsContract(query: Partial<Contract>): Promise<boolean> {
 		try {
-			const contract = await getRepository(Contract).findOneOrFail({where: query});
+			const contract = await getRepository(Contract).findOneOrFail({ where: query });
 
 			return true;
 		} catch {

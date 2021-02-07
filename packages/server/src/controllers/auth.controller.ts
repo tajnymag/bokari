@@ -1,12 +1,12 @@
-import {Body, JsonController, Post, Req} from "routing-controllers";
-import {BadRequest, InternalServerError, Unauthorized} from '@curveball/http-errors';
+import { Request } from 'express';
+import { Body, JsonController, Post, Req } from 'routing-controllers';
+import { BadRequest, InternalServerError, Unauthorized } from '@curveball/http-errors';
 import * as argon2 from 'argon2';
-import {IsJWT, IsString} from "class-validator";
+import { IsJWT, IsString } from 'class-validator';
 
-import {getRepository, RefreshToken, User} from "@bokari/database";
+import { getRepository, RefreshToken, User } from '@bokari/database';
 
-import {TsoaRequest} from '../middlewares/authentication';
-import {issueToken, JwtType, verifyToken} from '../common/jwt';
+import { issueToken, JwtType, verifyToken } from '../common/jwt';
 
 export class LoginRequest {
 	@IsString()
@@ -35,19 +35,19 @@ export class RefreshResponse {
 @JsonController('auth')
 export class AuthController {
 	@Post('login')
-	public async login(
-		@Req() request: TsoaRequest,
-		@Body() requestBody: LoginRequest
+	async login(
+		@Req() request: Request,
+		@Body() credentials: LoginRequest
 	): Promise<LoginResponse> {
-		const login = requestBody;
+		const { username, password } = credentials;
 
-		const user = await getRepository(User).findOne({where: {username: login.username}});
+		const user = await getRepository(User).findOne({ where: { username } });
 
 		if (!user) {
 			throw new Unauthorized('Wrong login credentials!');
 		}
 
-		const isCorrectPassword = await argon2.verify(user.passwordHash, login.password);
+		const isCorrectPassword = await argon2.verify(user.passwordHash, password);
 
 		if (!isCorrectPassword) {
 			throw new Unauthorized('Wrong login credentials!');
@@ -73,7 +73,7 @@ export class AuthController {
 		const issuedRefreshToken = await getRepository(RefreshToken).create(refreshTokenEntity);
 
 		if (!issuedRefreshToken) {
-			throw new InternalServerError(`Could not save ${user.username}'s to the database!`);
+			throw new InternalServerError(`Could not save ${username}'s refresh token to the database!`);
 		}
 
 		return {
@@ -83,14 +83,12 @@ export class AuthController {
 	}
 
 	@Post('refresh')
-	public async refreshToken(@Body() requestBody: RefreshRequest): Promise<RefreshResponse> {
-		const oldRefreshToken = await verifyToken(requestBody.refreshToken);
+	async refreshToken(@Body() requestBody: RefreshRequest): Promise<RefreshResponse> {
+		const oldRefreshToken = await verifyToken(JwtType.REFRESH, requestBody.refreshToken);
 
-		if (oldRefreshToken.type !== 'refresh') {
-			throw new BadRequest('Bad token provided!');
-		}
-
-		const user = await getRepository(User).findOne({where: {username: oldRefreshToken.user.username}});
+		const user = await getRepository(User).findOne({
+			where: { username: oldRefreshToken.user.username }
+		});
 
 		if (!user) {
 			throw new Unauthorized('The user could not be found in the database!');

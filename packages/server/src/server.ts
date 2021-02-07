@@ -1,7 +1,7 @@
 import * as http from 'http';
 import { createTerminus } from '@godaddy/terminus';
 import { app } from './app';
-import {connectToDatabase} from "@bokari/database";
+import { connectToDatabase } from '@bokari/database';
 
 export class Server {
 	private server!: http.Server;
@@ -17,7 +17,7 @@ export class Server {
 			this.server.listen(port, hostname, () => {
 				resolve(this.server);
 			});
-		})
+		});
 	}
 }
 

@@ -1,7 +1,7 @@
-import {Column, Entity, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
-import {Metadata} from "./Metadata";
-import {User} from "./User";
-import {IsInt, IsIP, IsJWT, IsString, ValidateNested} from "class-validator";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Metadata } from './Metadata';
+import { User } from './User';
+import { IsInt, IsIP, IsJWT, IsString, ValidateNested } from 'class-validator';
 
 @Entity()
 export class RefreshToken {
@@ -9,7 +9,7 @@ export class RefreshToken {
 	@IsInt()
 	id!: number;
 
-	@Column({unique: true})
+	@Column({ unique: true })
 	@IsJWT()
 	token!: string;
 
@@ -21,7 +21,10 @@ export class RefreshToken {
 	@ValidateNested()
 	metadata!: Metadata;
 
-	@ManyToOne(() => User, user => user.refreshTokens)
+	@ManyToOne(
+		() => User,
+		user => user.refreshTokens
+	)
 	@ValidateNested()
 	user!: User;
 }

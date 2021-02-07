@@ -1,34 +1,38 @@
 import {
 	Column,
 	Entity,
-	JoinColumn, ManyToMany,
+	JoinColumn,
+	ManyToMany,
 	ManyToOne,
 	OneToMany,
 	OneToOne,
 	PrimaryGeneratedColumn
-} from "typeorm";
-import {File} from "./File";
-import {Person} from "./Person";
-import {WorkLog} from "./WorkLog";
-import {RefreshToken} from "./RefreshToken";
-import {IsInt, IsString, ValidateNested} from "class-validator";
-import {Exclude, Type } from "class-transformer";
+} from 'typeorm';
+import { Group } from './Group';
+import { File } from './File';
+import { Person } from './Person';
+import { WorkLog } from './WorkLog';
+import { RefreshToken } from './RefreshToken';
+import { IsEnum, IsInt, IsOptional, IsString, ValidateNested } from 'class-validator';
+import { Exclude, Type } from 'class-transformer';
+import { Permission } from './Permission';
 
 @Entity()
 export class User {
 	@PrimaryGeneratedColumn()
-	@IsInt({groups: ['jwt']})
+	@IsInt({ groups: ['jwt'] })
 	id!: number;
 
 	@OneToOne(() => Person, {
-		nullable: false
+		nullable: false,
+		cascade: true
 	})
 	@JoinColumn()
 	@ValidateNested()
 	person!: Person;
 
-	@Column({unique: true})
-	@IsString({groups: ['jwt']})
+	@Column({ unique: true })
+	@IsString({ groups: ['jwt'] })
 	username!: string;
 
 	@Column()
@@ -36,22 +40,35 @@ export class User {
 	@IsString()
 	passwordHash!: string;
 
-	@ManyToOne(() => File)
+	@ManyToOne(() => File, { cascade: true })
+	@IsOptional()
 	@ValidateNested()
-	avatar!: File;
+	avatar?: File;
 
-	@OneToMany(() => WorkLog, workLog => workLog.user)
+	@OneToMany(
+		() => WorkLog,
+		workLog => workLog.user,
+		{ cascade: true }
+	)
 	@ValidateNested({ each: true })
 	@Type(() => WorkLog)
 	workLogs!: WorkLog[];
 
-	@OneToMany(() => RefreshToken, refreshToken => refreshToken.user)
+	@OneToMany(
+		() => RefreshToken,
+		refreshToken => refreshToken.user,
+		{ cascade: true }
+	)
 	@Exclude()
 	@ValidateNested({ each: true })
 	@Type(() => RefreshToken)
 	refreshTokens!: RefreshToken[];
 
-	@ManyToMany(() => Group, group => group.users)
+	@ManyToMany(
+		() => Group,
+		group => group.users,
+		{ cascade: true }
+	)
 	@ValidateNested({ each: true })
 	@Type(() => Group)
 	groups!: Group[];

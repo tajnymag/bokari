@@ -1,17 +1,20 @@
-import * as jwt from 'jsonwebtoken';
-import { SignOptions } from 'jsonwebtoken';
+import { SignOptions, verify as jwtVerify, sign as jwtSign } from 'jsonwebtoken';
 import {
 	Equals,
 	IsEnum,
 	IsInt,
 	IsOptional,
 	IsString,
-	validate, ValidateIf,
-	ValidateNested, validateOrReject
-} from "class-validator";
-import {plainToClass, Type} from 'class-transformer';
+	validate,
+	ValidateIf,
+	ValidateNested,
+	validateOrReject
+} from 'class-validator';
+import { plainToClass, Type } from 'class-transformer';
 
-import {Permission, User} from '@bokari/database';
+import { Permission, User } from '@bokari/database';
+import { promisify } from 'util';
+import { BadRequest } from '@curveball/http-errors';
 
 export enum JwtType {
 	ACCESS = 'access',
@@ -20,7 +23,7 @@ export enum JwtType {
 
 export class JwtPayload {
 	@IsEnum(JwtType)
-	type!: JwtType
+	type!: JwtType;
 
 	@ValidateNested()
 	@Type(() => User)
@@ -35,20 +38,20 @@ export class JwtPayload {
 	exp?: number;
 
 	@ValidateIf(o => o.type === JwtType.ACCESS)
-	@IsEnum(Permission, {each: true})
+	@IsEnum(Permission, { each: true })
 	scopes?: Permission[];
 }
 
 export class AccessTokenPayload extends JwtPayload {
-	@Equals("access")
+	@Equals('access')
 	type!: JwtType.ACCESS;
 
-	@IsEnum(Permission, {each: true})
+	@IsEnum(Permission, { each: true })
 	scopes!: Permission[];
 }
 
 export class RefreshTokenPayload extends JwtPayload {
-	@Equals("refresh")
+	@Equals('refresh')
 	type!: JwtType.REFRESH;
 }
 
@@ -57,7 +60,7 @@ export function issueToken(
 	options: SignOptions
 ): Promise<string> {
 	return new Promise((resolve, reject) => {
-		jwt.sign(payload, 'TODO', options, (err, encoded) => {
+		jwtSign(payload, 'TODO', options, (err, encoded) => {
 			if (err) {
 				reject(err);
 			} else {
@@ -67,18 +70,39 @@ export function issueToken(
 	});
 }
 
-export function verifyToken(token: string): Promise<AccessTokenPayload | RefreshTokenPayload> {
-	return new Promise((resolve, reject) => {
-		jwt.verify(token, 'TODO', async (err, decoded) => {
-			if ((err !== undefined) || (decoded === undefined)) {
-				return reject(err);
-			}
+export async function verifyToken(
+	expectedType: JwtType.ACCESS,
+	token: string
+): Promise<AccessTokenPayload>;
+export async function verifyToken(
+	expectedType: JwtType.REFRESH,
+	token: string
+): Promise<RefreshTokenPayload>;
+export async function verifyToken(
+	expectedType: JwtType,
+	token: string
+): Promise<AccessTokenPayload | RefreshTokenPayload> {
+	const payload = jwtVerify(token, 'TODO');
 
-			await validateOrReject(plainToClass(JwtPayload, decoded), {
-				groups: ["jwt"]
-			});
-
-			resolve(decoded as (AccessTokenPayload | RefreshTokenPayload));
+	if (expectedType === JwtType.ACCESS) {
+		const errors = await validate(plainToClass(AccessTokenPayload, payload), {
+			groups: ['jwt']
 		});
-	});
+
+		if (errors.length > 0) {
+			throw new BadRequest('Wrong token structure!');
+		}
+
+		return payload as AccessTokenPayload;
+	} else {
+		const errors = await validate(plainToClass(RefreshTokenPayload, payload), {
+			groups: ['jwt']
+		});
+
+		if (errors.length > 0) {
+			throw new BadRequest('Wrong token structure!');
+		}
+
+		return payload as RefreshTokenPayload;
+	}
 }
