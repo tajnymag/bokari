@@ -7,9 +7,10 @@ import { defaultMetadataStorage } from 'class-transformer/cjs/storage';
 import { authorizationChecker } from './middlewares/authorization';
 import { currentUserChecker } from './middlewares/current-user';
 import { UsersController } from './controllers/users.controller';
+import { AuthController } from './controllers/auth.controller';
 
 const app = createExpressServer({
-	controllers: [UsersController, ContractsController],
+	controllers: [AuthController, UsersController, ContractsController],
 	middlewares: [ErrorHandler],
 	defaultErrorHandler: false,
 	authorizationChecker,

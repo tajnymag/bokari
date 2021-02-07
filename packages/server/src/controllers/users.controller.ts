@@ -1,12 +1,4 @@
-import {
-	Authorized,
-	Body,
-	CurrentUser,
-	Get, HttpError,
-	JsonController,
-	Param,
-	Post
-} from 'routing-controllers';
+import { Authorized, Body, CurrentUser, Get, HttpError, JsonController, Param, Post } from 'routing-controllers';
 import { getRepository, Permission, Person, User } from '@bokari/database';
 import { classToPlain } from 'class-transformer';
 import * as argon2 from 'argon2';
@@ -28,7 +20,9 @@ export class UsersController {
 	@Authorized([Permission.USERS_READ])
 	@Get()
 	async getAllUsers(): Promise<User[]> {
-		const users = await getRepository(User).find();
+		const users = await getRepository(User).find({
+			relations: ['person', 'groups', 'avatar', 'workLogs']
+		});
 
 		return users;
 	}
@@ -36,7 +30,10 @@ export class UsersController {
 	@Authorized([Permission.USERS_READ])
 	@Get('/:username')
 	async getUserByUsername(@Param('username') username: string): Promise<User | undefined> {
-		const user = await getRepository(User).findOne({ where: { username } });
+		const user = await getRepository(User).findOne({
+			where: { username },
+			relations: ['person', 'groups', 'avatar', 'workLogs']
+		});
 
 		return user;
 	}
@@ -44,7 +41,7 @@ export class UsersController {
 	@Authorized([Permission.USERS_WRITE])
 	@Post()
 	async createUser(@CurrentUser() currentUser: User, @Body() desiredUser: UserInsertable): Promise<User> {
-		if (await getRepository(User).count({where: {username: desiredUser.username}}) > 0) {
+		if ((await getRepository(User).count({ where: { username: desiredUser.username } })) > 0) {
 			throw new HttpError(409, 'A user with such username already exists!');
 		}
 

@@ -4,7 +4,7 @@ import { BadRequest, InternalServerError, Unauthorized } from '@curveball/http-e
 import * as argon2 from 'argon2';
 import { IsJWT, IsString } from 'class-validator';
 
-import { getRepository, RefreshToken, User } from '@bokari/database';
+import { getRepository, Metadata, RefreshToken, User } from '@bokari/database';
 
 import { issueToken, JwtType, verifyToken } from '../common/jwt';
 
@@ -32,16 +32,16 @@ export class RefreshResponse {
 	accessToken!: string;
 }
 
-@JsonController('auth')
+@JsonController('/auth')
 export class AuthController {
-	@Post('login')
-	async login(
-		@Req() request: Request,
-		@Body() credentials: LoginRequest
-	): Promise<LoginResponse> {
+	@Post('/login')
+	async login(@Req() request: Request, @Body() credentials: LoginRequest): Promise<LoginResponse> {
 		const { username, password } = credentials;
 
-		const user = await getRepository(User).findOne({ where: { username } });
+		const user = await getRepository(User).findOne({
+			where: { username },
+			relations: ['person', 'groups']
+		});
 
 		if (!user) {
 			throw new Unauthorized('Wrong login credentials!');
@@ -65,12 +65,15 @@ export class AuthController {
 		);
 
 		const refreshTokenEntity = new RefreshToken();
+		const metadataEntity = new Metadata();
+
 		refreshTokenEntity.user = user;
 		refreshTokenEntity.ip = request.ip;
-		refreshTokenEntity.metadata.createdBy = user;
 		refreshTokenEntity.token = refreshToken;
+		refreshTokenEntity.metadata = metadataEntity;
+		refreshTokenEntity.metadata.createdBy = user;
 
-		const issuedRefreshToken = await getRepository(RefreshToken).create(refreshTokenEntity);
+		const issuedRefreshToken = await getRepository(RefreshToken).save(refreshTokenEntity);
 
 		if (!issuedRefreshToken) {
 			throw new InternalServerError(`Could not save ${username}'s refresh token to the database!`);
@@ -82,7 +85,7 @@ export class AuthController {
 		};
 	}
 
-	@Post('refresh')
+	@Post('/refresh')
 	async refreshToken(@Body() requestBody: RefreshRequest): Promise<RefreshResponse> {
 		const oldRefreshToken = await verifyToken(JwtType.REFRESH, requestBody.refreshToken);
 
