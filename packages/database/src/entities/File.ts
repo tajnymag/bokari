@@ -1,16 +1,23 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { Metadata } from './Metadata';
-import { IsAscii, IsInt, IsOptional, IsString, IsUrl, ValidateNested } from 'class-validator';
-import { Exclude } from 'class-transformer';
+import {
+	IsAscii,
+	IsInt,
+	IsMimeType,
+	IsOptional,
+	IsString,
+	IsUrl,
+	ValidateNested
+} from 'class-validator';
 
 @Entity()
 export class File {
 	@PrimaryGeneratedColumn()
+	@IsOptional()
 	@IsInt()
 	id!: number;
 
 	@Column()
-	@Exclude()
 	@IsAscii()
 	hash!: string;
 
@@ -18,9 +25,15 @@ export class File {
 	@IsString()
 	filename!: string;
 
+	@Column()
 	@IsOptional()
 	@IsUrl()
 	url!: string;
+
+	@Column()
+	@IsOptional()
+	@IsMimeType()
+	mimeType!: string;
 
 	@Column(() => Metadata)
 	@ValidateNested()

@@ -4,6 +4,7 @@ import { IsInt, IsOptional, IsString } from 'class-validator';
 @Entity()
 export class Address {
 	@PrimaryGeneratedColumn()
+	@IsOptional()
 	@IsInt()
 	id!: number;
 

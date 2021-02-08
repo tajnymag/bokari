@@ -1,11 +1,19 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Contract } from './Contract';
 import { Phase } from './Phase';
-import { IsBoolean, IsDate, IsInt, ValidateNested } from 'class-validator';
+import {
+	IsBoolean,
+	IsDate,
+	IsDateString,
+	IsInt,
+	IsOptional,
+	ValidateNested
+} from 'class-validator';
 
 @Entity()
 export class ContractPhase {
 	@PrimaryGeneratedColumn()
+	@IsOptional()
 	@IsInt()
 	id!: number;
 
@@ -18,7 +26,7 @@ export class ContractPhase {
 	phaseId!: number;
 
 	@Column('timestamptz')
-	@IsDate()
+	@IsDateString()
 	deadlineAt!: Date;
 
 	@Column({ default: false })

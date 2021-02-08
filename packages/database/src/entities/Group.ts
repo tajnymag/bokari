@@ -1,12 +1,13 @@
 import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Permission } from './Permission';
 import { User } from './User';
-import { IsEnum, IsInt, IsString, ValidateNested } from 'class-validator';
+import { IsEnum, IsInt, IsOptional, IsString, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 
 @Entity()
 export class Group {
 	@PrimaryGeneratedColumn()
+	@IsOptional()
 	@IsInt()
 	id!: number;
 

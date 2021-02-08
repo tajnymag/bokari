@@ -8,11 +8,28 @@ import { authorizationChecker } from './middlewares/authorization';
 import { currentUserChecker } from './middlewares/current-user';
 import { UsersController } from './controllers/users.controller';
 import { AuthController } from './controllers/auth.controller';
+import { FilesController } from './controllers/files.controller';
+import { WorkLogsController } from './controllers/worklogs.controller';
+import { CustomersController } from './controllers/customers.controller';
 
 const app = createExpressServer({
-	controllers: [AuthController, UsersController, ContractsController],
+	cors: true,
+	controllers: [
+		AuthController,
+		UsersController,
+		ContractsController,
+		FilesController,
+		WorkLogsController,
+		CustomersController
+	],
 	middlewares: [ErrorHandler],
 	defaultErrorHandler: false,
+	validation: {
+		stopAtFirstError: true,
+		validationError: {
+			target: false
+		}
+	},
 	authorizationChecker,
 	currentUserChecker
 });

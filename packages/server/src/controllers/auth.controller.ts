@@ -1,6 +1,12 @@
 import { Request } from 'express';
-import { Body, JsonController, Post, Req } from 'routing-controllers';
-import { BadRequest, InternalServerError, Unauthorized } from '@curveball/http-errors';
+import {
+	Body,
+	InternalServerError,
+	JsonController,
+	Post,
+	Req,
+	UnauthorizedError
+} from 'routing-controllers';
 import * as argon2 from 'argon2';
 import { IsJWT, IsString } from 'class-validator';
 
@@ -44,13 +50,13 @@ export class AuthController {
 		});
 
 		if (!user) {
-			throw new Unauthorized('Wrong login credentials!');
+			throw new UnauthorizedError('Wrong login credentials!');
 		}
 
 		const isCorrectPassword = await argon2.verify(user.passwordHash, password);
 
 		if (!isCorrectPassword) {
-			throw new Unauthorized('Wrong login credentials!');
+			throw new UnauthorizedError('Wrong login credentials!');
 		}
 
 		const permissions = user.groups.flatMap(group => group.permissions);
@@ -94,7 +100,7 @@ export class AuthController {
 		});
 
 		if (!user) {
-			throw new Unauthorized('The user could not be found in the database!');
+			throw new UnauthorizedError('The user could not be found in the database!');
 		}
 
 		const permissions = user.groups.flatMap(group => group.permissions);

@@ -13,13 +13,13 @@ import { File } from './File';
 import { Person } from './Person';
 import { WorkLog } from './WorkLog';
 import { RefreshToken } from './RefreshToken';
-import { IsEnum, IsInt, IsOptional, IsString, ValidateNested } from 'class-validator';
+import { IsInt, IsOptional, IsString, ValidateNested } from 'class-validator';
 import { Exclude, Type } from 'class-transformer';
-import { Permission } from './Permission';
 
 @Entity()
 export class User {
 	@PrimaryGeneratedColumn()
+	@IsOptional()
 	@IsInt({ groups: ['jwt'] })
 	id!: number;
 

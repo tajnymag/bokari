@@ -1,11 +1,12 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { ContractPhase } from './ContractPhase';
-import { IsInt, IsString, ValidateNested } from 'class-validator';
+import { IsInt, IsOptional, IsString, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 
 @Entity()
 export class Phase {
 	@PrimaryGeneratedColumn()
+	@IsOptional()
 	@IsInt()
 	id!: number;
 

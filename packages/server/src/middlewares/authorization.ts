@@ -1,14 +1,6 @@
-import { BadRequest, Unauthorized } from '@curveball/http-errors';
-import { AccessTokenPayload, JwtType, verifyToken } from '../common/jwt';
-import { IsOptional, ValidateNested } from 'class-validator';
-import { Action } from 'routing-controllers';
+import { JwtType, verifyToken } from '../common/jwt';
+import { Action, BadRequestError, UnauthorizedError } from 'routing-controllers';
 import { Permission } from '@bokari/database';
-
-export class AuthenticationPayload {
-	@IsOptional()
-	@ValidateNested()
-	jwt?: AccessTokenPayload;
-}
 
 export async function authorizationChecker(action: Action, roles: Permission[]): Promise<boolean> {
 	if (!process.env.NON_EXISTENT) {
@@ -29,13 +21,13 @@ export async function authorizationChecker(action: Action, roles: Permission[]):
 	const token = authorizationHeader?.replace(/^Bearer/i, '').trim();
 
 	if (!token) {
-		throw new BadRequest('No token provided!');
+		throw new BadRequestError('No token provided!');
 	}
 
 	const payload = await verifyToken(JwtType.ACCESS, token);
 
 	if (roles.some(scope => !payload.scopes.includes(scope))) {
-		throw new Unauthorized('Insufficient permissions granted!');
+		throw new UnauthorizedError('Insufficient permissions granted!');
 	}
 
 	action.request.jwt = payload;

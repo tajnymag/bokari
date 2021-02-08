@@ -2,11 +2,19 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn
 import { Metadata } from './Metadata';
 import { File } from './File';
 import { Contract } from './Contract';
-import { IsInt, IsOptional, IsString, ValidateNested } from 'class-validator';
+import {
+	IsDefined,
+	IsInt,
+	IsOptional,
+	IsString,
+	ValidateIf,
+	ValidateNested
+} from 'class-validator';
 
 @Entity()
 export class ContractAttachment {
 	@PrimaryGeneratedColumn()
+	@IsOptional()
 	@IsInt()
 	id!: number;
 

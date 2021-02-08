@@ -7,79 +7,100 @@ import {
 	Authorized,
 	Req,
 	CurrentUser,
-	Param
+	Param,
+	HttpError,
+	BadRequestError
 } from 'routing-controllers';
-import { Forbidden } from '@curveball/http-errors';
-import { Contract, Customer, getRepository, Permission, User } from '@bokari/database';
-import { classToPlain } from 'class-transformer';
+
+import {
+	Contract,
+	ContractAttachment,
+	Customer,
+	getRepository,
+	Metadata,
+	Permission,
+	User
+} from '@bokari/database';
 
 @JsonController('/contracts')
 export class ContractsController {
+	@Get()
 	@Authorized([Permission.CONTRACTS_READ])
-	@Get('')
 	async getAllContracts() {
-		const rawContracts = await getRepository(Contract).find();
-
-		const contracts = rawContracts.map(rc => ({
-			id: rc.id,
-			isDone: rc.isDone,
-			code: rc.code,
-			deadlineAt: rc.deadlineAt,
-			description: rc.description ?? undefined,
-			startAt: rc.startAt,
-			name: rc.name,
-			attachments: rc.attachments.map(a => ({
-				...a,
-				file: {
-					...a.file,
-					url: `/static/${a.file.hash}`
-				}
-			})),
-			contractPhases: rc.contractPhases,
-			customer: rc.customer
-		}));
+		const contracts = await getRepository(Contract).find({
+			relations: ['customer', 'contractPhases']
+		});
 
 		return contracts;
 	}
 
+	@Get('/:code')
 	@Authorized([Permission.CONTRACTS_READ])
-	@Get("/:code")
-	async getContractByCode(@Param("code") code: string) {
-		const contract = await getRepository(Contract).findOne({where: {code}});
+	async getContractByCode(@Param('code') code: string): Promise<Contract> {
+		const contract = await getRepository(Contract).findOneOrFail({
+			where: { code },
+			relations: ['attachments', 'contractPhases', 'customer']
+		});
 
 		return contract;
 	}
 
+	@Post()
 	@Authorized([Permission.CONTRACTS_WRITE])
-	@Post('')
 	async createContract(
 		@CurrentUser() currentUser: User,
 		@Body() desiredContract: Contract,
 		@Req() request: Request
 	) {
 		if (await this.existsContract({ code: desiredContract.code })) {
-			throw new Forbidden('A contract with such code already exists!');
+			throw new HttpError(409, 'A contract with such code already exists!');
 		}
 
 		const contractEntity = new Contract();
 		contractEntity.code = desiredContract.code;
 		contractEntity.name = desiredContract.name;
+		contractEntity.description = desiredContract.description;
+		contractEntity.startAt = desiredContract.startAt;
 		contractEntity.deadlineAt = desiredContract.deadlineAt;
-		contractEntity.customer = await getRepository(Customer).findOneOrFail(desiredContract.customer.id);
-		contractEntity.metadata.createdBy = currentUser;
+		contractEntity.contractPhases = desiredContract.contractPhases;
+		contractEntity.metadata = new Metadata({ createdBy: currentUser });
+		contractEntity.customer = desiredContract.customer;
 
-		const createdContract = await getRepository(Contract).save(contractEntity);
+		try {
+			const createdContract = await getRepository(Contract).save(contractEntity);
 
-		return createdContract;
+			return createdContract;
+		} catch (e) {
+			throw new BadRequestError(
+				'Could not persist the desired contract. Check your supplied fields and contact the administrator if the problem persists.'
+			);
+		}
+	}
+
+	@Post('/:code/attachments')
+	@Authorized()
+	async createContractAttachment(
+		@CurrentUser() currentUser: User,
+		@Param('code') code: string,
+		@Body() desiredAttachment: ContractAttachment
+	): Promise<ContractAttachment> {
+		const contractEntity = await getRepository(Contract).findOneOrFail({
+			where: { code },
+			select: ['id']
+		});
+
+		const attachmentEntity = new ContractAttachment();
+		attachmentEntity.metadata = new Metadata({ createdBy: currentUser });
+		attachmentEntity.contract = contractEntity;
+		attachmentEntity.file = desiredAttachment.file;
+		attachmentEntity.note = desiredAttachment.note;
+
+		const createdAttachment = await getRepository(ContractAttachment).save(attachmentEntity);
+
+		return createdAttachment;
 	}
 
 	async existsContract(query: Partial<Contract>): Promise<boolean> {
-		try {
-			const contract = await getRepository(Contract).findOneOrFail({ where: query });
-
-			return true;
-		} catch {
-			return false;
-		}
+		return (await getRepository(Contract).count({ where: query })) > 0;
 	}
 }

@@ -4,17 +4,14 @@ import {
 	IsEnum,
 	IsInt,
 	IsOptional,
-	IsString,
 	validate,
 	ValidateIf,
 	ValidateNested,
-	validateOrReject
 } from 'class-validator';
 import { plainToClass, Type } from 'class-transformer';
 
 import { Permission, User } from '@bokari/database';
-import { promisify } from 'util';
-import { BadRequest } from '@curveball/http-errors';
+import { BadRequestError } from 'routing-controllers';
 
 export enum JwtType {
 	ACCESS = 'access',
@@ -55,10 +52,7 @@ export class RefreshTokenPayload extends JwtPayload {
 	type!: JwtType.REFRESH;
 }
 
-export function issueToken(
-	payload: AccessTokenPayload | RefreshTokenPayload,
-	options: SignOptions
-): Promise<string> {
+export function issueToken(payload: AccessTokenPayload | RefreshTokenPayload, options: SignOptions): Promise<string> {
 	return new Promise((resolve, reject) => {
 		jwtSign(payload, 'TODO', options, (err, encoded) => {
 			if (err) {
@@ -70,14 +64,8 @@ export function issueToken(
 	});
 }
 
-export async function verifyToken(
-	expectedType: JwtType.ACCESS,
-	token: string
-): Promise<AccessTokenPayload>;
-export async function verifyToken(
-	expectedType: JwtType.REFRESH,
-	token: string
-): Promise<RefreshTokenPayload>;
+export async function verifyToken(expectedType: JwtType.ACCESS, token: string): Promise<AccessTokenPayload>;
+export async function verifyToken(expectedType: JwtType.REFRESH, token: string): Promise<RefreshTokenPayload>;
 export async function verifyToken(
 	expectedType: JwtType,
 	token: string
@@ -90,7 +78,7 @@ export async function verifyToken(
 		});
 
 		if (errors.length > 0) {
-			throw new BadRequest('Wrong token structure!');
+			throw new BadRequestError('Wrong token structure!');
 		}
 
 		return payload as AccessTokenPayload;
@@ -100,7 +88,7 @@ export async function verifyToken(
 		});
 
 		if (errors.length > 0) {
-			throw new BadRequest('Wrong token structure!');
+			throw new BadRequestError('Wrong token structure!');
 		}
 
 		return payload as RefreshTokenPayload;

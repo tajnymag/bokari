@@ -4,12 +4,21 @@ import { Metadata } from './Metadata';
 import { ContractAttachment } from './ContractAttachment';
 import { WorkLog } from './WorkLog';
 import { Customer } from './Customer';
-import { IsBoolean, IsDate, IsInt, IsString, ValidateNested } from 'class-validator';
+import {
+	IsBoolean,
+	IsDate,
+	IsDateString,
+	IsInt, IsNotEmpty, IsNotEmptyObject,
+	IsOptional,
+	IsString,
+	ValidateNested
+} from 'class-validator';
 import { Type } from 'class-transformer';
 
 @Entity()
 export class Contract {
 	@PrimaryGeneratedColumn()
+	@IsOptional()
 	@IsInt()
 	id!: number;
 
@@ -21,19 +30,21 @@ export class Contract {
 	@IsString()
 	name!: string;
 
-	@Column()
+	@Column({ nullable: true })
+	@IsOptional()
 	@IsString()
-	description!: string;
+	description?: string;
 
 	@Column('timestamptz')
-	@IsDate()
+	@IsDateString()
 	startAt!: Date;
 
 	@Column('timestamptz')
-	@IsDate()
+	@IsDateString()
 	deadlineAt!: Date;
 
 	@Column({ default: false })
+	@IsOptional()
 	@IsBoolean()
 	isDone!: boolean;
 
@@ -41,7 +52,8 @@ export class Contract {
 	@ValidateNested()
 	metadata!: Metadata;
 
-	@ManyToOne(() => Customer)
+	@ManyToOne(() => Customer, { nullable: false })
+	@IsNotEmptyObject()
 	@ValidateNested()
 	customer!: Customer;
 

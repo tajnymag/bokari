@@ -6,6 +6,7 @@ import { IsEmail, IsInt, IsOptional, IsPhoneNumber, IsString, ValidateNested } f
 @Entity()
 export class Contact {
 	@PrimaryGeneratedColumn()
+	@IsOptional()
 	@IsInt()
 	id!: number;
 

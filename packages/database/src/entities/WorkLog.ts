@@ -2,20 +2,21 @@ import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { User } from './User';
 import { Contract } from './Contract';
 import { Metadata } from './Metadata';
-import { IsDate, IsInt, IsOptional, IsString, ValidateNested } from 'class-validator';
+import { IsDate, IsDateString, IsInt, IsOptional, IsString, ValidateNested } from 'class-validator';
 
 @Entity()
 export class WorkLog {
 	@PrimaryGeneratedColumn()
+	@IsOptional()
 	@IsInt()
 	id!: number;
 
 	@Column('timestamptz')
-	@IsDate()
+	@IsDateString()
 	from!: Date;
 
 	@Column('timestamptz')
-	@IsDate()
+	@IsDateString()
 	to!: Date;
 
 	@Column({ nullable: true })
