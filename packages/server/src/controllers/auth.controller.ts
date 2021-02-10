@@ -46,7 +46,7 @@ export class AuthController {
 
 		const user = await getRepository(User).findOne({
 			where: { username },
-			relations: ['person', 'groups']
+			relations: ['groups']
 		});
 
 		if (!user) {

@@ -9,27 +9,24 @@ import {
 	CurrentUser,
 	Param,
 	HttpError,
-	BadRequestError
+	BadRequestError,
 } from 'routing-controllers';
 
 import {
 	Contract,
-	ContractAttachment,
-	Customer,
 	getRepository,
 	Metadata,
 	Permission,
-	User
+	User,
 } from '@bokari/database';
 
+@Authorized()
 @JsonController('/contracts')
 export class ContractsController {
 	@Get()
 	@Authorized([Permission.CONTRACTS_READ])
 	async getAllContracts() {
-		const contracts = await getRepository(Contract).find({
-			relations: ['customer', 'contractPhases']
-		});
+		const contracts = await getRepository(Contract).find();
 
 		return contracts;
 	}
@@ -39,7 +36,7 @@ export class ContractsController {
 	async getContractByCode(@Param('code') code: string): Promise<Contract> {
 		const contract = await getRepository(Contract).findOneOrFail({
 			where: { code },
-			relations: ['attachments', 'contractPhases', 'customer']
+			relations: ['attachments']
 		});
 
 		return contract;
@@ -75,29 +72,6 @@ export class ContractsController {
 				'Could not persist the desired contract. Check your supplied fields and contact the administrator if the problem persists.'
 			);
 		}
-	}
-
-	@Post('/:code/attachments')
-	@Authorized()
-	async createContractAttachment(
-		@CurrentUser() currentUser: User,
-		@Param('code') code: string,
-		@Body() desiredAttachment: ContractAttachment
-	): Promise<ContractAttachment> {
-		const contractEntity = await getRepository(Contract).findOneOrFail({
-			where: { code },
-			select: ['id']
-		});
-
-		const attachmentEntity = new ContractAttachment();
-		attachmentEntity.metadata = new Metadata({ createdBy: currentUser });
-		attachmentEntity.contract = contractEntity;
-		attachmentEntity.file = desiredAttachment.file;
-		attachmentEntity.note = desiredAttachment.note;
-
-		const createdAttachment = await getRepository(ContractAttachment).save(attachmentEntity);
-
-		return createdAttachment;
 	}
 
 	async existsContract(query: Partial<Contract>): Promise<boolean> {

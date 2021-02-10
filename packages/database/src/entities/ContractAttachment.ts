@@ -18,7 +18,7 @@ export class ContractAttachment {
 	@IsInt()
 	id!: number;
 
-	@OneToOne(() => File, { cascade: true })
+	@OneToOne(() => File, { eager: true, cascade: true })
 	@JoinColumn()
 	@IsOptional()
 	@ValidateNested()

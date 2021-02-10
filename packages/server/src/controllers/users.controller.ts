@@ -12,13 +12,14 @@ class UserInsertable extends User {
 	passwordHash!: string;
 }
 
+@Authorized()
 @JsonController('/users')
 export class UsersController {
 	@Get()
 	@Authorized([Permission.USERS_READ])
 	async getAllUsers(): Promise<User[]> {
 		const users = await getRepository(User).find({
-			relations: ['person', 'groups', 'avatar', 'workLogs']
+			relations: ['person', 'person.contacts', 'groups', 'workLogs']
 		});
 
 		return users;
@@ -29,7 +30,7 @@ export class UsersController {
 	async getUserByUsername(@Param('username') username: string): Promise<User> {
 		const user = await getRepository(User).findOneOrFail({
 			where: { username },
-			relations: ['person', 'groups', 'avatar', 'workLogs']
+			relations: ['person', 'person.contacts', 'groups', 'workLogs']
 		});
 
 		return user;

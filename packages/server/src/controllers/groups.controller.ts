@@ -1,6 +1,7 @@
 import { Authorized, Body, Get, HttpError, JsonController, Param, Post } from 'routing-controllers';
 import { getRepository, Group, Permission } from '@bokari/database';
 
+@Authorized()
 @JsonController('/groups')
 export class GroupsController {
 	@Get()

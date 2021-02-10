@@ -11,16 +11,24 @@ import { AuthController } from './controllers/auth.controller';
 import { FilesController } from './controllers/files.controller';
 import { WorkLogsController } from './controllers/worklogs.controller';
 import { CustomersController } from './controllers/customers.controller';
+import { PhasesController } from './controllers/phases.controller';
+import { GroupsController } from './controllers/groups.controller';
+import { ContractAttachmentsController } from './controllers/contract-attachments.controller';
+import { ContractPhasesController } from './controllers/contract-phases.controller';
 
 const app = createExpressServer({
 	cors: true,
 	controllers: [
 		AuthController,
-		UsersController,
 		ContractsController,
+		ContractAttachmentsController,
+		ContractPhasesController,
+		CustomersController,
 		FilesController,
-		WorkLogsController,
-		CustomersController
+		GroupsController,
+		PhasesController,
+		UsersController,
+		WorkLogsController
 	],
 	middlewares: [ErrorHandler],
 	defaultErrorHandler: false,

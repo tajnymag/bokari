@@ -10,7 +10,7 @@ export class Customer {
 	@IsInt()
 	id!: number;
 
-	@OneToOne(() => Person, { nullable: false, cascade: true })
+	@OneToOne(() => Person, { eager: true, nullable: false, cascade: true })
 	@JoinColumn()
 	@ValidateNested()
 	person!: Person;

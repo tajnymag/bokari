@@ -28,6 +28,7 @@ class WorkLogsQueryParams implements Partial<WorkLog> {
 	to?: Date;
 }
 
+@Authorized()
 @JsonController('/worklogs')
 export class WorkLogsController {
 	@Get()

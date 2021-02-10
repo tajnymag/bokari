@@ -43,7 +43,7 @@ export class Contract {
 	@IsDateString()
 	deadlineAt!: Date;
 
-	@Column({ default: false })
+	@Column()
 	@IsOptional()
 	@IsBoolean()
 	isDone!: boolean;
@@ -52,7 +52,7 @@ export class Contract {
 	@ValidateNested()
 	metadata!: Metadata;
 
-	@ManyToOne(() => Customer, { nullable: false })
+	@ManyToOne(() => Customer, { eager: true, nullable: false })
 	@IsNotEmptyObject()
 	@ValidateNested()
 	customer!: Customer;
@@ -76,8 +76,8 @@ export class Contract {
 
 	@OneToMany(
 		() => ContractPhase,
-		phase => phase.contractId,
-		{ cascade: true }
+		phase => phase.contract,
+		{ eager: true, cascade: true }
 	)
 	@ValidateNested({ each: true })
 	@Type(() => ContractPhase)

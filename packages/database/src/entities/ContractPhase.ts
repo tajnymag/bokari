@@ -1,27 +1,32 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+	Column,
+	Entity,
+	JoinColumn,
+	ManyToOne,
+	PrimaryColumn,
+	PrimaryGeneratedColumn,
+	Unique
+} from 'typeorm';
 import { Contract } from './Contract';
 import { Phase } from './Phase';
 import {
 	IsBoolean,
-	IsDate,
-	IsDateString,
-	IsInt,
+	IsDateString, IsEmpty,
+	IsInt, IsNotEmpty,
 	IsOptional,
 	ValidateNested
 } from 'class-validator';
 
 @Entity()
+@Unique("unique_contract_phase", ["contract", "phase"])
 export class ContractPhase {
-	@PrimaryGeneratedColumn()
+	@PrimaryColumn()
 	@IsOptional()
-	@IsInt()
-	id!: number;
-
-	@Column()
 	@IsInt()
 	contractId!: number;
 
-	@Column()
+	@PrimaryColumn()
+	@IsNotEmpty()
 	@IsInt()
 	phaseId!: number;
 
@@ -30,20 +35,25 @@ export class ContractPhase {
 	deadlineAt!: Date;
 
 	@Column({ default: false })
+	@IsOptional()
 	@IsBoolean()
 	isDone!: boolean;
 
 	@ManyToOne(
 		() => Contract,
-		contract => contract.contractPhases
+		contract => contract.contractPhases,
+		{ primary: true }
 	)
+	@IsEmpty()
 	@ValidateNested({ each: true })
 	contract!: Contract;
 
 	@ManyToOne(
 		() => Phase,
-		phase => phase.contractPhases
+		phase => phase.contractPhases,
+		{ eager: true, primary: true }
 	)
+	@IsEmpty()
 	@ValidateNested({ each: true })
 	phase!: Phase;
 }

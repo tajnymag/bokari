@@ -2,6 +2,7 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { Metadata } from './Metadata';
 import {
 	IsAscii,
+	IsHexadecimal,
 	IsInt,
 	IsMimeType,
 	IsOptional,
@@ -18,16 +19,19 @@ export class File {
 	id!: number;
 
 	@Column()
-	@IsAscii()
+	@IsHexadecimal()
 	hash!: string;
 
 	@Column()
 	@IsString()
 	filename!: string;
 
-	@Column()
-	@IsOptional()
-	@IsUrl()
+	@IsUrl({
+		require_host: false,
+		require_protocol: false,
+		require_tld: false,
+		require_valid_protocol: false
+	})
 	url!: string;
 
 	@Column()

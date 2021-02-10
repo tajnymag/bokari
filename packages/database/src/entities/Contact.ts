@@ -20,7 +20,7 @@ export class Contact {
 	@ValidateNested({ each: true })
 	person!: Person;
 
-	@OneToOne(() => Address, { cascade: true })
+	@OneToOne(() => Address, { eager: true, cascade: true })
 	@JoinColumn()
 	@IsOptional()
 	@ValidateNested()

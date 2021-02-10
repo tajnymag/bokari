@@ -1,12 +1,13 @@
-import { Body, Get, JsonController, Param, Post } from 'routing-controllers';
+import { Authorized, Body, Get, JsonController, Param, Post } from 'routing-controllers';
 import { Customer, getRepository } from '@bokari/database';
 
+@Authorized()
 @JsonController('/customers')
 export class CustomersController {
 	@Get()
 	async getAllCustomers(): Promise<Customer[]> {
 		const customers = await getRepository(Customer).find({
-			relations: ['contacts', 'contacts.address']
+			relations: ['person', 'person.contacts']
 		});
 
 		return customers;
@@ -15,7 +16,7 @@ export class CustomersController {
 	@Get('/:id')
 	async getCustomerById(@Param('id') id: number): Promise<Customer> {
 		const customer = await getRepository(Customer).findOneOrFail(id, {
-			relations: ['contacts', 'contacts.address']
+			relations: ['person', 'person.contacts']
 		});
 
 		return customer;

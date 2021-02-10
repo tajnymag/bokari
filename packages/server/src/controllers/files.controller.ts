@@ -23,6 +23,7 @@ const MULTER_OPTIONS: UploadOptions = {
 	}
 };
 
+@Authorized()
 @JsonController('/files')
 export class FilesController {
 	@Get('/:id')
@@ -34,14 +35,23 @@ export class FilesController {
 	}
 
 	@Post()
-	@Authorized()
 	async uploadFile(
 		@UploadedFile('file', MULTER_OPTIONS) uploadedFile: Express.Multer.File,
 		@CurrentUser() currentUser: User
 	): Promise<File> {
 		const hash = await hasha.fromFile(uploadedFile.path, { algorithm: 'sha256' });
-		const storagePath = path.resolve(process.env.BOKARI_UPLOADS_DIR ?? __dirname, 'uploads', hash);
-		const urlPath = `/static/uploads/${hash}`;
+
+		const normalizedFilename = uploadedFile.originalname
+			.replace(/[^a-z0-9.]/gi, '_')
+			.toLowerCase();
+
+		const storagePath = path.resolve(
+			process.env.BOKARI_UPLOADS_DIR ?? __dirname,
+			hash,
+			normalizedFilename
+		);
+
+		const urlPath = `/static/uploads/${hash}/${normalizedFilename}`;
 
 		if (!(await fs.pathExists(storagePath))) {
 			await fs.copy(uploadedFile.path, storagePath);

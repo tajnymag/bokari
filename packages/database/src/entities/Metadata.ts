@@ -16,7 +16,7 @@ export class Metadata {
 	@IsDateString()
 	deletedAt?: Date;
 
-	@ManyToOne(() => User)
+	@ManyToOne(() => User, { nullable: false })
 	@ValidateNested()
 	createdBy!: User;
 

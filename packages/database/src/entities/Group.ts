@@ -21,7 +21,8 @@ export class Group {
 
 	@ManyToMany(
 		() => User,
-		user => user.groups
+		user => user.groups,
+		{ eager: true }
 	)
 	@JoinTable()
 	@ValidateNested({ each: true })

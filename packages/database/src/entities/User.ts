@@ -24,6 +24,7 @@ export class User {
 	id!: number;
 
 	@OneToOne(() => Person, {
+		eager: true,
 		nullable: false,
 		cascade: true
 	})
@@ -40,7 +41,7 @@ export class User {
 	@IsString()
 	passwordHash!: string;
 
-	@ManyToOne(() => File, { cascade: true })
+	@ManyToOne(() => File, { eager: true, cascade: true })
 	@IsOptional()
 	@ValidateNested()
 	avatar?: File;
