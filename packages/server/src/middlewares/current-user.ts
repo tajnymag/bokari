@@ -1,12 +1,19 @@
 import { Action } from 'routing-controllers';
 import { AccessTokenPayload } from '../common/jwt';
-import { getRepository, User } from '@bokari/database';
-import { classToPlain } from 'class-transformer';
+import { Permission, User } from '@bokari/entities';
+
+export class CurrentUserPayload {
+	id!: number;
+	username!: string;
+	permissions!: Permission[];
+
+	constructor(props?: Partial<CurrentUserPayload>) {
+		if (props) Object.assign(this, props);
+	}
+}
 
 export async function currentUserChecker(action: Action) {
 	const jwtPayload: AccessTokenPayload = action.request.jwt;
 
-	const user = getRepository(User).findOne(jwtPayload.user.id);
-
-	return classToPlain(user);
+	return new CurrentUserPayload({ ...jwtPayload.user, permissions: jwtPayload.scopes });
 }

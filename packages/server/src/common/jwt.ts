@@ -1,4 +1,4 @@
-import { SignOptions, verify as jwtVerify, sign as jwtSign } from 'jsonwebtoken';
+import { sign as jwtSign, SignOptions, verify as jwtVerify } from 'jsonwebtoken';
 import {
 	Equals,
 	IsEnum,
@@ -6,11 +6,11 @@ import {
 	IsOptional,
 	validate,
 	ValidateIf,
-	ValidateNested,
+	ValidateNested
 } from 'class-validator';
 import { plainToClass, Type } from 'class-transformer';
 
-import { Permission, User } from '@bokari/database';
+import { Permission, User } from '@bokari/entities';
 import { BadRequestError } from 'routing-controllers';
 
 export enum JwtType {

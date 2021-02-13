@@ -1,7 +1,7 @@
 import * as http from 'http';
 import { createTerminus } from '@godaddy/terminus';
+import { createConnection } from 'typeorm';
 import { app } from './app';
-import { connectToDatabase } from '@bokari/database';
 
 export class Server {
 	private server!: http.Server;
@@ -11,7 +11,7 @@ export class Server {
 
 		createTerminus(this.server);
 
-		await connectToDatabase();
+		await createConnection();
 
 		return new Promise(resolve => {
 			this.server.listen(port, hostname, () => {
