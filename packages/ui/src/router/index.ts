@@ -26,9 +26,9 @@ const routes: Array<RouteConfig> = [
 		component: () => import(/* webpackChunkName: "contractList" */ '../views/ContractList.vue')
 	},
 	{
-		path: '/contracts/:id',
+		path: '/contracts/:contractCode',
 		name: 'Contract',
-		props: (route) => ({ id: parseInt(route.params.id) }),
+		props: (route) => ({ contractCode: route.params.contractCode }),
 		component: () => import(/* webpackChunkName: "contract" */ '../views/Contract.vue')
 	},
 	{

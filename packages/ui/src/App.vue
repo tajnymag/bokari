@@ -21,7 +21,7 @@
 					<v-list-item>
 						<v-list-item-title>Můj účet</v-list-item-title>
 					</v-list-item>
-					<v-list-item>
+					<v-list-item @click="logout()">
 						<v-list-item-title>Odhlásit</v-list-item-title>
 					</v-list-item>
 				</v-list>
@@ -38,7 +38,7 @@
 						<v-list-item-title>Domovská strana</v-list-item-title>
 					</v-list-item>
 
-					<v-list-item to="/contracts">
+					<v-list-item to="/contracts" v-if="hasPermission(Permission.CONTRACTS_READ)">
 						<v-list-item-icon>
 							<v-icon>mdi-file</v-icon>
 						</v-list-item-icon>
@@ -68,20 +68,33 @@
 			</v-container>
 		</v-main>
 
+		<app-toast-container />
+
 		<v-footer app></v-footer>
 	</v-app>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from '@vue/composition-api';
+import { Permission } from '@bokari/entities';
+import AppToastContainer from '@/components/AppToastContainer.vue';
+import { useCurrentUserStore } from '@/stores/current-user.store';
 
 export default defineComponent({
 	name: 'App',
+	components: {
+		AppToastContainer
+	},
 	setup() {
 		const drawer = ref<boolean | null>(null);
+		const { isLoggedIn, hasPermission, logout } = useCurrentUserStore();
 
 		return {
-			drawer
+			drawer,
+			isLoggedIn,
+			hasPermission,
+			Permission,
+			logout
 		};
 	}
 });

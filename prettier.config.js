@@ -4,6 +4,7 @@ module.exports = {
 	singleQuote: true,
 	trailingComma: 'none',
 	tabWidth: 4,
+	htmlWhitespaceSensitivity: 'ignore',
 	overrides: [
 		{
 			files: '*.json',

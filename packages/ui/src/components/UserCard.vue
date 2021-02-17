@@ -42,8 +42,9 @@
 
 									<v-list-item-content>
 										<v-list-item-title>
-											{{ contact.address.street }}, {{ contact.address.city }},
-											{{ contact.address.zip }}, {{ contact.address.country }}
+											{{ contact.address.street }},
+											{{ contact.address.city }}, {{ contact.address.zip }},
+											{{ contact.address.country }}
 										</v-list-item-title>
 										<v-list-item-subtitle>Adresa</v-list-item-subtitle>
 									</v-list-item-content>
@@ -69,7 +70,7 @@
 
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api';
-import { User } from '@bokari/shared';
+import { User } from '@bokari/api-client';
 
 export default defineComponent({
 	name: 'UserCard',

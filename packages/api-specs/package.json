@@ -1,0 +1,12 @@
+{
+  "name": "@bokari/api-specs",
+  "version": "1.0.0",
+  "description": "The OpenAPI specs for @bokari/api-server",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "license": "MIT",
+  "private": true,
+  "devDependencies": {
+    "openapi3-ts": "^2.0.1"
+  }
+}

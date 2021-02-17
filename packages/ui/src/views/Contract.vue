@@ -30,19 +30,22 @@
 									<v-list-item>
 										<span>Klient</span>
 										<v-spacer />
-										<span>{{ contract.client.name }}</span>
+										<span>{{ contract.customer.person.name }}</span>
 									</v-list-item>
 
 									<v-list-item>
-										<span>Zodpovědný zaměstnanec</span>
+										<span>Vytvořil</span>
 										<v-spacer />
-										<span>{{ contract.responsibleUser.name }}</span>
+										<span>{{ contract.metadata.createdBy.username }}</span>
 									</v-list-item>
 
 									<v-list-item>
 										<span>Cena</span>
 										<v-spacer />
-										<span>{{ contract.price.amount }} {{ contract.price.currency }}</span>
+										<span>
+											{{ contract.price.value }}
+											{{ contract.price.currency.iso }}
+										</span>
 									</v-list-item>
 								</v-list>
 							</v-card>
@@ -59,13 +62,13 @@
 									<v-list-item>
 										<span>Deadline</span>
 										<v-spacer />
-										<span>{{ contract.deadlineAt.toLocaleDateString() }}</span>
+										<span>{{ contract.deadlineAt }}</span>
 									</v-list-item>
 
 									<v-list-item>
 										<span>Začátek</span>
 										<v-spacer />
-										<span>{{ contract.startAt.toLocaleDateString() }}</span>
+										<span>{{ contract.startAt }}</span>
 									</v-list-item>
 								</v-list>
 							</v-card>
@@ -77,26 +80,34 @@
 							<v-card>
 								<v-card-title>Dokumentace</v-card-title>
 
-								<v-row v-for="level in contract.levels" :key="level.id" no-gutters>
+								<v-row
+									v-for="contractPhase in contract.contractPhases"
+									:key="contractPhase.id"
+									no-gutters
+								>
 									<v-col>
-										<v-subheader>{{ level.name }}</v-subheader>
+										<v-subheader>{{ contractPhase.phase.name }}</v-subheader>
 
 										<v-list-item dense>
 											<span>Dokončen</span>
 											<v-spacer />
-											<span>{{ level.isDone ? 'ANO' : 'NE' }}</span>
+											<span>{{ contractPhase.isDone ? 'ANO' : 'NE' }}</span>
 										</v-list-item>
 
 										<v-list-item dense>
 											<span>Deadline</span>
 											<v-spacer />
-											<span>{{ level.deadlineAt.toLocaleDateString() }}</span>
+											<span>
+												{{ contractPhase.deadlineAt }}
+											</span>
 										</v-list-item>
 
 										<v-list-item dense>
 											<span>Začátek</span>
 											<v-spacer />
-											<span>{{ level.startAt.toLocaleDateString() }}</span>
+											<span>
+												{{ contractPhase.startAt }}
+											</span>
 										</v-list-item>
 									</v-col>
 								</v-row>
@@ -109,18 +120,20 @@
 			<v-row>
 				<v-col>
 					<v-card>
-						<v-card-title>Komentáře</v-card-title>
+						<v-card-title>Přílohy</v-card-title>
 
-						<v-card-text v-if="contract.comments.length < 1"
-							>U zakázky nejsou zatím žádné komentáře</v-card-text
-						>
+						<v-card-text v-if="contract.attachments.length < 1">
+							U zakázky nejsou zatím žádné přílohy
+						</v-card-text>
 
-						<v-row v-for="comment in contract.comments" :key="comment.id">
+						<v-row v-for="attachment in contract.attachments" :key="attachment.id">
 							<v-col>
 								<v-card>
-									<v-card-title>{{ comment.author }}</v-card-title>
+									<v-card-title>
+										{{ attachment.metadata.createdBy.username }}
+									</v-card-title>
 									<v-card-text>
-										{{ comment.content }}
+										{{ attachment.note }}
 									</v-card-text>
 								</v-card>
 							</v-col>
@@ -136,33 +149,32 @@
 
 <script lang="ts">
 import { defineComponent, ref, toRefs, watchEffect } from '@vue/composition-api';
-import { Contract } from '@bokari/shared';
-import { getContractById } from '../../mock/data';
 import { useRouter } from '@/router';
+import { Contract } from '@bokari/api-client';
+import { contractsAPIClient } from '@/http/api';
 
 export default defineComponent({
 	name: 'Contract',
 	props: {
-		id: {
-			type: Number,
+		contractCode: {
+			type: String,
 			required: true
 		}
 	},
 	setup(props) {
-		const { id } = toRefs(props);
+		const { contractCode } = toRefs(props);
 		const contract = ref<Contract | null>(null);
 		const router = useRouter();
 
 		watchEffect(() => {
-			setTimeout(() => {
-				const foundContract = getContractById(id.value);
-
-				if (!foundContract) {
-					return router.push({ name: 'NotFound' });
-				}
-
-				contract.value = foundContract;
-			}, 1000);
+			contractsAPIClient
+				.getContractByCode(contractCode.value)
+				.then((res) => {
+					contract.value = res.data;
+				})
+				.catch(() => {
+					router.push({ name: 'NotFound' });
+				});
 		});
 
 		return {

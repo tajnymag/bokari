@@ -28,9 +28,10 @@
 
 <script lang="ts">
 import { defineComponent, ref } from '@vue/composition-api';
-import { Contract } from '@bokari/shared';
 import { useRouter } from '@/router';
-import { getAllContracts } from '../../mock/data';
+import { Contract } from '@bokari/entities';
+import { plainToClass } from 'class-transformer';
+import { contractsAPIClient } from '@/http/api';
 
 export default defineComponent({
 	name: 'ContractList',
@@ -49,7 +50,7 @@ export default defineComponent({
 			},
 			{
 				text: 'Klient',
-				value: 'client.name'
+				value: 'customer.name'
 			},
 			{
 				text: 'Uzávěrka',
@@ -59,14 +60,14 @@ export default defineComponent({
 
 		const router = useRouter();
 		const handleClick = (row: Contract) => {
-			if (row.id) {
-				router.push({ name: 'Contract', params: { id: row.id.toString() } });
+			if (row.code) {
+				router.push({ name: 'Contract', params: { contractCode: row.code.toString() } });
 			}
 		};
 
-		setTimeout(() => {
-			contracts.value = getAllContracts();
-		}, 1000);
+		contractsAPIClient.getAllContracts().then((res) => {
+			contracts.value = plainToClass(Contract, res.data);
+		});
 
 		return {
 			contracts,

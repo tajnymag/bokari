@@ -1,7 +1,7 @@
 <template>
 	<v-row justify="center">
 		<v-col>
-			<v-card> Omlouváme se, ale hledaná strana nebyla nalezena.</v-card>
+			<v-card>Omlouváme se, ale hledaná strana nebyla nalezena.</v-card>
 		</v-col>
 	</v-row>
 </template>
