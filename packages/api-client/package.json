@@ -1,14 +1,18 @@
 {
   "name": "@bokari/api-client",
   "version": "1.0.0",
+  "type": "module",
+  "main": "dist/esm/index.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
   "license": "MIT",
   "scripts": {
-    "generate": "openapi-generator-cli generate -i ../api-specs/openapi3/bokari.openapi3.json --generator-name typescript-axios -c generator-config.yaml -o src && node build/patch-generated-client.js",
-    "build": "node build/dist-clean.js && tsc -b tsconfig.esm.json"
+    "generate": "openapi-generator-cli generate -i ../api-specs/openapi3/bokari.openapi3.json --generator-name typescript-axios -c generator-config.yaml -o src && node build/patch-generated-client.cjs",
+    "build": "node build/dist-clean.cjs && tsc -b tsconfig.esm.json"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@bokari/entities": "^1.0.0"
+  },
   "devDependencies": {
     "@openapitools/openapi-generator-cli": "^2.1.23",
     "cross-env": "^7.0.3",

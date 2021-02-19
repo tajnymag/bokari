@@ -1,9 +1,9 @@
 import { sign as jwtSign, SignOptions, verify as jwtVerify } from 'jsonwebtoken';
 import {
 	Equals,
-	IsEnum,
+	IsEnum, IsIn,
 	IsInt,
-	IsOptional,
+	IsOptional, IsString,
 	validate,
 	ValidateIf,
 	ValidateNested
@@ -11,7 +11,7 @@ import {
 import { plainToClass, Type } from 'class-transformer';
 
 import { Permission, User } from '@bokari/entities';
-import { BadRequestError, UnauthorizedError } from 'routing-controllers';
+import { UnauthorizedError } from 'routing-controllers';
 import { JWT_PRIVATE_KEY, JWT_PUBLIC_KEY } from '../env.config';
 
 export enum JwtType {

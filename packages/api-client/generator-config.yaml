@@ -1,4 +1,5 @@
 supportsES6: true,
 disallowAdditionalPropertiesIfNotPresent: false
 enumPropertyNaming: UPPERCASE
-withoutPrefixEnums: false
+withoutPrefixEnums: true
+enumNameSuffix: ""

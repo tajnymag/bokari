@@ -1,3 +1,5 @@
+import { Currency } from "@bokari/entities"
+import { Permission as Permissions } from "@bokari/entities"
 /* tslint:disable */
 /* eslint-disable */
 /**
@@ -32,13 +34,13 @@ export interface AccessTokenPayload {
      * @type {string}
      * @memberof AccessTokenPayload
      */
-    type: AccessTokenPayloadTypeEnum;
+    type: Type;
     /**
      * 
      * @type {Array<string>}
      * @memberof AccessTokenPayload
      */
-    scopes?: Array<AccessTokenPayloadScopesEnum>;
+    scopes?: Array<Scopes>;
     /**
      * 
      * @type {User}
@@ -59,26 +61,6 @@ export interface AccessTokenPayload {
     exp?: number;
 }
 
-/**
-    * @export
-    * @enum {string}
-    */
-export enum AccessTokenPayloadTypeEnum {
-    ACCESS = 'access',
-    REFRESH = 'refresh'
-}
-/**
-    * @export
-    * @enum {string}
-    */
-export enum AccessTokenPayloadScopesEnum {
-    USERS_READ = 'users_read',
-    USERS_WRITE = 'users_write',
-    FINANCES_READ = 'finances_read',
-    FINANCES_WRITE = 'finances_write',
-    CONTRACTS_READ = 'contracts_read',
-    CONTRACTS_WRITE = 'contracts_write'
-}
 
 /**
  * 
@@ -444,10 +426,10 @@ export interface ContractInsertable {
     isDone?: boolean;
     /**
      * 
-     * @type {MonetaryInsertable}
+     * @type {Monetary}
      * @memberof ContractInsertable
      */
-    price: MonetaryInsertable;
+    price: Monetary;
 }
 /**
  * 
@@ -558,34 +540,27 @@ export interface ContractUpdatable {
 /**
  * 
  * @export
- * @interface Currency
+ * @interface ContractsQueryParams
  */
-export interface Currency {
+export interface ContractsQueryParams {
+    /**
+     * 
+     * @type {number}
+     * @memberof ContractsQueryParams
+     */
+    limit?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof ContractsQueryParams
+     */
+    page?: number;
     /**
      * 
      * @type {string}
-     * @memberof Currency
+     * @memberof ContractsQueryParams
      */
-    iso: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Currency
-     */
-    name: string;
-}
-/**
- * 
- * @export
- * @interface CurrencyJoinable
- */
-export interface CurrencyJoinable {
-    /**
-     * 
-     * @type {string}
-     * @memberof CurrencyJoinable
-     */
-    iso: string;
+    search?: string;
 }
 /**
  * 
@@ -668,7 +643,7 @@ export interface Group {
      * @type {Array<string>}
      * @memberof Group
      */
-    permissions: Array<GroupPermissionsEnum>;
+    permissions: Array<Permissions>;
     /**
      * 
      * @type {Array<User>}
@@ -677,18 +652,6 @@ export interface Group {
     users: Array<User>;
 }
 
-/**
-    * @export
-    * @enum {string}
-    */
-export enum GroupPermissionsEnum {
-    USERS_READ = 'users_read',
-    USERS_WRITE = 'users_write',
-    FINANCES_READ = 'finances_read',
-    FINANCES_WRITE = 'finances_write',
-    CONTRACTS_READ = 'contracts_read',
-    CONTRACTS_WRITE = 'contracts_write'
-}
 
 /**
  * 
@@ -707,7 +670,7 @@ export interface GroupInsertable {
      * @type {Array<string>}
      * @memberof GroupInsertable
      */
-    permissions: Array<GroupInsertablePermissionsEnum>;
+    permissions: Array<Permissions>;
     /**
      * 
      * @type {Array<UserJoinable>}
@@ -716,18 +679,6 @@ export interface GroupInsertable {
     users: Array<UserJoinable>;
 }
 
-/**
-    * @export
-    * @enum {string}
-    */
-export enum GroupInsertablePermissionsEnum {
-    USERS_READ = 'users_read',
-    USERS_WRITE = 'users_write',
-    FINANCES_READ = 'finances_read',
-    FINANCES_WRITE = 'finances_write',
-    CONTRACTS_READ = 'contracts_read',
-    CONTRACTS_WRITE = 'contracts_write'
-}
 
 /**
  * 
@@ -759,7 +710,7 @@ export interface GroupUpdatable {
      * @type {Array<string>}
      * @memberof GroupUpdatable
      */
-    permissions?: Array<GroupUpdatablePermissionsEnum>;
+    permissions?: Array<Permissions>;
     /**
      * 
      * @type {Array<UserJoinable>}
@@ -768,18 +719,6 @@ export interface GroupUpdatable {
     users?: Array<UserJoinable>;
 }
 
-/**
-    * @export
-    * @enum {string}
-    */
-export enum GroupUpdatablePermissionsEnum {
-    USERS_READ = 'users_read',
-    USERS_WRITE = 'users_write',
-    FINANCES_READ = 'finances_read',
-    FINANCES_WRITE = 'finances_write',
-    CONTRACTS_READ = 'contracts_read',
-    CONTRACTS_WRITE = 'contracts_write'
-}
 
 /**
  * 
@@ -792,7 +731,7 @@ export interface JwtPayload {
      * @type {string}
      * @memberof JwtPayload
      */
-    type: JwtPayloadTypeEnum;
+    type: Type;
     /**
      * 
      * @type {User}
@@ -816,29 +755,9 @@ export interface JwtPayload {
      * @type {Array<string>}
      * @memberof JwtPayload
      */
-    scopes?: Array<JwtPayloadScopesEnum>;
+    scopes?: Array<Scopes>;
 }
 
-/**
-    * @export
-    * @enum {string}
-    */
-export enum JwtPayloadTypeEnum {
-    ACCESS = 'access',
-    REFRESH = 'refresh'
-}
-/**
-    * @export
-    * @enum {string}
-    */
-export enum JwtPayloadScopesEnum {
-    USERS_READ = 'users_read',
-    USERS_WRITE = 'users_write',
-    FINANCES_READ = 'finances_read',
-    FINANCES_WRITE = 'finances_write',
-    CONTRACTS_READ = 'contracts_read',
-    CONTRACTS_WRITE = 'contracts_write'
-}
 
 /**
  * 
@@ -963,33 +882,16 @@ export interface Monetary {
      * @type {number}
      * @memberof Monetary
      */
-    value: number;
+    amount: number;
     /**
      * 
-     * @type {Currency}
+     * @type {string}
      * @memberof Monetary
      */
     currency: Currency;
 }
-/**
- * 
- * @export
- * @interface MonetaryInsertable
- */
-export interface MonetaryInsertable {
-    /**
-     * 
-     * @type {number}
-     * @memberof MonetaryInsertable
-     */
-    value: number;
-    /**
-     * 
-     * @type {CurrencyJoinable}
-     * @memberof MonetaryInsertable
-     */
-    currency: CurrencyJoinable;
-}
+
+
 /**
  * 
  * @export
@@ -1153,7 +1055,7 @@ export interface RefreshTokenPayload {
      * @type {string}
      * @memberof RefreshTokenPayload
      */
-    type: RefreshTokenPayloadTypeEnum;
+    type: Type;
     /**
      * 
      * @type {User}
@@ -1177,14 +1079,14 @@ export interface RefreshTokenPayload {
      * @type {Array<string>}
      * @memberof RefreshTokenPayload
      */
-    scopes?: Array<RefreshTokenPayloadScopesEnum>;
+    scopes?: Array<Scopes>;
 }
 
 /**
     * @export
     * @enum {string}
     */
-export enum RefreshTokenPayloadTypeEnum {
+export enum Type {
     ACCESS = 'access',
     REFRESH = 'refresh'
 }
@@ -1192,7 +1094,7 @@ export enum RefreshTokenPayloadTypeEnum {
     * @export
     * @enum {string}
     */
-export enum RefreshTokenPayloadScopesEnum {
+export enum Scopes {
     USERS_READ = 'users_read',
     USERS_WRITE = 'users_write',
     FINANCES_READ = 'finances_read',
@@ -2006,10 +1908,13 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
         /**
          * 
          * @summary Get all contracts
+         * @param {number} [limit] 
+         * @param {number} [page] 
+         * @param {string} [search] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAllContracts: async (options: any = {}): Promise<RequestArgs> => {
+        getAllContracts: async (limit?: number, page?: number, search?: string, options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/api/contracts`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2021,6 +1926,18 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
+
+            if (page !== undefined) {
+                localVarQueryParameter['page'] = page;
+            }
+
+            if (search !== undefined) {
+                localVarQueryParameter['search'] = search;
+            }
 
 
     
@@ -2103,11 +2020,14 @@ export const ContractsApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Get all contracts
+         * @param {number} [limit] 
+         * @param {number} [page] 
+         * @param {string} [search] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getAllContracts(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Contract>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getAllContracts(options);
+        async getAllContracts(limit?: number, page?: number, search?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Contract>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getAllContracts(limit, page, search, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -2155,11 +2075,14 @@ export const ContractsApiFactory = function (configuration?: Configuration, base
         /**
          * 
          * @summary Get all contracts
+         * @param {number} [limit] 
+         * @param {number} [page] 
+         * @param {string} [search] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAllContracts(options?: any): AxiosPromise<Array<Contract>> {
-            return localVarFp.getAllContracts(options).then((request) => request(axios, basePath));
+        getAllContracts(limit?: number, page?: number, search?: string, options?: any): AxiosPromise<Array<Contract>> {
+            return localVarFp.getAllContracts(limit, page, search, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -2209,12 +2132,15 @@ export class ContractsApi extends BaseAPI {
     /**
      * 
      * @summary Get all contracts
+     * @param {number} [limit] 
+     * @param {number} [page] 
+     * @param {string} [search] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ContractsApi
      */
-    public getAllContracts(options?: any) {
-        return ContractsApiFp(this.configuration).getAllContracts(options).then((request) => request(this.axios, this.basePath));
+    public getAllContracts(limit?: number, page?: number, search?: string, options?: any) {
+        return ContractsApiFp(this.configuration).getAllContracts(limit, page, search, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

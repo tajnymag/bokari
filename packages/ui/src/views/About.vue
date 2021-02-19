@@ -1,5 +1,5 @@
 <template>
-	<v-card id="about-view">
+	<v-card>
 		<v-card-title>
 			<h2 class="text-h2">O aplikaci</h2>
 		</v-card-title>

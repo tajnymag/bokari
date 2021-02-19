@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, Index, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { ContractPhase } from './ContractPhase';
 import { Metadata } from './Metadata';
 import { ContractAttachment } from './ContractAttachment';
@@ -9,6 +9,7 @@ import { Type } from 'class-transformer';
 import { IsBoolean, IsDate, IsInt, IsString, Matches, ValidateNested } from 'class-validator';
 
 @Entity()
+@Index('contract_name_trgm', { synchronize: false })
 export class Contract {
 	@PrimaryGeneratedColumn()
 	@IsInt()

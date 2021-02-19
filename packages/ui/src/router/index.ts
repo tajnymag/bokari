@@ -23,13 +23,48 @@ const routes: Array<RouteConfig> = [
 	{
 		path: '/contracts',
 		name: 'ContractList',
-		component: () => import(/* webpackChunkName: "contractList" */ '../views/ContractList.vue')
+		component: () => import(/* webpackChunkName: "contracts" */ '../views/ContractList.vue')
 	},
 	{
 		path: '/contracts/:contractCode',
 		name: 'Contract',
 		props: (route) => ({ contractCode: route.params.contractCode }),
-		component: () => import(/* webpackChunkName: "contract" */ '../views/Contract.vue')
+		component: () => import(/* webpackChunkName: "contracts" */ '../views/Contract.vue')
+	},
+	{
+		path: '/new-contract',
+		name: 'NewContract',
+		component: () => import(/* webpackChunkName: "contracts" */ '../views/NewContract.vue')
+	},
+	{
+		path: '/customers',
+		name: 'CustomerList',
+		component: () => import(/* webpackChunkName: "customers" */ '../views/CustomerList.vue')
+	},
+	{
+		path: '/customers/:customerId',
+		name: 'Customer',
+		component: () => import(/* webpackChunkName: "customers" */ '../views/Customer.vue')
+	},
+	{
+		path: '/new-customer',
+		name: 'NewCustomer',
+		component: () => import(/* webpackChunkName: "customers" */ '../views/NewCustomer.vue')
+	},
+	{
+		path: '/groups',
+		name: 'GroupList',
+		component: () => import(/* webpackChunkName: "groups" */ '../views/GroupList.vue')
+	},
+	{
+		path: '/groups/:groupId',
+		name: 'Group',
+		component: () => import(/* webpackChunkName: "groups" */ '../views/Group.vue')
+	},
+	{
+		path: '/new-group',
+		name: 'NewGroup',
+		component: () => import(/* webpackChunkName: "groups" */ '../views/NewGroup.vue')
 	},
 	{
 		path: '/404',

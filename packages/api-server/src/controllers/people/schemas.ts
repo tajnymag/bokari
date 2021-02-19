@@ -22,8 +22,9 @@ export class AddressInsertable {
 	@IsString()
 	country!: string;
 
+	@IsOptional()
 	@IsString()
-	state!: string;
+	state?: string;
 }
 
 @Expose()

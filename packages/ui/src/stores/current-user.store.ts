@@ -1,10 +1,11 @@
 import { User } from '@bokari/api-client';
-import { computed, reactive, ref } from '@vue/composition-api';
+import { computed, reactive, ref, toRef } from '@vue/composition-api';
 import { Permission } from '@bokari/entities';
 import { resetTokens, saveAccessToken, saveRefreshToken } from '@/http/auth';
 import { useToastStore } from '@/stores/toast.store';
 import { authAPIClient, usersAPIClient } from '@/http/api';
 import { useRouter } from '@/router';
+import { useLocalStorage } from '@vueuse/core';
 
 export interface UserStoreState {
 	user: User | null;
@@ -18,11 +19,14 @@ export function useCurrentUserStore() {
 			user: null
 		});
 	}
+
 	const toastStore = useToastStore();
 	const router = useRouter();
+	const storedUsername = useLocalStorage<string | null>('username', null);
 
 	const isLoggingIn = ref<boolean>(false);
 	const isLoggedIn = computed<boolean>(() => !!state.user);
+	const isCurrentUserLoaded = computed(() => !!state.user?.person);
 	const permissions = computed<Permission[]>(() => {
 		const foundPermissions: Permission[] = [];
 
@@ -32,9 +36,8 @@ export function useCurrentUserStore() {
 
 		for (const group of state.user.groups) {
 			for (const permission of group.permissions) {
-				const typedPermission = (permission as unknown) as Permission;
-				if (!foundPermissions.includes(typedPermission)) {
-					foundPermissions.push(typedPermission);
+				if (!foundPermissions.includes(permission)) {
+					foundPermissions.push(permission);
 				}
 			}
 		}
@@ -45,13 +48,14 @@ export function useCurrentUserStore() {
 	const hasPermission = (permission: Permission): boolean =>
 		permissions.value.includes(permission);
 
-	const reloadProfile = async (username?: string) => {
-		if (!state.user?.username && !username) {
-			toastStore.showToast({ message: 'Uživatel není přihlášen!', type: 'error' });
+	const reloadProfile = async () => {
+		if (!state.user?.username && !storedUsername.value) {
+			toastStore.showToast({ message: 'Přihlašte se, prosím.', type: 'warning' });
+			await router.push('/login');
 			return;
 		}
 
-		if (!username) {
+		if (!storedUsername.value) {
 			toastStore.showToast({
 				message: 'Nebylo zadáno validní uživatelské jméno!',
 				type: 'error'
@@ -59,9 +63,7 @@ export function useCurrentUserStore() {
 			return;
 		}
 
-		const { data: user } = await usersAPIClient.getUserByUsername(
-			state.user?.username ?? username
-		);
+		const { data: user } = await usersAPIClient.getUserByUsername(storedUsername.value);
 
 		state.user = user;
 	};
@@ -82,9 +84,10 @@ export function useCurrentUserStore() {
 
 			saveAccessToken(accessToken);
 			saveRefreshToken(refreshToken);
+			storedUsername.value = username;
 
 			toastStore.showToast({ message: 'Úspěšně přihlášeno.', type: 'success' });
-			await reloadProfile(username);
+			await reloadProfile();
 			await router.push('/');
 		} catch (err) {
 			toastStore.showToast({ message: 'Nesprávné přihlašovací údaje!', type: 'error' });
@@ -97,13 +100,15 @@ export function useCurrentUserStore() {
 	const logout = () => {
 		resetTokens();
 		state.user = null;
+		storedUsername.value = null;
 		toastStore.showToast({ message: 'Byl jste úspěšně odhlášen.', type: 'success' });
 	};
 
 	return {
-		user: state.user,
+		currentUser: computed(() => state.user),
 		isLoggingIn,
 		isLoggedIn,
+		isCurrentUserLoaded,
 		permissions,
 		hasPermission,
 		login,

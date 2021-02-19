@@ -44,7 +44,7 @@ import { defineComponent, ref } from '@vue/composition-api';
 import { useCurrentUserStore } from '@/stores/current-user.store';
 
 export default defineComponent({
-	name: 'Login',
+	name: 'LoginView',
 	setup() {
 		const username = ref<string>('');
 		const password = ref<string>('');

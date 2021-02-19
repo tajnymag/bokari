@@ -10,7 +10,7 @@
 import { defineComponent } from '@vue/composition-api';
 
 export default defineComponent({
-	name: '404'
+	name: 'NotFoundView'
 });
 </script>
 

@@ -5,6 +5,21 @@ import cs from 'vuetify/src/locale/cs';
 
 Vue.use(Vuetify);
 
+export interface VDialogElement extends HTMLElement {
+	save: (value: unknown) => void;
+}
+
+export interface VFormElement extends HTMLElement {
+	reset: () => void;
+	resetValidation: () => void;
+	validate: () => boolean;
+}
+
+export interface VDataTableHeader {
+	text: string;
+	value: string;
+}
+
 export default new Vuetify({
 	theme: {
 		options: {

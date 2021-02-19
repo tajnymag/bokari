@@ -23,7 +23,7 @@ export class Address {
 	@IsString()
 	country!: string;
 
-	@Column()
+	@Column({ nullable: true })
 	@IsString()
-	state!: string;
+	state?: string;
 }

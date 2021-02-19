@@ -1,15 +1,30 @@
 import {
-	IsBoolean, IsDate,
-	IsDateString,
-	IsInt,
+	IsBoolean, IsDate, IsIn,
+	IsInt, IsNotEmpty,
 	IsOptional,
-	IsString,
+	IsString, Min,
 	ValidateNested
 } from 'class-validator';
 import { Expose, Type } from 'class-transformer';
 
-import { MonetaryInsertable } from '../schemas';
 import { CustomerJoinable } from '../customers';
+import { Monetary } from '@bokari/entities';
+
+@Expose()
+export class ContractsQueryParams {
+	@IsOptional()
+	@IsInt()
+	limit?: number;
+
+	@IsOptional()
+	@IsInt()
+	@Min(1)
+	page?: number;
+
+	@IsOptional()
+	@IsString()
+	search?: string;
+}
 
 @Expose()
 export class ContractJoinable {
@@ -23,7 +38,6 @@ export class ContractInsertable {
 	@IsString()
 	code?: string;
 
-	@IsOptional()
 	@IsString()
 	name!: string;
 
@@ -47,9 +61,9 @@ export class ContractInsertable {
 	@IsBoolean()
 	isDone?: boolean;
 
-	@Type(() => MonetaryInsertable)
+	@Type(() => Monetary)
 	@ValidateNested()
-	price!: MonetaryInsertable;
+	price!: Monetary;
 }
 
 @Expose()
@@ -72,7 +86,7 @@ export class ContractUpdatable {
 	@IsOptional()
 	customer?: CustomerJoinable;
 
-	@Type(() => MonetaryInsertable)
+	@Type(() => Monetary)
 	@IsOptional()
-	price?: MonetaryInsertable;
+	price?: Monetary;
 }

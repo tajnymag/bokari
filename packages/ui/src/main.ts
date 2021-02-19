@@ -1,7 +1,10 @@
-import Vue from 'vue';
-import { router } from './router';
+import Vue, { CreateElement } from 'vue';
+import VueCompositionAPI, { createApp } from '@vue/composition-api';
+import PortalVue from 'portal-vue';
+
 import vuetify from './plugins/vuetify';
-import VueCompositionAPI from '@vue/composition-api';
+import { i18n } from './plugins/i18n';
+import { router } from './router';
 
 import App from './App.vue';
 
@@ -10,9 +13,13 @@ import '@mdi/font/css/materialdesignicons.css';
 
 Vue.config.productionTip = false;
 Vue.use(VueCompositionAPI);
+Vue.use(PortalVue);
 
-new Vue({
+const app = createApp({
 	router,
 	vuetify,
-	render: (h) => h(App)
-}).$mount('#app');
+	i18n,
+	render: (h: CreateElement) => h(App)
+});
+
+app.mount('#app');
