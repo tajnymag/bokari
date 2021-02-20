@@ -1,18 +1,18 @@
 <template>
 	<v-card class="pa-5">
-		<v-form v-on:submit.prevent="submit">
+		<v-form @submit.prevent="submit">
 			<v-card-text>
 				<v-text-field
-					label="Jméno"
+					v-model="customer.person.name"
 					:rules="[isRequired]"
 					class="required"
-					v-model="customer.person.name"
+					label="Jméno"
 				/>
 			</v-card-text>
 
 			<v-card-actions>
 				<v-spacer />
-				<v-btn text type="submit" color="primary">Uložit</v-btn>
+				<v-btn color="primary" text type="submit">Uložit</v-btn>
 			</v-card-actions>
 		</v-form>
 	</v-card>
@@ -23,7 +23,6 @@ import { defineComponent, reactive, ref } from '@vue/composition-api';
 import { CustomerInsertable } from '@bokari/api-client';
 import { useToastStore } from '@/stores/toast.store';
 import { customersAPIClient } from '@/http/api';
-import ContactInput from '@/components/ContactInput.vue';
 import { VFormElement } from '@/plugins/vuetify';
 import { useValidation } from '@/utils/validations';
 import ContactList from '@/components/ContactList.vue';

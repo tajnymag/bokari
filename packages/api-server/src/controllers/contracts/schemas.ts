@@ -5,7 +5,7 @@ import {
 	IsString, Min,
 	ValidateNested
 } from 'class-validator';
-import { Expose, Type } from 'class-transformer';
+import { Exclude, Expose, Type } from "class-transformer";
 
 import { CustomerJoinable } from '../customers';
 import { Monetary } from '@bokari/entities';
@@ -66,26 +66,32 @@ export class ContractInsertable {
 	price!: Monetary;
 }
 
-@Expose()
+@Exclude()
 export class ContractUpdatable {
+  @Expose()
 	@IsOptional()
 	code?: string;
 
+  @Expose()
 	@IsOptional()
 	name?: string;
 
+  @Expose()
 	@Type(() => Date)
 	@IsOptional()
 	startAt?: Date;
 
+  @Expose()
 	@Type(() => Date)
 	@IsOptional()
 	deadlineAt?: Date;
 
+  @Expose()
 	@Type(() => CustomerJoinable)
 	@IsOptional()
 	customer?: CustomerJoinable;
 
+  @Expose()
 	@Type(() => Monetary)
 	@IsOptional()
 	price?: Monetary;

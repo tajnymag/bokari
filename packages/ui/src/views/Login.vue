@@ -1,11 +1,11 @@
 <template>
 	<div id="login-view">
-		<v-form v-on:submit.prevent="login(username, password)">
+		<v-form @submit.prevent="login(username, password)">
 			<v-row justify="center">
-				<v-col cols="12" sm="10" md="8" lg="6">
+				<v-col cols="12" lg="6" md="8" sm="10">
 					<v-card>
 						<v-card-title>
-							<h2 class="text-h2 text-center">Přihlášení</h2>
+							<h2 class="text-center text-h2">Přihlášení</h2>
 						</v-card-title>
 
 						<v-card-text>
@@ -18,9 +18,9 @@
 							<v-text-field
 								v-model="password"
 								label="Heslo"
-								type="password"
 								outlined
 								required
+								type="password"
 							/>
 						</v-card-text>
 
@@ -28,7 +28,7 @@
 
 						<v-card-actions>
 							<v-spacer />
-							<v-btn type="submit" text color="primary" :loading="isLoggingIn">
+							<v-btn :loading="isLoggingIn" color="primary" text type="submit">
 								Přihlásit se
 							</v-btn>
 						</v-card-actions>

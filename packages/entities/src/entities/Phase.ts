@@ -1,14 +1,16 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { ContractPhase } from './ContractPhase';
 import { Exclude, Type } from 'class-transformer';
-import { ValidateNested } from 'class-validator';
+import { IsInt, IsString, ValidateNested } from 'class-validator';
 
 @Entity()
 export class Phase {
 	@PrimaryGeneratedColumn()
+	@IsInt()
 	id!: number;
 
 	@Column({ unique: true })
+	@IsString()
 	name!: string;
 
 	@OneToMany(

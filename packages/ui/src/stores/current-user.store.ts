@@ -1,5 +1,5 @@
 import { User } from '@bokari/api-client';
-import { computed, reactive, ref, toRef } from '@vue/composition-api';
+import { computed, reactive, ref } from '@vue/composition-api';
 import { Permission } from '@bokari/entities';
 import { resetTokens, saveAccessToken, saveRefreshToken } from '@/http/auth';
 import { useToastStore } from '@/stores/toast.store';

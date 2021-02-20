@@ -2,6 +2,8 @@ import { AxiosInstance } from 'axios';
 import { authHttpClient, httpClient } from '@/http/http-client';
 import {
 	AuthApi,
+	ContractAttachmentsApi,
+	ContractPhasesApi,
 	ContractsApi,
 	CustomersApi,
 	FilesApi,
@@ -12,14 +14,22 @@ import {
 	WorkLogsApi
 } from '@bokari/api-client';
 
+const authAPIClientConfig: [undefined, undefined, AxiosInstance] = [
+	undefined,
+	undefined,
+	authHttpClient
+];
+
 const commonAPIClientConfig: [undefined, undefined, AxiosInstance] = [
 	undefined,
 	undefined,
 	httpClient
 ];
 
-export const authAPIClient = new AuthApi(undefined, undefined, authHttpClient);
+export const authAPIClient = new AuthApi(...authAPIClientConfig);
 export const contractsAPIClient = new ContractsApi(...commonAPIClientConfig);
+export const contractPhasesAPIClient = new ContractPhasesApi(...commonAPIClientConfig);
+export const contractAttachmentsAPIClient = new ContractAttachmentsApi(...commonAPIClientConfig);
 export const customersAPIClient = new CustomersApi(...commonAPIClientConfig);
 export const filesAPIClient = new FilesApi(...commonAPIClientConfig);
 export const groupsAPIClient = new GroupsApi(...commonAPIClientConfig);

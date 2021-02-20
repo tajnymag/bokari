@@ -2,36 +2,35 @@
 	<v-dialog
 		ref="dialog"
 		v-model="modal"
-		:return-value.sync="date"
 		:disabled="disabled"
+		:return-value.sync="date"
 		width="290px"
 	>
 		<template v-slot:activator="{ on, attrs }">
 			<v-text-field
 				v-model="date"
-				:label="label"
-				:rules="rules"
-				:reverse="reverse"
-				:prepend-icon="prependIcon"
-				:solo="solo"
-				:flat="flat"
-				readonly
 				v-bind="attrs"
+				:flat="flat"
+				:label="label"
+				:prepend-icon="prependIcon"
+				:reverse="reverse"
+				:rules="rules"
+				:solo="solo"
+				readonly
 				v-on="on"
 			></v-text-field>
 		</template>
 		<v-date-picker v-model="date" scrollable>
 			<v-spacer></v-spacer>
-			<v-btn text color="primary" @click="modal = false">Zrušit</v-btn>
-			<v-btn text color="primary" @click="confirm">OK</v-btn>
+			<v-btn color="primary" text @click="modal = false">Zrušit</v-btn>
+			<v-btn color="primary" text @click="confirm">OK</v-btn>
 		</v-date-picker>
 	</v-dialog>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, toRefs, watchEffect } from '@vue/composition-api';
+import { defineComponent, ref, toRefs } from '@vue/composition-api';
 import { InputValidationRules } from 'vuetify';
-import { syncRef } from '@vueuse/core';
 import { VDialogElement } from '@/plugins/vuetify';
 
 export default defineComponent({

@@ -11,37 +11,37 @@
 					<v-row>
 						<v-col>
 							<v-text-field
+								v-model="contact.email"
+								:rules="[isEmail]"
 								label="E-mail"
 								type="email"
-								:rules="[isEmail]"
-								v-model="contact.email"
 							/>
-							<v-text-field label="Telefon" type="tel" v-model="contact.phone" />
-							<v-textarea label="Poznámka" v-model="contact.note" />
-							<v-switch label="Přidat adresu" v-model="hasAddress" />
+							<v-text-field v-model="contact.phone" label="Telefon" type="tel" />
+							<v-textarea v-model="contact.note" label="Poznámka" />
+							<v-switch v-model="hasAddress" label="Přidat adresu" />
 						</v-col>
 						<v-col>
-							<v-form ref="addressForm" v-if="hasAddress">
+							<v-form v-if="hasAddress" ref="addressForm">
 								<v-text-field
-									label="Město"
-									:rules="[isRequired]"
 									v-model="contact.address.city"
+									:rules="[isRequired]"
+									label="Město"
 								/>
 								<v-text-field
-									label="Ulice a číslo popisné"
-									:rules="[isRequired]"
 									v-model="contact.address.street"
-								/>
-								<v-text-field
-									label="PSČ"
-									:rules="[isPostalCode]"
-									v-model="contact.address.zip"
-								/>
-								<v-text-field label="Kraj" v-model="contact.address.state" />
-								<v-text-field
-									label="Země"
 									:rules="[isRequired]"
+									label="Ulice a číslo popisné"
+								/>
+								<v-text-field
+									v-model="contact.address.zip"
+									:rules="[isPostalCode]"
+									label="PSČ"
+								/>
+								<v-text-field v-model="contact.address.state" label="Kraj" />
+								<v-text-field
 									v-model="contact.address.country"
+									:rules="[isRequired]"
+									label="Země"
 								/>
 							</v-form>
 						</v-col>

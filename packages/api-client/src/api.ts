@@ -140,7 +140,7 @@ export interface AddressInsertable {
      * @type {string}
      * @memberof AddressInsertable
      */
-    state: string;
+    state?: string;
 }
 /**
  * 
@@ -393,7 +393,7 @@ export interface ContractInsertable {
      * @type {string}
      * @memberof ContractInsertable
      */
-    name?: string;
+    name: string;
     /**
      * 
      * @type {CustomerJoinable}
@@ -464,10 +464,10 @@ export interface ContractPhase {
     isDone: boolean;
     /**
      * 
-     * @type {object}
+     * @type {Phase}
      * @memberof ContractPhase
      */
-    phase: object;
+    phase: Phase;
 }
 /**
  * 
@@ -954,6 +954,25 @@ export interface PersonUpdatable {
      * @memberof PersonUpdatable
      */
     contacts: Array<ContactUpdatable>;
+}
+/**
+ * 
+ * @export
+ * @interface Phase
+ */
+export interface Phase {
+    /**
+     * 
+     * @type {number}
+     * @memberof Phase
+     */
+    id: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof Phase
+     */
+    name: string;
 }
 /**
  * 
@@ -3384,7 +3403,7 @@ export const PhasesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createPhase(phaseInsertable?: PhaseInsertable, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async createPhase(phaseInsertable?: PhaseInsertable, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Phase>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.createPhase(phaseInsertable, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -3394,7 +3413,7 @@ export const PhasesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getAllPhases(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<object>>> {
+        async getAllPhases(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Phase>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getAllPhases(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -3415,7 +3434,7 @@ export const PhasesApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createPhase(phaseInsertable?: PhaseInsertable, options?: any): AxiosPromise<object> {
+        createPhase(phaseInsertable?: PhaseInsertable, options?: any): AxiosPromise<Phase> {
             return localVarFp.createPhase(phaseInsertable, options).then((request) => request(axios, basePath));
         },
         /**
@@ -3424,7 +3443,7 @@ export const PhasesApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAllPhases(options?: any): AxiosPromise<Array<object>> {
+        getAllPhases(options?: any): AxiosPromise<Array<Phase>> {
             return localVarFp.getAllPhases(options).then((request) => request(axios, basePath));
         },
     };

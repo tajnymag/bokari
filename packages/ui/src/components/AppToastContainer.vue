@@ -1,9 +1,9 @@
 <template>
 	<div>
-		<v-snackbar v-for="toast of toasts" v-model="toast.visible" :key="toast.id">
+		<v-snackbar v-for="toast of toasts" :key="toast.id" v-model="toast.visible">
 			{{ toast.message }}
 			<template v-slot:action="{ attrs }">
-				<v-btn :color="toast.type" text v-bind="attrs" @click="dismissToast(toast.id)">
+				<v-btn v-bind="attrs" :color="toast.type" text @click="dismissToast(toast.id)">
 					Schovat
 				</v-btn>
 			</template>
@@ -12,7 +12,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, toRefs } from '@vue/composition-api';
+import { defineComponent } from '@vue/composition-api';
 import { useToastStore } from '@/stores/toast.store';
 
 export default defineComponent({

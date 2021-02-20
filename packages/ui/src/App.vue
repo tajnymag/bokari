@@ -3,7 +3,7 @@
 		<v-app-bar app>
 			<v-app-bar-nav-icon @click="drawer = !drawer" />
 			<v-toolbar-title>
-				<v-btn to="/" text>
+				<v-btn text to="/">
 					<h1>Bokari</h1>
 				</v-btn>
 			</v-toolbar-title>
@@ -12,7 +12,7 @@
 
 			<v-menu bottom left>
 				<template v-slot:activator="{ on, attrs }">
-					<v-btn icon v-bind="attrs" v-on="on">
+					<v-btn v-bind="attrs" icon v-on="on">
 						<v-icon>mdi-dots-vertical</v-icon>
 					</v-btn>
 				</template>
@@ -25,7 +25,7 @@
 			</v-menu>
 		</v-app-bar>
 
-		<v-navigation-drawer app v-model="drawer">
+		<v-navigation-drawer v-model="drawer" app>
 			<v-list-item>
 				<v-list-item-avatar>
 					<v-img src="https://randomuser.me/api/portraits/men/78.jpg"></v-img>
@@ -49,35 +49,35 @@
 						<v-list-item-title>Domovská strana</v-list-item-title>
 					</v-list-item>
 
-					<v-list-item to="/contracts" v-if="hasPermission(Permission.CONTRACTS_READ)">
+					<v-list-item v-if="hasPermission(Permission.CONTRACTS_READ)" to="/contracts">
 						<v-list-item-icon>
 							<v-icon>mdi-file</v-icon>
 						</v-list-item-icon>
 						<v-list-item-title>Zakázky</v-list-item-title>
 					</v-list-item>
 
-					<v-list-item to="/customers" v-if="isLoggedIn">
+					<v-list-item v-if="isLoggedIn" to="/customers">
 						<v-list-item-icon>
 							<v-icon>mdi-card-account-details</v-icon>
 						</v-list-item-icon>
 						<v-list-item-title>Klienti</v-list-item-title>
 					</v-list-item>
 
-					<v-list-item to="/users" v-if="hasPermission(Permission.USERS_READ)">
+					<v-list-item v-if="hasPermission(Permission.USERS_READ)" to="/users">
 						<v-list-item-icon>
 							<v-icon>mdi-card-account-details</v-icon>
 						</v-list-item-icon>
 						<v-list-item-title>Zaměstnanci</v-list-item-title>
 					</v-list-item>
 
-					<v-list-item to="/groups" v-if="hasPermission(Permission.USERS_READ)">
+					<v-list-item v-if="hasPermission(Permission.USERS_READ)" to="/groups">
 						<v-list-item-icon>
 							<v-icon>mdi-card-account-details</v-icon>
 						</v-list-item-icon>
 						<v-list-item-title>Skupiny</v-list-item-title>
 					</v-list-item>
 
-					<v-list-item to="/login" v-if="!isLoggedIn">
+					<v-list-item v-if="!isLoggedIn" to="/login">
 						<v-list-item-icon>
 							<v-icon>mdi-account-arrow-left</v-icon>
 						</v-list-item-icon>

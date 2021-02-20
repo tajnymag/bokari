@@ -1,4 +1,4 @@
-import { computed, reactive, readonly, ref } from '@vue/composition-api';
+import { reactive, readonly } from '@vue/composition-api';
 
 export interface ToastOptions {
 	message: string;

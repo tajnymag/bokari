@@ -6,7 +6,7 @@
 
 		<v-card-actions v-if="hasPermission(Permission.CONTRACTS_WRITE)">
 			<v-spacer />
-			<v-btn text to="/new-contract" color="primary">Vytvořit novou zakázku</v-btn>
+			<v-btn color="primary" text to="/new-contract">Vytvořit novou zakázku</v-btn>
 			<v-spacer />
 		</v-card-actions>
 
@@ -14,24 +14,24 @@
 			<v-text-field
 				v-model="searchInput"
 				append-icon="mdi-magnify"
+				class="pa-2"
+				clearable
+				hide-details
 				label="Vyhledat"
 				singe-line
-				hide-details
-				clearable
-				class="pa-2"
 			/>
 
 			<v-data-table
 				:headers="headers"
-				:items="contracts"
-				:loading="loading"
-				:items-per-page.sync="itemsPerPage"
-				:page.sync="page"
 				:item-class="rowClass"
+				:items="contracts"
+				:items-per-page.sync="itemsPerPage"
+				:loading="loading"
+				:page.sync="page"
 				@click:row="handleClick"
 			>
 				<template v-slot:item.deadlineAt="{ item }">
-					<span>{{ d(new Date(item.deadlineAt)) }}</span>
+					<span>{{ d(item.deadlineAt) }}</span>
 				</template>
 			</v-data-table>
 		</v-card-text>
@@ -44,9 +44,9 @@ import { useRouter } from '@/router';
 import { Contract, Permission } from '@bokari/entities';
 import { contractsAPIClient } from '@/http/api';
 import { asyncComputed, useDebounce } from '@vueuse/core';
-import { useI18n } from 'vue-i18n-composable';
 import { VDataTableHeader } from '@/plugins/vuetify';
 import { useCurrentUserStore } from '@/stores/current-user.store';
+import { useTypedI18n } from '@/plugins/i18n';
 
 export default defineComponent({
 	name: 'ContractListView',
@@ -110,7 +110,7 @@ export default defineComponent({
 			rowClass,
 			hasPermission,
 			Permission,
-			...useI18n()
+			...useTypedI18n()
 		};
 	}
 });

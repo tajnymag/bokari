@@ -4,8 +4,7 @@ module.exports = {
 		node: true
 	},
 	extends: [
-		'plugin:vue/base',
-		'plugin:vue/essential',
+		'plugin:vue/recommended',
 		'eslint:recommended',
 		'@vue/typescript/recommended',
 		'@vue/prettier',
@@ -17,6 +16,7 @@ module.exports = {
 	},
 	rules: {
 		'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
-		'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off'
+		'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+		'vue/static-class-names-order': 'error'
 	}
 };

@@ -1,60 +1,60 @@
 <template>
 	<v-card class="pa-5">
-		<v-form ref="form" v-on:submit.prevent="submit">
+		<v-form ref="form" @submit.prevent="submit">
 			<v-card-text>
 				<v-text-field
-					label="Název"
+					v-model="contract.name"
 					:rules="[isRequired]"
 					class="required"
-					v-model="contract.name"
+					label="Název"
 				/>
 				<v-text-field
-					label="Číslo"
+					v-model="contract.code"
 					:rules="[isPattern(/^\d{5}$/)]"
 					clearable
-					v-model="contract.code"
+					label="Číslo"
 				/>
 				<date-picker
-					label="Datum začátku"
-					:rules="[isRequired]"
 					v-model="contract.startAt"
+					:rules="[isRequired]"
+					label="Datum začátku"
 				/>
 				<date-picker
-					label="Datum odevzdání"
+					v-model="contract.deadlineAt"
 					:rules="[isRequired]"
 					class="required"
-					v-model="contract.deadlineAt"
+					label="Datum odevzdání"
 				/>
-				<v-switch label="Hotova" v-model="contract.isDone" />
+				<v-switch v-model="contract.isDone" label="Hotova" />
 				<v-text-field
-					label="Cena"
-					inputmode="decimal"
+					v-model="contract.price.amount"
 					:rules="[isNumber]"
 					class="required"
-					v-model="contract.price.amount"
+					inputmode="decimal"
+					label="Cena"
 				/>
 				<v-autocomplete
-					label="Měna"
+					v-model="contract.price.currency"
 					:items="currencies"
 					class="required"
-					v-model="contract.price.currency"
+					label="Měna"
 				/>
 				<v-autocomplete
-					label="Klient"
+					v-model="contract.customer"
 					:items="customers"
+					:loading="loadingCustomers"
+					:rules="[hasNonDefaultId]"
 					class="required"
 					item-text="person.name"
+					label="Klient"
 					return-object
-					:rules="[hasNonDefaultId]"
-					:loading="loadingCustomers"
-					v-model="contract.customer"
 				/>
-				<v-textarea label="Popis" clearable v-model="contract.description" />
+				<v-textarea v-model="contract.description" clearable label="Popis" />
 			</v-card-text>
 
 			<v-card-actions>
 				<v-spacer />
-				<v-btn text type="submit" color="primary">Uložit</v-btn>
+				<v-btn color="primary" text type="submit">Uložit</v-btn>
 			</v-card-actions>
 		</v-form>
 	</v-card>
@@ -84,7 +84,7 @@ export default defineComponent({
 
 		const contract: ContractInsertable = reactive<ContractInsertable>({
 			code: undefined,
-			name: undefined,
+			name: '',
 			description: '',
 			deadlineAt: '',
 			startAt: '',

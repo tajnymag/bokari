@@ -11,6 +11,7 @@
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
     "isolatedModules": true,
+    "resolveJsonModule": true,
     "baseUrl": ".",
     "types": [
       "vuetify",
@@ -39,5 +40,10 @@
   ],
   "exclude": [
     "node_modules"
-  ]
+  ],
+  "ts-node": {
+    "compilerOptions": {
+      "module": "commonjs"
+    }
+  }
 }
