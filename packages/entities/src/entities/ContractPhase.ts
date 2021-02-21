@@ -1,8 +1,9 @@
-import { Column, Entity, ManyToOne, PrimaryColumn, Unique } from 'typeorm';
-import { Contract } from './Contract';
-import { Phase } from './Phase';
 import { Exclude, Type } from 'class-transformer';
 import { IsBoolean, IsDate, IsInt, ValidateNested } from 'class-validator';
+import { Column, Entity, ManyToOne, PrimaryColumn, Unique } from 'typeorm';
+
+import { Contract } from './Contract';
+import { Phase } from './Phase';
 
 @Entity()
 @Unique('unique_contract_phase', ['contract', 'phase'])

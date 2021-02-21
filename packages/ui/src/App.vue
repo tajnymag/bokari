@@ -4,25 +4,13 @@
 			<v-app-bar-nav-icon @click="drawer = !drawer" />
 			<v-toolbar-title>
 				<v-btn text to="/">
-					<h1>Bokari</h1>
+					<h1>{{ title }}</h1>
 				</v-btn>
 			</v-toolbar-title>
 
 			<v-spacer />
 
-			<v-menu bottom left>
-				<template v-slot:activator="{ on, attrs }">
-					<v-btn v-bind="attrs" icon v-on="on">
-						<v-icon>mdi-dots-vertical</v-icon>
-					</v-btn>
-				</template>
-
-				<v-list>
-					<v-list-item @click="logout()">
-						<v-list-item-title>Odhlásit</v-list-item-title>
-					</v-list-item>
-				</v-list>
-			</v-menu>
+			<portal-target name="app-toolbar-buttons" />
 		</v-app-bar>
 
 		<v-navigation-drawer v-model="drawer" app>
@@ -67,7 +55,7 @@
 						<v-list-item-icon>
 							<v-icon>mdi-card-account-details</v-icon>
 						</v-list-item-icon>
-						<v-list-item-title>Zaměstnanci</v-list-item-title>
+						<v-list-item-title>Uživatelé</v-list-item-title>
 					</v-list-item>
 
 					<v-list-item v-if="hasPermission(Permission.USERS_READ)" to="/groups">
@@ -92,6 +80,10 @@
 					</v-list-item>
 				</v-list-item-group>
 			</v-list>
+
+			<template v-if="isLoggedIn" v-slot:append>
+				<v-btn block @click="logout">Odhlásit</v-btn>
+			</template>
 		</v-navigation-drawer>
 
 		<v-main class="grey lighten-3">
@@ -107,10 +99,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from '@vue/composition-api';
 import { Permission } from '@bokari/entities';
-import AppToastContainer from '@/components/AppToastContainer.vue';
-import { useCurrentUserStore } from '@/stores/current-user.store';
+import { defineComponent, ref } from '@vue/composition-api';
+import { useTitle } from '@vueuse/core';
+
+import AppToastContainer from './components/AppToastContainer.vue';
+import { useCurrentUserStore } from './stores/current-user.store';
 
 export default defineComponent({
 	name: 'App',
@@ -118,6 +112,7 @@ export default defineComponent({
 		AppToastContainer
 	},
 	setup() {
+		const title = useTitle('Bokari');
 		const drawer = ref<boolean | null>(null);
 		const {
 			isLoggedIn,
@@ -130,8 +125,16 @@ export default defineComponent({
 
 		reloadProfile();
 
+		new MutationObserver(function(mutations) {
+			title.value = mutations[0].target.textContent;
+		}).observe(document.querySelector('title') as HTMLTitleElement, {
+			characterData: true,
+			childList: true
+		});
+
 		return {
 			drawer,
+			title,
 			isLoggedIn,
 			isCurrentUserLoaded,
 			currentUser,

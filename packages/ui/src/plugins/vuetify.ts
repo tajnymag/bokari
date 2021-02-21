@@ -1,5 +1,5 @@
 import Vue from 'vue';
-// @ts-expect-error
+// @ts-expect-error Vuetify doesn't work well in monorepos afaik
 import Vuetify from 'vuetify/lib/framework';
 import cs from 'vuetify/src/locale/cs';
 

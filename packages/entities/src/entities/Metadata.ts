@@ -1,3 +1,5 @@
+import { Type } from 'class-transformer';
+import { IsDate, ValidateNested } from 'class-validator';
 import {
 	CreateDateColumn,
 	DeepPartial,
@@ -5,9 +7,8 @@ import {
 	ManyToOne,
 	UpdateDateColumn
 } from 'typeorm';
+
 import { User } from './User';
-import { IsDate, ValidateNested } from 'class-validator';
-import { Type } from 'class-transformer';
 
 export class Metadata {
 	@CreateDateColumn({ type: 'timestamptz' })

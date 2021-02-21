@@ -1,34 +1,35 @@
+import { Contract, Metadata, Permission } from '@bokari/entities';
+import { plainToClass, plainToClassFromExist } from 'class-transformer';
+import { isNotEmptyObject } from 'class-validator';
 import { Request } from 'express';
 import {
-	Authorized,
-	Body,
-	CurrentUser,
-	Get,
-	HttpCode,
-	HttpError,
-	JsonController,
-	Param,
-	Patch,
-	Post,
-	QueryParams,
-	Req
-} from 'routing-controllers';
-
-import { Contract, Metadata, Permission } from '@bokari/entities';
-import { ContractInsertable, ContractsQueryParams, ContractUpdatable } from './schemas';
+  Authorized,
+  Body,
+  CurrentUser,
+  Delete,
+  Get,
+  HttpCode,
+  HttpError,
+  JsonController, OnUndefined,
+  Param,
+  Patch,
+  Post,
+  QueryParams,
+  Req
+} from "routing-controllers";
 import { ResponseSchema } from 'routing-controllers-openapi';
-import {
-	FindManyOptions,
-	getRepository,
-	ILike,
-	Like,
-	QueryBuilder,
-	SelectQueryBuilder
-} from 'typeorm';
-import { plainToClass, plainToClassFromExist } from 'class-transformer';
-import { CurrentUserPayload } from '../../middlewares';
+import { FindManyOptions, FindOneOptions, getRepository, Like, SelectQueryBuilder } from 'typeorm';
+
 import { existsEntity } from '../../helpers/entities';
 import { isEmptyObject } from '../../helpers/utils';
+import { CurrentUserPayload } from '../../middlewares';
+
+import {
+	ContractInsertable,
+	ContractsQueryFilterable,
+	ContractsQueryParams,
+	ContractUpdatable
+} from './schemas';
 
 @Authorized()
 @JsonController('/contracts')
@@ -41,24 +42,57 @@ export class ContractsController {
 			return getRepository(Contract).find();
 		}
 
-		const limit = (query.limit && query.limit >= 0) ? query.limit : 100;
+		const limit = query.limit && query.limit >= 0 ? query.limit : 100;
 		const page = query.page || 1;
 		const searchLike = `%${query.search}%`;
+		const orderBy = query.orderBy || 'code';
 
-		const contracts = await getRepository(Contract).find({
-			where: (qb: SelectQueryBuilder<Contract>) => {
-				if (!query.search) return;
+		const take = limit;
+		const skip = (page - 1) * limit;
+		const order: FindOneOptions<Contract>['order'] = {};
+		order[orderBy] = query.order || 'DESC';
+
+		const whereQuery = (
+			qb: SelectQueryBuilder<Contract>
+		): void => {
+			if (query.search) {
 				qb.where('Contract.code = :search', { search: query.search })
 					.orWhere('Contract.name ILIKE :searchLike', { searchLike })
 					.orWhere('Contract_customer_person.name ILIKE :searchLike', {
 						searchLike
 					});
-			},
-			take: limit,
-			skip: (page - 1) * limit,
-			order: {
-				code: 'DESC'
 			}
+
+			const filterable: (keyof ContractsQueryFilterable)[] = ['deadlineAt', 'startAt'];
+
+			for (const filterProperty of filterable) {
+				if (
+					query.filterMax &&
+					isNotEmptyObject(query.filterMax) &&
+					filterProperty in query.filterMax
+				) {
+					qb.andWhere(`Contract.${filterable} <= :value`, {
+						value: query.filterMax[filterProperty]
+					});
+				}
+
+        if (
+          query.filterMin &&
+          isNotEmptyObject(query.filterMin) &&
+          filterProperty in query.filterMin
+        ) {
+          qb.andWhere(`Contract.${filterable} >= :value`, {
+            value: query.filterMin[filterProperty]
+          });
+        }
+			}
+		};
+
+		const contracts = await getRepository(Contract).find({
+			where: (qb: SelectQueryBuilder<Contract>) => whereQuery(qb),
+			take,
+			skip,
+			order
 		});
 
 		return contracts;
@@ -70,7 +104,7 @@ export class ContractsController {
 	async getContractByCode(@Param('code') code: string): Promise<Contract> {
 		const contract = await getRepository(Contract).findOneOrFail({
 			where: { code },
-			relations: ['attachments', 'metadata.createdBy']
+			relations: ['attachments', 'metadata.createdBy', 'attachments.metadata.createdBy']
 		});
 
 		return contract;
@@ -111,6 +145,13 @@ export class ContractsController {
 		const updatedContract = await getRepository(Contract).save(updatedEntity);
 
 		return updatedContract;
+	}
+
+	@Delete('/:code')
+	@Authorized([Permission.CONTRACTS_WRITE])
+	@OnUndefined(204)
+	async deleteContractByCode(@Param('code') code: string) {
+		await getRepository(Contract).softDelete({ code });
 	}
 
 	private async nextContractCode(): Promise<string> {

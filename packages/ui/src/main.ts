@@ -1,12 +1,11 @@
-import Vue, { CreateElement } from 'vue';
 import VueCompositionAPI, { createApp } from '@vue/composition-api';
 import PortalVue from 'portal-vue';
-
-import vuetify from './plugins/vuetify';
-import { i18n } from './plugins/i18n';
-import { router } from './router';
+import Vue, { CreateElement } from 'vue';
 
 import App from './App.vue';
+import { i18n } from './plugins/i18n';
+import vuetify from './plugins/vuetify';
+import { router } from './router';
 
 import 'roboto-fontface/css/roboto/roboto-fontface.css';
 import '@mdi/font/css/materialdesignicons.css';

@@ -4,9 +4,19 @@
 
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api';
+import { useTitle } from '@vueuse/core';
 
 export default defineComponent({
-	name: 'Group'
+	name: 'Group',
+	props: {
+		groupId: {
+			type: Number,
+			required: true
+		}
+	},
+	setup() {
+		useTitle('Skupina');
+	}
 });
 </script>
 

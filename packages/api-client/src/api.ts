@@ -103,7 +103,7 @@ export interface Address {
      * @type {string}
      * @memberof Address
      */
-    state: string;
+    state?: string;
 }
 /**
  * 
@@ -159,7 +159,7 @@ export interface Contact {
      * @type {Address}
      * @memberof Contact
      */
-    address: Address;
+    address?: Address;
     /**
      * 
      * @type {string}
@@ -540,6 +540,25 @@ export interface ContractUpdatable {
 /**
  * 
  * @export
+ * @interface ContractsQueryFilterable
+ */
+export interface ContractsQueryFilterable {
+    /**
+     * 
+     * @type {string}
+     * @memberof ContractsQueryFilterable
+     */
+    deadlineAt?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ContractsQueryFilterable
+     */
+    startAt?: string;
+}
+/**
+ * 
+ * @export
  * @interface ContractsQueryParams
  */
 export interface ContractsQueryParams {
@@ -561,7 +580,41 @@ export interface ContractsQueryParams {
      * @memberof ContractsQueryParams
      */
     search?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ContractsQueryParams
+     */
+    orderBy?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ContractsQueryParams
+     */
+    order?: Order;
+    /**
+     * 
+     * @type {ContractsQueryFilterable}
+     * @memberof ContractsQueryParams
+     */
+    filterMax?: ContractsQueryFilterable;
+    /**
+     * 
+     * @type {ContractsQueryFilterable}
+     * @memberof ContractsQueryParams
+     */
+    filterMin?: ContractsQueryFilterable;
 }
+
+/**
+    * @export
+    * @enum {string}
+    */
+export enum Order {
+    ASC = 'ASC',
+    DESC = 'DESC'
+}
+
 /**
  * 
  * @export
@@ -1888,6 +1941,40 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
         },
         /**
          * 
+         * @summary Delete contract by code
+         * @param {string} code 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteContractByCode: async (code: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'code' is not null or undefined
+            assertParamExists('deleteContractByCode', 'code', code)
+            const localVarPath = `/api/contracts/{code}`
+                .replace(`{${"code"}}`, encodeURIComponent(String(code)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Edit contract
          * @param {string} code 
          * @param {ContractUpdatable} [contractUpdatable] ContractUpdatable
@@ -1930,10 +2017,14 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
          * @param {number} [limit] 
          * @param {number} [page] 
          * @param {string} [search] 
+         * @param {string} [orderBy] 
+         * @param {'ASC' | 'DESC'} [order] 
+         * @param {ContractsQueryFilterable} [filterMax] 
+         * @param {ContractsQueryFilterable} [filterMin] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAllContracts: async (limit?: number, page?: number, search?: string, options: any = {}): Promise<RequestArgs> => {
+        getAllContracts: async (limit?: number, page?: number, search?: string, orderBy?: string, order?: 'ASC' | 'DESC', filterMax?: ContractsQueryFilterable, filterMin?: ContractsQueryFilterable, options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/api/contracts`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1956,6 +2047,22 @@ export const ContractsApiAxiosParamCreator = function (configuration?: Configura
 
             if (search !== undefined) {
                 localVarQueryParameter['search'] = search;
+            }
+
+            if (orderBy !== undefined) {
+                localVarQueryParameter['orderBy'] = orderBy;
+            }
+
+            if (order !== undefined) {
+                localVarQueryParameter['order'] = order;
+            }
+
+            if (filterMax !== undefined) {
+                localVarQueryParameter['filterMax'] = filterMax;
+            }
+
+            if (filterMin !== undefined) {
+                localVarQueryParameter['filterMin'] = filterMin;
             }
 
 
@@ -2026,6 +2133,17 @@ export const ContractsApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Delete contract by code
+         * @param {string} code 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deleteContractByCode(code: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteContractByCode(code, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Edit contract
          * @param {string} code 
          * @param {ContractUpdatable} [contractUpdatable] ContractUpdatable
@@ -2042,11 +2160,15 @@ export const ContractsApiFp = function(configuration?: Configuration) {
          * @param {number} [limit] 
          * @param {number} [page] 
          * @param {string} [search] 
+         * @param {string} [orderBy] 
+         * @param {'ASC' | 'DESC'} [order] 
+         * @param {ContractsQueryFilterable} [filterMax] 
+         * @param {ContractsQueryFilterable} [filterMin] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getAllContracts(limit?: number, page?: number, search?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Contract>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getAllContracts(limit, page, search, options);
+        async getAllContracts(limit?: number, page?: number, search?: string, orderBy?: string, order?: 'ASC' | 'DESC', filterMax?: ContractsQueryFilterable, filterMin?: ContractsQueryFilterable, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Contract>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getAllContracts(limit, page, search, orderBy, order, filterMax, filterMin, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -2082,6 +2204,16 @@ export const ContractsApiFactory = function (configuration?: Configuration, base
         },
         /**
          * 
+         * @summary Delete contract by code
+         * @param {string} code 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteContractByCode(code: string, options?: any): AxiosPromise<void> {
+            return localVarFp.deleteContractByCode(code, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Edit contract
          * @param {string} code 
          * @param {ContractUpdatable} [contractUpdatable] ContractUpdatable
@@ -2097,11 +2229,15 @@ export const ContractsApiFactory = function (configuration?: Configuration, base
          * @param {number} [limit] 
          * @param {number} [page] 
          * @param {string} [search] 
+         * @param {string} [orderBy] 
+         * @param {'ASC' | 'DESC'} [order] 
+         * @param {ContractsQueryFilterable} [filterMax] 
+         * @param {ContractsQueryFilterable} [filterMin] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAllContracts(limit?: number, page?: number, search?: string, options?: any): AxiosPromise<Array<Contract>> {
-            return localVarFp.getAllContracts(limit, page, search, options).then((request) => request(axios, basePath));
+        getAllContracts(limit?: number, page?: number, search?: string, orderBy?: string, order?: 'ASC' | 'DESC', filterMax?: ContractsQueryFilterable, filterMin?: ContractsQueryFilterable, options?: any): AxiosPromise<Array<Contract>> {
+            return localVarFp.getAllContracts(limit, page, search, orderBy, order, filterMax, filterMin, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -2137,6 +2273,18 @@ export class ContractsApi extends BaseAPI {
 
     /**
      * 
+     * @summary Delete contract by code
+     * @param {string} code 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ContractsApi
+     */
+    public deleteContractByCode(code: string, options?: any) {
+        return ContractsApiFp(this.configuration).deleteContractByCode(code, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
      * @summary Edit contract
      * @param {string} code 
      * @param {ContractUpdatable} [contractUpdatable] ContractUpdatable
@@ -2154,12 +2302,16 @@ export class ContractsApi extends BaseAPI {
      * @param {number} [limit] 
      * @param {number} [page] 
      * @param {string} [search] 
+     * @param {string} [orderBy] 
+     * @param {'ASC' | 'DESC'} [order] 
+     * @param {ContractsQueryFilterable} [filterMax] 
+     * @param {ContractsQueryFilterable} [filterMin] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ContractsApi
      */
-    public getAllContracts(limit?: number, page?: number, search?: string, options?: any) {
-        return ContractsApiFp(this.configuration).getAllContracts(limit, page, search, options).then((request) => request(this.axios, this.basePath));
+    public getAllContracts(limit?: number, page?: number, search?: string, orderBy?: string, order?: 'ASC' | 'DESC', filterMax?: ContractsQueryFilterable, filterMin?: ContractsQueryFilterable, options?: any) {
+        return ContractsApiFp(this.configuration).getAllContracts(limit, page, search, orderBy, order, filterMax, filterMin, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -2627,6 +2779,40 @@ export const GroupsApiAxiosParamCreator = function (configuration?: Configuratio
         },
         /**
          * 
+         * @summary Delete group by id
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteGroupById: async (id: number, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('deleteGroupById', 'id', id)
+            const localVarPath = `/api/groups/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Get all groups
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2712,6 +2898,17 @@ export const GroupsApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Delete group by id
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deleteGroupById(id: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteGroupById(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Get all groups
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2753,6 +2950,16 @@ export const GroupsApiFactory = function (configuration?: Configuration, basePat
         },
         /**
          * 
+         * @summary Delete group by id
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteGroupById(id: number, options?: any): AxiosPromise<void> {
+            return localVarFp.deleteGroupById(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Get all groups
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2790,6 +2997,18 @@ export class GroupsApi extends BaseAPI {
      */
     public createGroup(groupInsertable?: GroupInsertable, options?: any) {
         return GroupsApiFp(this.configuration).createGroup(groupInsertable, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Delete group by id
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof GroupsApi
+     */
+    public deleteGroupById(id: number, options?: any) {
+        return GroupsApiFp(this.configuration).deleteGroupById(id, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -3103,11 +3322,11 @@ export const PeopleApiAxiosParamCreator = function (configuration?: Configuratio
          * 
          * @summary Edit person
          * @param {number} personId 
-         * @param {UserUpdatable} [userUpdatable] UserUpdatable
+         * @param {PersonUpdatable} [personUpdatable] PersonUpdatable
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        editPerson: async (personId: number, userUpdatable?: UserUpdatable, options: any = {}): Promise<RequestArgs> => {
+        editPerson: async (personId: number, personUpdatable?: PersonUpdatable, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'personId' is not null or undefined
             assertParamExists('editPerson', 'personId', personId)
             const localVarPath = `/api/people/{personId}`
@@ -3130,7 +3349,7 @@ export const PeopleApiAxiosParamCreator = function (configuration?: Configuratio
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(userUpdatable, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(personUpdatable, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -3188,12 +3407,12 @@ export const PeopleApiFp = function(configuration?: Configuration) {
          * 
          * @summary Edit person
          * @param {number} personId 
-         * @param {UserUpdatable} [userUpdatable] UserUpdatable
+         * @param {PersonUpdatable} [personUpdatable] PersonUpdatable
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async editPerson(personId: number, userUpdatable?: UserUpdatable, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Person>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.editPerson(personId, userUpdatable, options);
+        async editPerson(personId: number, personUpdatable?: PersonUpdatable, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Person>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.editPerson(personId, personUpdatable, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -3244,12 +3463,12 @@ export const PeopleApiFactory = function (configuration?: Configuration, basePat
          * 
          * @summary Edit person
          * @param {number} personId 
-         * @param {UserUpdatable} [userUpdatable] UserUpdatable
+         * @param {PersonUpdatable} [personUpdatable] PersonUpdatable
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        editPerson(personId: number, userUpdatable?: UserUpdatable, options?: any): AxiosPromise<Person> {
-            return localVarFp.editPerson(personId, userUpdatable, options).then((request) => request(axios, basePath));
+        editPerson(personId: number, personUpdatable?: PersonUpdatable, options?: any): AxiosPromise<Person> {
+            return localVarFp.editPerson(personId, personUpdatable, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -3305,13 +3524,13 @@ export class PeopleApi extends BaseAPI {
      * 
      * @summary Edit person
      * @param {number} personId 
-     * @param {UserUpdatable} [userUpdatable] UserUpdatable
+     * @param {PersonUpdatable} [personUpdatable] PersonUpdatable
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PeopleApi
      */
-    public editPerson(personId: number, userUpdatable?: UserUpdatable, options?: any) {
-        return PeopleApiFp(this.configuration).editPerson(personId, userUpdatable, options).then((request) => request(this.axios, this.basePath));
+    public editPerson(personId: number, personUpdatable?: PersonUpdatable, options?: any) {
+        return PeopleApiFp(this.configuration).editPerson(personId, personUpdatable, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -3523,6 +3742,40 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
         },
         /**
          * 
+         * @summary Delete user by username
+         * @param {string} username 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteUserByUsername: async (username: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'username' is not null or undefined
+            assertParamExists('deleteUserByUsername', 'username', username)
+            const localVarPath = `/api/users/{username}`
+                .replace(`{${"username"}}`, encodeURIComponent(String(username)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Edit user
          * @param {string} username 
          * @param {UserUpdatable} [userUpdatable] UserUpdatable
@@ -3646,6 +3899,17 @@ export const UsersApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Delete user by username
+         * @param {string} username 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deleteUserByUsername(username: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteUserByUsername(username, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Edit user
          * @param {string} username 
          * @param {UserUpdatable} [userUpdatable] UserUpdatable
@@ -3699,6 +3963,16 @@ export const UsersApiFactory = function (configuration?: Configuration, basePath
         },
         /**
          * 
+         * @summary Delete user by username
+         * @param {string} username 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteUserByUsername(username: string, options?: any): AxiosPromise<void> {
+            return localVarFp.deleteUserByUsername(username, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Edit user
          * @param {string} username 
          * @param {UserUpdatable} [userUpdatable] UserUpdatable
@@ -3747,6 +4021,18 @@ export class UsersApi extends BaseAPI {
      */
     public createUser(userInsertable?: UserInsertable, options?: any) {
         return UsersApiFp(this.configuration).createUser(userInsertable, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Delete user by username
+     * @param {string} username 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UsersApi
+     */
+    public deleteUserByUsername(username: string, options?: any) {
+        return UsersApiFp(this.configuration).deleteUserByUsername(username, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

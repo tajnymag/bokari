@@ -1,7 +1,8 @@
-import { routingControllersToSpec } from 'routing-controllers-openapi';
-import { getMetadataArgsStorage } from 'routing-controllers';
-import { validationMetadatasToSchemas } from 'class-validator-jsonschema';
 import { defaultMetadataStorage } from 'class-transformer/cjs/storage';
+import { validationMetadatasToSchemas } from 'class-validator-jsonschema';
+import { getMetadataArgsStorage } from 'routing-controllers';
+import { routingControllersToSpec } from 'routing-controllers-openapi';
+
 import { routingControllersOptions } from './routing-controllers';
 
 export type OpenAPISpecDocumentObject = ReturnType<typeof routingControllersToSpec>
@@ -31,12 +32,12 @@ export async function getBokariOpenAPISpecs(): Promise<OpenAPISpecDocumentObject
 
 	/** Temporarily remove controller name from operation ids until codegen implements a better way **/
 	for (const apiPath in spec.paths) {
-		if (!spec.paths.hasOwnProperty(apiPath)) {
+		if (!Object.prototype.hasOwnProperty.call(spec.paths, apiPath)) {
 			continue;
 		}
 
 		for (const method in spec.paths[apiPath]) {
-			if (!spec.paths[apiPath].hasOwnProperty(method)) {
+			if (!Object.prototype.hasOwnProperty.call(spec.paths[apiPath], method)) {
 				continue;
 			}
 

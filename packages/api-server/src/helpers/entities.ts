@@ -1,4 +1,5 @@
 import { EntityTarget, getRepository } from 'typeorm';
+
 import { TypeormQuery } from './typing';
 
 export async function existsEntity<T>(

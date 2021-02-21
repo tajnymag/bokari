@@ -8,9 +8,13 @@
 
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api';
+import { useTitle } from '@vueuse/core';
 
 export default defineComponent({
-	name: 'NotFoundView'
+	name: 'NotFoundView',
+	setup() {
+		useTitle('Stránka nebyla nalezena');
+	}
 });
 </script>
 

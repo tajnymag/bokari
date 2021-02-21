@@ -1,5 +1,7 @@
 import {MigrationInterface, QueryRunner} from "typeorm";
+
 import { Group, User } from '../entities';
+
 import { AdminUserSeed } from './seeds/admin-user.seed';
 
 export class SeedAdminUser1613643641329 implements MigrationInterface {

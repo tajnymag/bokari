@@ -1,4 +1,6 @@
-dist/
+node_modules
 
-packages/**/dist/
+dist
+
+packages/**/dist
 packages/**/dist/**/*

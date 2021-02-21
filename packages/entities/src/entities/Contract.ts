@@ -1,12 +1,13 @@
-import { Column, Entity, Index, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { ContractPhase } from './ContractPhase';
-import { Metadata } from './Metadata';
-import { ContractAttachment } from './ContractAttachment';
-import { WorkLog } from './WorkLog';
-import { Customer } from './Customer';
-import { Monetary } from './Monetary';
 import { Type } from 'class-transformer';
 import { IsBoolean, IsDate, IsInt, IsString, Matches, ValidateNested } from 'class-validator';
+import { Column, Entity, Index, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+
+import { ContractAttachment } from './ContractAttachment';
+import { ContractPhase } from './ContractPhase';
+import { Customer } from './Customer';
+import { Metadata } from './Metadata';
+import { Monetary } from './Monetary';
+import { WorkLog } from './WorkLog';
 
 @Entity()
 @Index('contract_name_trgm', { synchronize: false })

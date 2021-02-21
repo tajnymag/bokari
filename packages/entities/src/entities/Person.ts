@@ -1,7 +1,8 @@
-import { Column, DeepPartial, Entity, Index, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { Contact } from './Contact';
 import { Type } from 'class-transformer';
 import { IsInt, IsString, ValidateNested } from 'class-validator';
+import { Column, DeepPartial, Entity, Index, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+
+import { Contact } from './Contact';
 
 @Entity()
 @Index('person_name_trgm', { synchronize: false })

@@ -1,11 +1,22 @@
-import { Body, CurrentUser, HttpCode, JsonController, Param, Post } from 'routing-controllers';
 import { Contract, ContractAttachment, Metadata, User } from '@bokari/entities';
-import { ResponseSchema } from 'routing-controllers-openapi';
-import { ContractAttachmentInsertable } from './schemas';
-import { getRepository } from 'typeorm';
 import { plainToClass } from 'class-transformer';
+import {
+	Authorized,
+	Body,
+	CurrentUser,
+	HttpCode,
+	JsonController,
+	Param,
+	Post
+} from 'routing-controllers';
+import { ResponseSchema } from 'routing-controllers-openapi';
+import { getRepository } from 'typeorm';
+
 import { CurrentUserPayload } from '../../../middlewares';
 
+import { ContractAttachmentInsertable } from './schemas';
+
+@Authorized()
 @JsonController('/contracts/:code/attachments')
 export class ContractAttachmentsController {
 	@Post()
@@ -25,8 +36,13 @@ export class ContractAttachmentsController {
 		attachmentEntity.metadata = new Metadata({ createdBy: currentUser });
 		attachmentEntity.contract = contractEntity;
 
-		const createdAttachment = await getRepository(ContractAttachment).save(attachmentEntity);
+		const createdAttachment = await getRepository(ContractAttachment).save(
+			attachmentEntity,
+			{}
+		);
 
-		return createdAttachment;
+		return getRepository(ContractAttachment).findOneOrFail(createdAttachment.id, {
+			relations: ['metadata.createdBy']
+		});
 	}
 }

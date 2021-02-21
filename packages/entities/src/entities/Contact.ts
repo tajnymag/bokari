@@ -1,8 +1,16 @@
+import { Exclude, Type } from 'class-transformer';
+import {
+  IsEmail,
+  IsInt,
+  IsOptional,
+  IsPhoneNumber,
+  IsString,
+  ValidateNested
+} from "class-validator";
 import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+
 import { Address } from './Address';
 import { Person } from './Person';
-import { IsEmail, IsInt, IsPhoneNumber, IsString, ValidateNested } from 'class-validator';
-import { Exclude, Type } from 'class-transformer';
 
 @Entity()
 export class Contact {
@@ -23,21 +31,25 @@ export class Contact {
 	@ValidateNested()
 	person!: Person;
 
-	@OneToOne(() => Address, { eager: true, cascade: true })
+	@OneToOne(() => Address, { eager: true, cascade: true, nullable: true })
 	@JoinColumn()
 	@Type(() => Address)
+  @IsOptional()
 	@ValidateNested()
 	address?: Address;
 
 	@Column({ nullable: true })
+  @IsOptional()
 	@IsEmail()
 	email?: string;
 
 	@Column({ nullable: true })
+  @IsOptional()
 	@IsPhoneNumber()
 	phone?: string;
 
 	@Column({ nullable: true })
+  @IsOptional()
 	@IsString()
 	note?: string;
 }

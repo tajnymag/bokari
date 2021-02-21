@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import { mkdir, writeFile } from 'fs/promises';
-import path from 'path';
 import * as os from 'os';
+import path from 'path';
 
 export async function existsAsync(path: string): Promise<boolean> {
 	return new Promise(resolve => {
@@ -15,7 +15,7 @@ export async function existsAsync(path: string): Promise<boolean> {
 	});
 }
 
-export async function writeLogFile(loggable: Record<string, object>): Promise<void> {
+export async function writeLogFile(loggable: Record<string, unknown>): Promise<void> {
 	const firstKey = Object.keys(loggable)[0];
 	const date = new Date().toISOString().replace(/:/gi, '-');
 

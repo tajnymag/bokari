@@ -1,7 +1,8 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { ContractPhase } from './ContractPhase';
 import { Exclude, Type } from 'class-transformer';
 import { IsInt, IsString, ValidateNested } from 'class-validator';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+
+import { ContractPhase } from './ContractPhase';
 
 @Entity()
 export class Phase {

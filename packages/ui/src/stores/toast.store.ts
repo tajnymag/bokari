@@ -39,7 +39,7 @@ export function useToastStore() {
 	};
 
 	const dismissToast = (id: number) => {
-		const foundToast = state.toasts.find((toast) => toast.id === id);
+		const foundToast = state.toasts.find(toast => toast.id === id);
 
 		if (!foundToast) {
 			return;

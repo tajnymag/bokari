@@ -61,15 +61,16 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref } from '@vue/composition-api';
-import { asyncComputed } from '@vueuse/core';
-import { Currency } from '@bokari/entities';
 import { ContractInsertable } from '@bokari/api-client';
-import { contractsAPIClient, customersAPIClient } from '@/http/api';
-import { useToastStore } from '@/stores/toast.store';
-import DatePicker from '@/components/DatePicker.vue';
-import { useValidation } from '@/utils/validations';
-import { VFormElement } from '@/plugins/vuetify';
+import { Currency } from '@bokari/entities';
+import { defineComponent, reactive, ref } from '@vue/composition-api';
+import { asyncComputed, useTitle } from '@vueuse/core';
+
+import DatePicker from '../components/DatePicker.vue';
+import { contractsAPIClient, customersAPIClient } from '../http/api';
+import { VFormElement } from '../plugins/vuetify';
+import { useToastStore } from '../stores/toast.store';
+import { useValidation } from '../utils/validations';
 
 export default defineComponent({
 	name: 'NewContractView',
@@ -77,6 +78,7 @@ export default defineComponent({
 		DatePicker
 	},
 	setup() {
+		useTitle('Nová zakázka');
 		const form = ref<VFormElement | null>(null);
 		const toastStore = useToastStore();
 		const { isRequired, isNumber, isPattern, hasNonDefaultId, validate } = useValidation(form);
@@ -100,7 +102,7 @@ export default defineComponent({
 
 		const loadingCustomers = ref(true);
 		const customers = asyncComputed(
-			() => customersAPIClient.getAllCustomers().then((res) => res.data),
+			() => customersAPIClient.getAllCustomers().then(res => res.data),
 			[],
 			loadingCustomers
 		);
@@ -116,7 +118,7 @@ export default defineComponent({
 
 			contractsAPIClient
 				.createContract(contract)
-				.then((res) => {
+				.then(res => {
 					toastStore.showToast({
 						message: `Zakázka s číslem ${res.data.code} byla úspěšně vytvořena!`,
 						type: 'success'

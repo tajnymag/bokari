@@ -1,8 +1,9 @@
+import { Type } from 'class-transformer';
+import { IsInt, IsJWT, IsIP, ValidateNested } from 'class-validator';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+
 import { Metadata } from './Metadata';
 import { User } from './User';
-import { IsInt, IsJWT, IsIP, ValidateNested } from 'class-validator';
-import { Type } from 'class-transformer';
 
 @Entity()
 export class RefreshToken {

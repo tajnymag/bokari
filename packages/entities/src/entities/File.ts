@@ -1,7 +1,8 @@
-import { Column, Entity, PrimaryGeneratedColumn, Unique } from 'typeorm';
-import { Metadata } from './Metadata';
-import { IsInt, IsHash, IsString, IsMimeType, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
+import { IsInt, IsHash, IsString, IsMimeType, ValidateNested } from 'class-validator';
+import { Column, Entity, PrimaryGeneratedColumn, Unique } from 'typeorm';
+
+import { Metadata } from './Metadata';
 
 @Entity()
 @Unique('unqiue_filename_hash', ['hash', 'filename'])

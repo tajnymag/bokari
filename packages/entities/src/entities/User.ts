@@ -1,3 +1,5 @@
+import { Exclude, Transform, Type } from 'class-transformer';
+import { IsHexadecimal, IsInt, IsLowercase, IsString, ValidateNested } from 'class-validator';
 import {
 	Column,
 	Entity,
@@ -8,15 +10,14 @@ import {
 	OneToOne,
 	PrimaryGeneratedColumn
 } from 'typeorm';
-import { Exclude, Transform, Type } from 'class-transformer';
 
-import { Group } from './Group';
-import { File } from './File';
-import { Person } from './Person';
-import { WorkLog } from './WorkLog';
-import { RefreshToken } from './RefreshToken';
-import { IsHexadecimal, IsInt, IsLowercase, IsString, ValidateNested } from 'class-validator';
 import { ToLowercaseAndTrim } from '../transformations';
+
+import { File } from './File';
+import { Group } from './Group';
+import { Person } from './Person';
+import { RefreshToken } from './RefreshToken';
+import { WorkLog } from './WorkLog';
 
 @Entity()
 export class User {

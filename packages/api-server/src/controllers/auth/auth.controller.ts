@@ -1,3 +1,5 @@
+import { Metadata, RefreshToken, User } from '@bokari/entities';
+import * as argon2 from 'argon2';
 import { Request } from 'express';
 import {
 	Body,
@@ -7,16 +9,13 @@ import {
 	Req,
 	UnauthorizedError
 } from 'routing-controllers';
-import * as argon2 from 'argon2';
-
+import { ResponseSchema } from 'routing-controllers-openapi';
 import { getRepository } from 'typeorm';
 
-import { Metadata, RefreshToken, User } from '@bokari/entities';
-
 import { issueToken, JwtType, verifyToken } from '../../common/jwt';
-import { LoginRequest, LoginResponse, RefreshRequest, RefreshResponse } from './schemas';
-import { ResponseSchema } from 'routing-controllers-openapi';
 import { dedupe } from '../../helpers/utils';
+
+import { LoginRequest, LoginResponse, RefreshRequest, RefreshResponse } from './schemas';
 
 @JsonController('/auth')
 export class AuthController {

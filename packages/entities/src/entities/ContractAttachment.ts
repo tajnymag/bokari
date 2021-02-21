@@ -1,9 +1,10 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { Metadata } from './Metadata';
-import { File } from './File';
-import { Contract } from './Contract';
 import { Exclude, Type } from 'class-transformer';
 import { IsInt, IsString, ValidateNested } from 'class-validator';
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+
+import { Contract } from './Contract';
+import { File } from './File';
+import { Metadata } from './Metadata';
 
 @Entity()
 export class ContractAttachment {

@@ -1,7 +1,8 @@
 import { WorkLog } from '@bokari/entities';
-import { IsDate, IsDateString, IsInt, IsOptional, IsString, ValidateNested } from 'class-validator';
-import { ContractJoinable } from '../contracts';
 import { Expose, Type } from 'class-transformer';
+import { IsDate, IsDateString, IsInt, IsOptional, IsString, ValidateNested } from 'class-validator';
+
+import { ContractJoinable } from '../contracts';
 import { UserJoinable } from '../users';
 
 export class WorkLogsQueryParams implements Partial<WorkLog> {

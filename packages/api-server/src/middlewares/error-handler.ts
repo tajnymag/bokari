@@ -1,16 +1,16 @@
-import { NextFunction, Request, Response } from 'express';
 import { ValidationError } from 'class-validator';
+import { NextFunction, Request, Response } from 'express';
 import { ExpressErrorMiddlewareInterface, HttpError, Middleware } from 'routing-controllers';
 import { EntityNotFoundError, QueryFailedError } from 'typeorm';
 
 @Middleware({ type: 'after' })
 export class ErrorHandler implements ExpressErrorMiddlewareInterface {
-	error(err: any, req: Request, res: Response, next: NextFunction) {
+	error(err: Record<string, unknown>, req: Request, res: Response, next: NextFunction) {
 		if (
 			Array.isArray(err.errors) &&
 			err.errors.every((valError: unknown) => valError instanceof ValidationError)
 		) {
-			return res.status(err.httpCode).json({
+			return res.status(err.httpCode as number).json({
 				message: err.message,
 				errors: err.errors
 			});
@@ -32,7 +32,7 @@ export class ErrorHandler implements ExpressErrorMiddlewareInterface {
 			console.debug(err);
 			return res.status(422).json({
 				message: 'Could not persist given values!',
-				details: (err as any).detail
+				details: err.detail
 			});
 		}
 

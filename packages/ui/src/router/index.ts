@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import VueRouter, { RouteConfig } from 'vue-router';
+
 import Home from '../views/Home.vue';
 
 Vue.use(VueRouter);
@@ -28,7 +29,7 @@ const routes: Array<RouteConfig> = [
 	{
 		path: '/contracts/:contractCode',
 		name: 'Contract',
-		props: (route) => ({ contractCode: route.params.contractCode }),
+		props: route => ({ contractCode: route.params.contractCode }),
 		component: () => import(/* webpackChunkName: "contracts" */ '../views/Contract.vue')
 	},
 	{
@@ -44,6 +45,7 @@ const routes: Array<RouteConfig> = [
 	{
 		path: '/customers/:customerId',
 		name: 'Customer',
+		props: route => ({ customerId: parseInt(route.params.customerId) }),
 		component: () => import(/* webpackChunkName: "customers" */ '../views/Customer.vue')
 	},
 	{
@@ -59,12 +61,29 @@ const routes: Array<RouteConfig> = [
 	{
 		path: '/groups/:groupId',
 		name: 'Group',
+		props: route => ({ groupId: parseInt(route.params.groupId) }),
 		component: () => import(/* webpackChunkName: "groups" */ '../views/Group.vue')
 	},
 	{
 		path: '/new-group',
 		name: 'NewGroup',
 		component: () => import(/* webpackChunkName: "groups" */ '../views/NewGroup.vue')
+	},
+	{
+		path: '/users',
+		name: 'UserList',
+		component: () => import(/* webpackChunkName: "users" */ '../views/UserList.vue')
+	},
+	{
+		path: '/users/:username',
+		name: 'User',
+		props: true,
+		component: () => import(/* webpackChunkName: "users" */ '../views/User.vue')
+	},
+	{
+		path: '/new-user',
+		name: 'NewUser',
+		component: () => import(/* webpackChunkName: "users" */ '../views/NewUser.vue')
 	},
 	{
 		path: '/404',

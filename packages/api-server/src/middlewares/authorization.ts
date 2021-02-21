@@ -1,6 +1,7 @@
-import { JwtType, verifyToken } from '../common/jwt';
-import { Action, UnauthorizedError } from 'routing-controllers';
 import { Permission } from '@bokari/entities';
+import { Action, UnauthorizedError } from 'routing-controllers';
+
+import { JwtType, verifyToken } from '../common/jwt';
 
 export async function authorizationChecker(action: Action, roles: Permission[]): Promise<boolean> {
 	const authorizationHeader = action.request.headers.authorization;

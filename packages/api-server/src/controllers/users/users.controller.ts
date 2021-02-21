@@ -1,25 +1,26 @@
-import {
-	Authorized,
-	Body,
-	CurrentUser,
-	Get,
-	HttpError,
-	JsonController,
-	NotFoundError,
-	Param,
-	Patch,
-	Post
-} from 'routing-controllers';
-import * as argon2 from 'argon2';
-
 import { Permission, User } from '@bokari/entities';
-import { ResponseSchema } from 'routing-controllers-openapi';
-import { UserInsertable, UserUpdatable } from './schemas';
-import { getRepository } from 'typeorm';
-import { TypeormQuery } from '../../helpers/typing';
+import * as argon2 from 'argon2';
 import { plainToClass, plainToClassFromExist } from 'class-transformer';
-import { CurrentUserPayload } from '../../middlewares';
+import {
+  Authorized,
+  Body,
+  CurrentUser, Delete,
+  Get, HttpCode,
+  HttpError,
+  JsonController,
+  NotFoundError, OnUndefined,
+  Param, Params,
+  Patch,
+  Post
+} from "routing-controllers";
+import { ResponseSchema } from 'routing-controllers-openapi';
+import { getRepository } from 'typeorm';
+
 import { existsEntity } from '../../helpers/entities';
+import { TypeormQuery } from '../../helpers/typing';
+import { CurrentUserPayload } from '../../middlewares';
+
+import { UserInsertable, UserUpdatable } from './schemas';
 
 @Authorized()
 @JsonController('/users')
@@ -92,4 +93,11 @@ export class UsersController {
 
 		return getRepository(User).save(updatedUserEntity);
 	}
+
+	@Delete('/:username')
+  @Authorized([Permission.USERS_WRITE])
+  @OnUndefined(204)
+  async deleteUserByUsername(@Param('username') username: string) {
+	  await getRepository(User).softDelete({ username });
+  }
 }

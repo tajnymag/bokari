@@ -1,9 +1,10 @@
-import { Authorized, Body, Get, HttpCode, JsonController, Param, Post } from 'routing-controllers';
 import { Customer, Person } from '@bokari/entities';
-import { CustomerInsertable } from './schemas';
+import { plainToClass } from 'class-transformer';
+import { Authorized, Body, Get, HttpCode, JsonController, Param, Post } from 'routing-controllers';
 import { ResponseSchema } from 'routing-controllers-openapi';
 import { getRepository } from 'typeorm';
-import { plainToClass } from 'class-transformer';
+
+import { CustomerInsertable } from './schemas';
 
 @Authorized()
 @JsonController('/customers')

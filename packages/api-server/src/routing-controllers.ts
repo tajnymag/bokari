@@ -1,4 +1,5 @@
 import { RoutingControllersOptions } from 'routing-controllers';
+
 import {
 	AuthController,
 	ContractAttachmentsController,
@@ -13,10 +14,10 @@ import {
 	UsersController,
 	WorkLogsController
 } from './controllers';
-
-import { authorizationChecker, currentUserChecker, ErrorHandler } from './middlewares';
 import { BOKARI_GENERATE_API_DOCS } from './env.config';
+import { authorizationChecker, currentUserChecker, ErrorHandler } from './middlewares';
 
+// eslint-disable-next-line @typescript-eslint/ban-types
 const conditionalControllers: Function[] = [];
 if (BOKARI_GENERATE_API_DOCS) conditionalControllers.push(OpenAPIDocsController);
 

@@ -1,6 +1,7 @@
 import { Group, Permission } from '@bokari/entities';
 import { Expose, Type } from 'class-transformer';
 import { IsEnum, IsInt, IsOptional, IsString, ValidateNested } from 'class-validator';
+
 import { UserJoinable } from '../users';
 
 @Expose()

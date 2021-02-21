@@ -1,6 +1,7 @@
 import axios from 'axios';
 import createAuthRefreshInterceptor from 'axios-auth-refresh';
-import { injectAccessTokenInterceptor, refreshAccessTokenLogic } from '@/http/auth';
+
+import { injectAccessTokenInterceptor, refreshAccessTokenLogic } from './auth';
 
 export const httpClient = axios.create();
 export const authHttpClient = axios.create();

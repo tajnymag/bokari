@@ -1,8 +1,9 @@
-import { Composer, createI18n, useI18n } from 'vue-i18n-composable';
 import { WritableComputedRef } from '@vue/composition-api';
 import VueI18n from 'vue-i18n';
-import { csLocale, enLocale } from '@/locales';
-import { TypedLocale, TypedLocaleMessagePath } from '@/locales/types';
+import { Composer, createI18n, useI18n } from 'vue-i18n-composable';
+
+import { csLocale, enLocale } from '../locales';
+import { TypedLocale, TypedLocaleMessagePath } from '../locales/types';
 
 interface TypedVueI18n extends VueI18n {
 	t(key: TypedLocaleMessagePath, values?: VueI18n.Values): VueI18n.TranslateResult;

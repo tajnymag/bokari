@@ -1,3 +1,4 @@
+import { Contract, ContractPhase, Permission } from '@bokari/entities';
 import {
 	Authorized,
 	Body,
@@ -7,10 +8,10 @@ import {
 	Param,
 	Put
 } from 'routing-controllers';
-import { Contract, ContractPhase, Permission } from '@bokari/entities';
 import { ResponseSchema } from 'routing-controllers-openapi';
-import { ContractPhaseInsertable } from './schemas';
 import { getManager, getRepository } from 'typeorm';
+
+import { ContractPhaseInsertable } from './schemas';
 
 @JsonController('/contracts/:code/phases')
 export class ContractPhasesController {

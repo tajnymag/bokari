@@ -1,5 +1,3 @@
-import { AxiosInstance } from 'axios';
-import { authHttpClient, httpClient } from '@/http/http-client';
 import {
 	AuthApi,
 	ContractAttachmentsApi,
@@ -13,6 +11,9 @@ import {
 	UsersApi,
 	WorkLogsApi
 } from '@bokari/api-client';
+import { AxiosInstance } from 'axios';
+
+import { authHttpClient, httpClient } from './http-client';
 
 const authAPIClientConfig: [undefined, undefined, AxiosInstance] = [
 	undefined,

@@ -1,6 +1,5 @@
-import 'vuetify/types';
+import Vuetify from 'vuetify/types';
 
 declare module 'vuetify/lib/framework' {
-	import Vuetify from 'vuetify';
 	export default Vuetify;
 }

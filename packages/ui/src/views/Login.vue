@@ -1,5 +1,5 @@
 <template>
-	<div id="login-view">
+	<div>
 		<v-form @submit.prevent="login(username, password)">
 			<v-row justify="center">
 				<v-col cols="12" lg="6" md="8" sm="10">
@@ -41,11 +41,14 @@
 
 <script lang="ts">
 import { defineComponent, ref } from '@vue/composition-api';
-import { useCurrentUserStore } from '@/stores/current-user.store';
+import { useTitle } from '@vueuse/core';
+
+import { useCurrentUserStore } from '../stores/current-user.store';
 
 export default defineComponent({
 	name: 'LoginView',
 	setup() {
+		useTitle('Přihlášení');
 		const username = ref<string>('');
 		const password = ref<string>('');
 

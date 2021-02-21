@@ -1,8 +1,15 @@
 import { Ref } from '@vue/composition-api';
-import { VFormElement } from '@/plugins/vuetify';
-import { InputValidationRule } from 'vuetify';
-import isPostalCodeAccordingToValidatorJS from 'validator/es/lib/isPostalCode';
+import { isValidPhoneNumber } from 'libphonenumber-js';
 import isEmailAccordingToValidatorJS from 'validator/es/lib/isEmail';
+import isPostalCodeAccordingToValidatorJS from 'validator/es/lib/isPostalCode';
+import { InputValidationRule } from 'vuetify';
+
+import { VFormElement } from '../plugins/vuetify';
+
+interface UnknownObjectWithId {
+	id: number;
+	[key: string]: unknown;
+}
 
 export function useValidation(formRef: Ref<VFormElement | null>) {
 	const isPattern = (pattern: RegExp): InputValidationRule => {
@@ -23,7 +30,12 @@ export function useValidation(formRef: Ref<VFormElement | null>) {
 	const isEmail: InputValidationRule = (input: string) =>
 		!input || isEmailAccordingToValidatorJS(input) || 'Není platný email';
 
-	const hasNonDefaultId: InputValidationRule = (input: any) =>
+	const isPhoneNumber: InputValidationRule = (input: string) =>
+		!input ||
+		isValidPhoneNumber(input) ||
+		'Není platné telefonní číslo. Číslo musí například obsahovat předvolbu.';
+
+	const hasNonDefaultId: InputValidationRule = (input: UnknownObjectWithId) =>
 		!input || input.id > 0 || 'Objekt nebyl zvolen';
 
 	const validate = () => formRef.value?.validate();
@@ -36,6 +48,7 @@ export function useValidation(formRef: Ref<VFormElement | null>) {
 		isRequired,
 		isPostalCode,
 		isEmail,
+		isPhoneNumber,
 		hasNonDefaultId,
 		validate,
 		resetValidation,

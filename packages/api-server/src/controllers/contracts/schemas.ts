@@ -1,3 +1,5 @@
+import { Contract, Monetary } from "@bokari/entities";
+import { Exclude, Expose, Type } from "class-transformer";
 import {
 	IsBoolean, IsDate, IsIn,
 	IsInt, IsNotEmpty,
@@ -5,25 +7,65 @@ import {
 	IsString, Min,
 	ValidateNested
 } from 'class-validator';
-import { Exclude, Expose, Type } from "class-transformer";
 
 import { CustomerJoinable } from '../customers';
-import { Monetary } from '@bokari/entities';
 
-@Expose()
+@Exclude()
+export class ContractsQueryFilterable {
+  @Expose()
+  @Type(() => Date)
+  @IsOptional()
+  @IsDate()
+  deadlineAt?: Date;
+
+  @Expose()
+  @Type(() => Date)
+  @IsOptional()
+  @IsDate()
+  startAt?: Date;
+}
+
+@Exclude()
 export class ContractsQueryParams {
+  @Expose()
 	@IsOptional()
 	@IsInt()
 	limit?: number;
 
+  @Expose()
 	@IsOptional()
 	@IsInt()
 	@Min(1)
 	page?: number;
 
+  @Expose()
 	@IsOptional()
 	@IsString()
 	search?: string;
+
+  @Expose()
+	@IsOptional()
+	@IsString()
+  @IsIn(Object.keys(new Contract()))
+	orderBy?: keyof Contract;
+
+  @Expose()
+	@IsOptional()
+  @IsString()
+  @IsIn(['ASC', 'DESC'])
+  order?: 'ASC' | 'DESC';
+
+  @Expose()
+	@IsOptional()
+  @Type(() => ContractsQueryFilterable)
+  @ValidateNested()
+	filterMax?: ContractsQueryFilterable
+
+  @Expose()
+  @IsOptional()
+  @Type(() => ContractsQueryFilterable)
+  @ValidateNested()
+  filterMin?: ContractsQueryFilterable
 }
 
 @Expose()
@@ -32,35 +74,43 @@ export class ContractJoinable {
 	id!: number;
 }
 
-@Expose()
+@Exclude()
 export class ContractInsertable {
+  @Expose()
 	@IsOptional()
 	@IsString()
 	code?: string;
 
+  @Expose()
 	@IsString()
 	name!: string;
 
+  @Expose()
 	@Type(() => CustomerJoinable)
 	@ValidateNested()
 	customer!: CustomerJoinable;
 
+  @Expose()
 	@Type(() => Date)
 	@IsDate()
 	startAt!: Date;
 
+  @Expose()
 	@Type(() => Date)
 	@IsDate()
 	deadlineAt!: Date;
 
+  @Expose()
 	@IsOptional()
 	@IsString()
 	description?: string;
 
+  @Expose()
 	@IsOptional()
 	@IsBoolean()
 	isDone?: boolean;
 
+  @Expose()
 	@Type(() => Monetary)
 	@ValidateNested()
 	price!: Monetary;

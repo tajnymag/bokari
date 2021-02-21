@@ -1,18 +1,19 @@
-import {
-	Authorized,
-	Body,
-	Get,
-	HttpCode,
-	HttpError,
-	JsonController,
-	Param,
-	Post
-} from 'routing-controllers';
 import { Group, Permission } from '@bokari/entities';
-import { GroupInsertable } from './schemas';
+import { plainToClass } from 'class-transformer';
+import {
+  Authorized,
+  Body, Delete,
+  Get,
+  HttpCode,
+  HttpError,
+  JsonController, OnUndefined,
+  Param,
+  Post
+} from "routing-controllers";
 import { ResponseSchema } from 'routing-controllers-openapi';
 import { getRepository } from 'typeorm';
-import { plainToClass } from 'class-transformer';
+
+import { GroupInsertable } from './schemas';
 
 @Authorized()
 @JsonController('/groups')
@@ -37,7 +38,6 @@ export class GroupsController {
 
 	@Post()
 	@Authorized([Permission.USERS_WRITE])
-	@HttpCode(201)
 	@ResponseSchema(Group, { statusCode: 201 })
 	async createGroup(@Body() desiredGroup: GroupInsertable): Promise<Group> {
 		if ((await getRepository(Group).count({ where: { name: desiredGroup.name } })) > 0) {
@@ -50,4 +50,11 @@ export class GroupsController {
 
 		return createdGroup;
 	}
+
+	@Delete('/:id')
+  @Authorized([Permission.USERS_WRITE])
+  @OnUndefined(204)
+  async deleteGroupById(@Param('id') id: number) {
+	  await getRepository(Group).softDelete(id);
+  }
 }

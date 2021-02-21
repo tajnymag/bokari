@@ -63,11 +63,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watchEffect } from '@vue/composition-api';
 import { ContactInsertable } from '@bokari/api-client';
-import ContactInput from '@/components/ContactInput.vue';
-import { VFormElement } from '@/plugins/vuetify';
-import { useValidation } from '@/utils/validations';
+import { defineComponent, ref, watchEffect } from '@vue/composition-api';
+
+import ContactInput from '../components/ContactInput.vue';
+import { VFormElement } from '../plugins/vuetify';
+import { useValidation } from '../utils/validations';
 
 const DefaultContactValue: ContactInsertable = {
 	email: '',

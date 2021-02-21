@@ -1,9 +1,10 @@
+import { Type } from 'class-transformer';
+import { IsDate, IsInt, IsString, ValidateNested } from 'class-validator';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn, Unique } from 'typeorm';
-import { User } from './User';
+
 import { Contract } from './Contract';
 import { Metadata } from './Metadata';
-import { IsDate, IsInt, IsString, ValidateNested } from 'class-validator';
-import { Type } from 'class-transformer';
+import { User } from './User';
 
 @Entity()
 @Unique('unique_worklog_user_time', ['from', 'to', 'user'])

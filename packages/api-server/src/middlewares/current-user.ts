@@ -1,6 +1,7 @@
-import { Action } from 'routing-controllers';
-import { AccessTokenPayload } from '../common/jwt';
 import { Permission, User } from '@bokari/entities';
+import { Action } from 'routing-controllers';
+
+import { AccessTokenPayload } from '../common/jwt';
 
 export class CurrentUserPayload {
 	id!: number;

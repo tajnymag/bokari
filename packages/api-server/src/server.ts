@@ -1,6 +1,8 @@
 import * as http from 'http';
+
 import { createTerminus } from '@godaddy/terminus';
 import { createConnection, getConnection } from 'typeorm';
+
 import { app } from './app';
 
 export class Server {

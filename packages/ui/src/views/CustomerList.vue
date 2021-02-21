@@ -4,9 +4,13 @@
 
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api';
+import { useTitle } from '@vueuse/core';
 
 export default defineComponent({
-	name: 'CustomerList'
+	name: 'CustomerList',
+	setup() {
+		useTitle('Klienti');
+	}
 });
 </script>
 

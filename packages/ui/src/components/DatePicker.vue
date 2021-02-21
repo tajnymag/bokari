@@ -31,7 +31,8 @@
 <script lang="ts">
 import { defineComponent, ref, toRefs } from '@vue/composition-api';
 import { InputValidationRules } from 'vuetify';
-import { VDialogElement } from '@/plugins/vuetify';
+
+import { VDialogElement } from '../plugins/vuetify';
 
 export default defineComponent({
 	name: 'DatePicker',

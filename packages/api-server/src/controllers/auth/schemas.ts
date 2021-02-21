@@ -1,5 +1,6 @@
-import { IsJWT, IsString } from 'class-validator';
 import { Expose, Transform } from 'class-transformer';
+import { IsJWT, IsString } from 'class-validator';
+
 import { ToLowercaseAndTrim } from '../../helpers/transformations';
 
 @Expose()

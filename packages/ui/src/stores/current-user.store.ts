@@ -1,11 +1,13 @@
 import { User } from '@bokari/api-client';
-import { computed, reactive, ref } from '@vue/composition-api';
 import { Permission } from '@bokari/entities';
-import { resetTokens, saveAccessToken, saveRefreshToken } from '@/http/auth';
-import { useToastStore } from '@/stores/toast.store';
-import { authAPIClient, usersAPIClient } from '@/http/api';
-import { useRouter } from '@/router';
+import { computed, reactive, ref } from '@vue/composition-api';
 import { useLocalStorage } from '@vueuse/core';
+
+import { authAPIClient, usersAPIClient } from '../http/api';
+import { getRefreshToken, resetTokens, saveAccessToken, saveRefreshToken } from '../http/auth';
+import { useRouter } from '../router';
+
+import { useToastStore } from './toast.store';
 
 export interface UserStoreState {
 	user: User | null;
@@ -49,9 +51,9 @@ export function useCurrentUserStore() {
 		permissions.value.includes(permission);
 
 	const reloadProfile = async () => {
-		if (!state.user?.username && !storedUsername.value) {
+		if ((!state.user?.username && !storedUsername.value) || !getRefreshToken()) {
 			toastStore.showToast({ message: 'Přihlašte se, prosím.', type: 'warning' });
-			await router.push('/login');
+			if (router.currentRoute.path !== '/login') await router.push('/login');
 			return;
 		}
 
@@ -102,6 +104,7 @@ export function useCurrentUserStore() {
 		state.user = null;
 		storedUsername.value = null;
 		toastStore.showToast({ message: 'Byl jste úspěšně odhlášen.', type: 'success' });
+		if (router.currentRoute.path !== '/') router.push('/');
 	};
 
 	return {

@@ -43,11 +43,12 @@
 </template>
 
 <script lang="ts">
+import { ContactInsertable } from '@bokari/api-client';
 import { defineComponent, ref } from '@vue/composition-api';
 import { debouncedWatch } from '@vueuse/core';
-import { VFormElement } from '@/plugins/vuetify';
-import { ContactInsertable } from '@bokari/api-client';
-import { useValidation } from '@/utils/validations';
+
+import { VFormElement } from '../plugins/vuetify';
+import { useValidation } from '../utils/validations';
 
 const DefaultContactValue: ContactInsertable = {
 	email: '',

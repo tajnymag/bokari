@@ -13,7 +13,8 @@
 
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api';
-import { useToastStore } from '@/stores/toast.store';
+
+import { useToastStore } from '../stores/toast.store';
 
 export default defineComponent({
 	name: 'AppToastContainer',

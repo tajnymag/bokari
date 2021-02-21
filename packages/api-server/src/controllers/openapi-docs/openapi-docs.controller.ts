@@ -1,10 +1,12 @@
-import { ContentType, Controller, Get, getMetadataArgsStorage } from 'routing-controllers';
-import { validationMetadatasToSchemas } from 'class-validator-jsonschema';
-import { defaultMetadataStorage } from 'class-transformer/cjs/storage';
-import { routingControllersToSpec } from 'routing-controllers-openapi';
-import { html } from 'common-tags';
 import { writeFile } from 'fs/promises';
+
 import { getOpenAPI3SpecPath } from '@bokari/api-specs';
+import { defaultMetadataStorage } from 'class-transformer/cjs/storage';
+import { validationMetadatasToSchemas } from 'class-validator-jsonschema';
+import { html } from 'common-tags';
+import { ContentType, Controller, Get, getMetadataArgsStorage } from 'routing-controllers';
+import { routingControllersToSpec } from 'routing-controllers-openapi';
+
 import { getBokariOpenAPISpecs, OpenAPISpecDocumentObject } from '../../openapi';
 
 @Controller('/openapi-docs')

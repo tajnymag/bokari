@@ -1,11 +1,6 @@
 <template>
-	<v-card v-if="!loading">
-		<v-card-title>
-			<h2 class="text-h2">{{ contract.name }}</h2>
-		</v-card-title>
-
-		<v-card-subtitle>{{ contract.code }}</v-card-subtitle>
-
+	<v-skeleton-loader v-if="!contract" type="card-heading, table" />
+	<v-card v-else>
 		<v-card-text>
 			<v-row>
 				<v-col cols="12" md="6">
@@ -15,135 +10,55 @@
 							<v-spacer />
 							<v-btn icon @click="toggleDetailsEditable">
 								<v-icon>
-									{{ detailsEditable ? 'mdi-pencil-remove' : 'mdi-pencil' }}
+									{{ detailsEditable ? 'mdi-content-save' : 'mdi-pencil' }}
 								</v-icon>
 							</v-btn>
 						</v-toolbar>
 
-						<v-list dense>
-							<v-list-item>
-								<span>{{ t('contract.code') }}</span>
-								<v-spacer />
+						<v-card-text>
+							<v-form :readonly="!detailsEditable">
 								<v-text-field
 									v-model="contract.code"
-									class="input-underline-hidden"
-									flat
+									:label="t('contract.code')"
 									readonly
-									reverse
 								/>
-							</v-list-item>
-
-							<v-list-item>
-								<span>{{ t('contract.createdBy') }}</span>
-								<v-spacer />
 								<v-text-field
 									v-model="contract.metadata.createdBy.username"
-									class="input-underline-hidden"
-									dense
-									flat
+									:label="t('contract.createdBy')"
 									readonly
-									reverse
 								/>
-							</v-list-item>
-
-							<v-list-item>
-								<span>Název</span>
-								<v-spacer />
-								<v-text-field
-									v-model="contract.name"
-									:readonly="!detailsEditable"
-									dense
-									flat
-									reverse
-									:class="{ 'input-underline-hidden': !detailsEditable }"
-								/>
-							</v-list-item>
-
-							<v-list-item>
-								<span>Dokončena</span>
-								<v-spacer />
-								<v-checkbox
-									v-model="contract.isDone"
-									:readonly="!detailsEditable"
-									dense
-									flat
-									:class="{ 'input-underline-hidden': !detailsEditable }"
-								/>
-							</v-list-item>
-
-							<v-list-item>
-								<span>Klient</span>
-								<v-spacer />
+								<v-text-field v-model="contract.name" label="Název" />
+								<v-checkbox v-model="contract.isDone" label="Dokončena" />
 								<v-autocomplete
 									v-model="contract.customer"
+									label="Klient"
 									:items="customers"
 									:loading="loadingCustomers"
-									:readonly="!detailsEditable"
 									append-icon=""
-									dense
-									flat
 									item-text="person.name"
 									return-object
-									reverse
-									:class="{ 'input-underline-hidden': !detailsEditable }"
 								/>
-							</v-list-item>
-
-							<v-list-item>
-								<span>Cena</span>
-								<v-spacer />
 								<v-text-field
 									v-if="!detailsEditable"
+									label="Cena"
 									:value="formattedPrice"
-									class="input-underline-hidden"
-									dense
-									flat
 									readonly
-									reverse
 								/>
-								<v-row v-else>
-									<v-col offset="3">
-										<v-text-field
-											v-model="contract.price.amount"
-											:readonly="!detailsEditable"
-											dense
-											flat
-											inputmode="numeric"
-											reverse
-											:class="{
-												'input-underline-hidden': !detailsEditable
-											}"
-										/>
-									</v-col>
-									<v-col>
-										<v-autocomplete
-											v-model="contract.price.currency"
-											:items="currencies"
-											:readonly="!detailsEditable"
-											append-icon=""
-											dense
-											flat
-											reverse
-											:class="{
-												'input-underline-hidden': !detailsEditable
-											}"
-										/>
-									</v-col>
-								</v-row>
-							</v-list-item>
-
-							<v-list-item>
-								<span>Popis</span>
-								<v-spacer />
-								<v-textarea
-									v-model="contract.description"
-									:readonly="!detailsEditable"
-									dense
-									flat
-									solo
+								<v-text-field
+									v-if="detailsEditable"
+									v-model="contract.price.amount"
+									label="Cena"
+									inputmode="numeric"
 								/>
-							</v-list-item>
-						</v-list>
+								<v-autocomplete
+									v-if="detailsEditable"
+									v-model="contract.price.currency"
+									label="Měna"
+									:items="currencies"
+								/>
+								<v-textarea v-model="contract.description" label="Popis" />
+							</v-form>
+						</v-card-text>
 					</v-card>
 				</v-col>
 				<v-col cols="12" md="6">
@@ -153,54 +68,28 @@
 							<v-spacer />
 							<v-btn icon @click="toggleDatesEditable">
 								<v-icon>
-									{{ datesEditable ? 'mdi-pencil-remove' : 'mdi-pencil' }}
+									{{ datesEditable ? 'mdi-content-save' : 'mdi-pencil' }}
 								</v-icon>
 							</v-btn>
 						</v-toolbar>
 
-						<v-list dense>
-							<v-list-item>
-								<span>Deadline</span>
-								<v-spacer />
-								<v-text-field
-									v-model="deadlineAt"
-									:readonly="!datesEditable"
-									reverse
-									type="date"
-									:class="{
-										'input-underline-hidden': !datesEditable
-									}"
-								/>
-							</v-list-item>
-
-							<v-list-item>
-								<span>Začátek</span>
-								<v-spacer />
-								<v-text-field
-									v-model="startAt"
-									:readonly="!datesEditable"
-									reverse
-									type="date"
-									:class="{
-										'input-underline-hidden': !datesEditable
-									}"
-								/>
-							</v-list-item>
-						</v-list>
+						<v-card-text>
+							<v-form :readonly="!datesEditable">
+								<v-text-field v-model="deadlineAt" label="Deadline" type="date" />
+								<v-text-field v-model="startAt" label="Začátek" type="date" />
+							</v-form>
+						</v-card-text>
 					</v-card>
 				</v-col>
 				<v-col cols="12" md="6">
 					<v-card>
 						<v-toolbar>
-							<v-toolbar-title>Dokumentace</v-toolbar-title>
+							<v-toolbar-title>Fáze</v-toolbar-title>
 							<v-spacer />
+							<v-btn icon @click.stop="openEditContractPhaseDialog()">
+								<v-icon>mdi-plus</v-icon>
+							</v-btn>
 							<v-dialog v-model="newContractPhaseDialogVisible" max-width="500px">
-								<template v-slot:activator="{ on, attrs }">
-									<v-btn v-bind="attrs" icon v-on="on">
-										<v-icon>mdi-pencil</v-icon>
-									</v-btn>
-								</template>
-
 								<v-card>
 									<v-card-title>Upravit nebo vytvořit fázi</v-card-title>
 
@@ -288,6 +177,14 @@
 								<template v-slot:item.deadlineAt="{ item }">
 									<span>{{ d(item.deadlineAt) }}</span>
 								</template>
+								<template v-slot:item.actions="{ item }">
+									<v-btn icon @click="openEditContractPhaseDialog(item)">
+										<v-icon>mdi-pencil</v-icon>
+									</v-btn>
+									<v-btn icon @click="deleteContractPhase(item)">
+										<v-icon>mdi-delete</v-icon>
+									</v-btn>
+								</template>
 							</v-data-table>
 						</v-card-text>
 					</v-card>
@@ -305,12 +202,12 @@
 							<v-row v-for="attachment in contract.attachments" :key="attachment.id">
 								<v-col>
 									<v-card>
-										<v-card-title>
+										<v-card-title v-if="attachment.metadata.createdBy">
 											{{ attachment.metadata.createdBy.username }}
 										</v-card-title>
 										<v-card-subtitle v-if="attachment.file">
 											<span>Přiložený soubor:</span>
-											<v-btn :href="attachment.file.url">
+											<v-btn text small :href="attachment.file.url">
 												{{ attachment.file.filename }}
 											</v-btn>
 										</v-card-subtitle>
@@ -323,19 +220,25 @@
 						</v-card-text>
 
 						<v-card-text>
-							<v-card flat>
-								<v-card-title>Nová příloha</v-card-title>
+							<v-card flat :loading="creatingNewAttachment">
+								<v-card-title class="text-subtitle-1">Nová příloha</v-card-title>
 								<v-card-text>
 									<v-file-input
+										v-model="newAttachment.file"
 										prepend-icon=""
 										append-icon="mdi-paperclip"
 										label="Přiložit soubor"
 									/>
-									<v-textarea label="Komentář k příloze" />
+									<v-textarea
+										v-model="newAttachment.note"
+										label="Komentář k příloze"
+									/>
 								</v-card-text>
 								<v-card-actions>
 									<v-spacer />
-									<v-btn text color="primary">Vytvořit</v-btn>
+									<v-btn text color="primary" @click="createNewAttachment">
+										Vytvořit
+									</v-btn>
 								</v-card-actions>
 							</v-card>
 						</v-card-text>
@@ -344,13 +247,9 @@
 			</v-row>
 		</v-card-text>
 	</v-card>
-
-	<v-skeleton-loader v-else type="card-heading, table" />
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref, toRefs } from '@vue/composition-api';
-import { useRouter } from '@/router';
 import {
 	Contract,
 	ContractPhase,
@@ -359,19 +258,31 @@ import {
 	Phase,
 	PhaseInsertable
 } from '@bokari/api-client';
+import { Currency } from '@bokari/entities';
 import {
+	computed,
+	defineComponent,
+	reactive,
+	ref,
+	toRefs,
+	watchEffect
+} from '@vue/composition-api';
+import { asyncComputed, useTitle } from '@vueuse/core';
+
+import DatePicker from '../components/DatePicker.vue';
+import {
+	contractAttachmentsAPIClient,
 	contractPhasesAPIClient,
 	contractsAPIClient,
 	customersAPIClient,
+	filesAPIClient,
 	phaseAPIClient
-} from '@/http/api';
-import { asyncComputed } from '@vueuse/core';
-import { Currency } from '@bokari/entities';
-import DatePicker from '@/components/DatePicker.vue';
-import { VDataTableHeader, VFormElement } from '@/plugins/vuetify';
-import { useTypedI18n } from '@/plugins/i18n';
-import { useToastStore } from '@/stores/toast.store';
-import { useValidation } from '@/utils/validations';
+} from '../http/api';
+import { useTypedI18n } from '../plugins/i18n';
+import { VDataTableHeader, VFormElement } from '../plugins/vuetify';
+import { useRouter } from '../router';
+import { useToastStore } from '../stores/toast.store';
+import { useValidation } from '../utils/validations';
 
 export default defineComponent({
 	name: 'ContractView',
@@ -385,10 +296,12 @@ export default defineComponent({
 		}
 	},
 	setup(props) {
-		const { contractCode } = toRefs(props);
+		const title = useTitle('Zakázka');
 		const router = useRouter();
 		const { showToast } = useToastStore();
 		const i18n = useTypedI18n();
+
+		const { contractCode } = toRefs(props);
 
 		const phaseForm = ref<VFormElement | null>(null);
 		const contractPhaseForm = ref<VFormElement | null>(null);
@@ -402,11 +315,17 @@ export default defineComponent({
 			() =>
 				contractsAPIClient
 					.getContractByCode(contractCode.value)
-					.then((res) => res.data)
+					.then(res => res.data)
 					.catch(() => router.push({ name: 'NotFound' }) && null),
 			null,
 			loading
 		);
+
+		watchEffect(() => {
+			if (contract.value) {
+				title.value = `${contract.value.code} - ${contract.value.name}`;
+			}
+		});
 
 		const detailsEditable = ref(false);
 		const datesEditable = ref(false);
@@ -450,20 +369,24 @@ export default defineComponent({
 			{
 				text: 'Dokončena',
 				value: 'isDone'
+			},
+			{
+				text: 'Možnosti',
+				value: 'actions'
 			}
 		];
 		const savingContractPhases = ref(false);
 		const saveContractPhases = async () => {
 			savingContractPhases.value = true;
 			const contractsToSave: ContractPhaseInsertable[] =
-				contract.value?.contractPhases.map((cp) => ({
+				contract.value?.contractPhases.map(cp => ({
 					phaseId: cp.phase.id,
 					deadlineAt: cp.deadlineAt,
 					isDone: cp.isDone
 				})) || [];
 			return contractPhasesAPIClient
 				.editContractPhases(contractCode.value, contractsToSave || [])
-				.catch((res) => {
+				.catch(() => {
 					showToast({ message: 'Fáze zakázky byly aktualizovány.', type: 'success' });
 				})
 				.catch(() => {
@@ -489,17 +412,46 @@ export default defineComponent({
 				return;
 			}
 			contract.value.contractPhases = contract.value.contractPhases.filter(
-				(cp) => cp.phase.id !== newContractPhase.value.phase.id
+				cp => cp.phase.id !== newContractPhase.value.phase.id
 			);
 			contract.value.contractPhases.push(newContractPhase.value);
 
 			await saveContractPhases();
 			newContractPhaseDialogVisible.value = false;
 		};
+		const deleteContractPhase = async (contractPhase: ContractPhase) => {
+			if (!contract.value?.contractPhases) {
+				return;
+			}
+			contract.value.contractPhases = contract.value.contractPhases.filter(
+				cp => cp.phase.id !== contractPhase.phase.id
+			);
+
+			await saveContractPhases();
+		};
+		const openEditContractPhaseDialog = async (contractPhase?: ContractPhase) => {
+			if (!contractPhase) {
+				newContractPhase.value = {
+					phase: {
+						id: 0,
+						name: ''
+					},
+					isDone: false,
+					deadlineAt: ''
+				};
+			} else {
+				newContractPhase.value = {
+					phase: { ...contractPhase.phase },
+					isDone: contractPhase.isDone,
+					deadlineAt: contractPhase.deadlineAt.substr(0, 10)
+				};
+			}
+			newContractPhaseDialogVisible.value = true;
+		};
 
 		const loadingCustomers = ref(true);
 		const customers = asyncComputed<Customer[]>(
-			() => customersAPIClient.getAllCustomers().then((res) => res.data),
+			() => customersAPIClient.getAllCustomers().then(res => res.data),
 			[],
 			loadingCustomers
 		);
@@ -508,7 +460,7 @@ export default defineComponent({
 
 		const loadingPhases = ref(true);
 		const phases = asyncComputed<Phase[]>(
-			() => phaseAPIClient.getAllPhases().then((res) => res.data),
+			() => phaseAPIClient.getAllPhases().then(res => res.data),
 			[],
 			loadingPhases
 		);
@@ -524,7 +476,7 @@ export default defineComponent({
 			creatingNewPhase.value = true;
 			return phaseAPIClient
 				.createPhase({ name: newPhase.value.name })
-				.then((res) => {
+				.then(res => {
 					phases.value.push(res.data);
 					showToast({ message: 'Fáze byla úspěšně vytvořena.', type: 'success' });
 				})
@@ -545,7 +497,7 @@ export default defineComponent({
 			savingContract.value = true;
 			return contractsAPIClient
 				.editContract(contractCode.value, contract.value)
-				.then((res) => {
+				.then(() => {
 					showToast({ message: 'Zakázka byla úspěšně upravena.', type: 'success' });
 				})
 				.catch(() => {
@@ -570,7 +522,7 @@ export default defineComponent({
 			loading.value = true;
 			return contractsAPIClient
 				.getContractByCode(contractCode.value)
-				.then((res) => {
+				.then(() => {
 					showToast({ message: 'Zakázka byla úspěšně aktualizována.', type: 'success' });
 				})
 				.catch(() => {
@@ -589,6 +541,36 @@ export default defineComponent({
 				});
 		};
 
+		const newAttachment = reactive({
+			file: null,
+			note: ''
+		});
+		const creatingNewAttachment = ref(false);
+		const createNewAttachment = async () => {
+			try {
+				creatingNewAttachment.value = true;
+				const createdFile = await filesAPIClient
+					.uploadFile(newAttachment.file)
+					.then(res => res.data);
+				const createdAttachment = await contractAttachmentsAPIClient
+					.createContractAttachment(contractCode.value, {
+						file: { id: createdFile.id },
+						note: newAttachment.note
+					})
+					.then(res => res.data);
+				contract.value?.attachments.push(createdAttachment);
+
+				newAttachment.file = null;
+				newAttachment.note = '';
+
+				showToast({ message: 'Přílohu se nepodařilo vytvořit', type: 'success' });
+			} catch {
+				showToast({ message: 'Přílohu se nepodařilo vytvořit', type: 'error' });
+			} finally {
+				creatingNewAttachment.value = false;
+			}
+		};
+
 		const toggleDetailsEditable = async () => {
 			detailsEditable.value = !detailsEditable.value;
 			if (!detailsEditable.value) await saveContract();
@@ -600,36 +582,41 @@ export default defineComponent({
 
 		return {
 			contract,
-			loading,
-			detailsEditable,
-			datesEditable,
-			loadingCustomers,
-			customers,
-			currencies,
-			deadlineAt,
-			startAt,
-			formattedPrice,
-			contractPhasesHeaders,
-			phases,
-			newContractPhase,
-			newPhase,
-			loadingPhases,
-			creatingNewPhase,
-			createNewPhase,
-			savingContract,
-			saveContract,
-			reloadContract,
-			newContractPhaseDialogVisible,
-			newPhaseDialogVisible,
-			savingContractPhases,
-			saveContractPhases,
-			createNewContractPhase,
-			isRequired,
-			hasNonDefaultId,
 			contractPhaseForm,
+			contractPhasesHeaders,
+			createNewAttachment,
+			createNewContractPhase,
+			createNewPhase,
+			creatingNewAttachment,
+			creatingNewPhase,
+			currencies,
+			customers,
+			datesEditable,
+			deadlineAt,
+			deleteContractPhase,
+			detailsEditable,
+			formattedPrice,
+			hasNonDefaultId,
+			isRequired,
+			loading,
+			loadingCustomers,
+			loadingPhases,
+			newAttachment,
+			newContractPhase,
+			newContractPhaseDialogVisible,
+			newPhase,
+			newPhaseDialogVisible,
+			openEditContractPhaseDialog,
 			phaseForm,
-			toggleDetailsEditable,
+			phases,
+			reloadContract,
+			saveContract,
+			saveContractPhases,
+			savingContract,
+			savingContractPhases,
+			startAt,
 			toggleDatesEditable,
+			toggleDetailsEditable,
 			...i18n
 		};
 	}

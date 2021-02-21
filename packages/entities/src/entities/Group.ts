@@ -1,8 +1,9 @@
-import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Type } from 'class-transformer';
+import { IsEnum, IsInt, IsString, ValidateNested } from 'class-validator';
+import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
+
 import { Permission } from './Permission';
 import { User } from './User';
-import { IsEnum, IsInt, IsString, ValidateNested } from 'class-validator';
 
 @Entity()
 export class Group {

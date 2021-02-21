@@ -1,7 +1,9 @@
 import { AxiosRequestConfig, AxiosResponse } from 'axios';
-import { authAPIClient } from '@/http/api';
-import { router } from '@/router';
-import { useToastStore } from '@/stores/toast.store';
+
+import { router } from '../router';
+import { useToastStore } from '../stores/toast.store';
+
+import { authAPIClient } from './api';
 
 const ACCESS_TOKEN_STORAGE_KEY = 'accessToken';
 const REFRESH_TOKEN_STORAGE_KEY = 'refreshToken';
@@ -43,12 +45,14 @@ export async function refreshAccessTokenLogic(failedRequest: AxiosResponse): Pro
 		saveAccessToken(res.data.accessToken);
 		failedRequest.config = injectAccessTokenInterceptor(failedRequest.config);
 	} catch (err) {
-		useToastStore().showToast({
-			message:
-				'Je požadováno opětovné přihlášení. Nyní budete přesměrování na stranu s přihlášením.',
-			type: 'warning',
-			timeout: 2000
-		});
-		setTimeout(() => router.push('/login'), 2000);
+		if (router.currentRoute.path !== '/login') {
+			useToastStore().showToast({
+				message:
+					'Je požadováno opětovné přihlášení. Nyní budete přesměrování na stranu s přihlášením.',
+				type: 'warning',
+				timeout: 2000
+			});
+			setTimeout(() => router.push('/login'), 2000);
+		}
 	}
 }

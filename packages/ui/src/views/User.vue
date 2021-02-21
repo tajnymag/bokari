@@ -4,9 +4,19 @@
 
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api';
+import { useTitle } from '@vueuse/core';
 
 export default defineComponent({
-	name: 'User'
+	name: 'User',
+	props: {
+		username: {
+			type: String,
+			required: true
+		}
+	},
+	setup() {
+		useTitle('Uživatel');
+	}
 });
 </script>
 

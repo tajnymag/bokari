@@ -1,22 +1,22 @@
-import {
-	Authorized,
-	Body,
-	CurrentUser, Delete, HttpCode,
-	JsonController,
-	NotFoundError,
-	Param,
-	Patch,
-	Post,
-	UnauthorizedError
-} from 'routing-controllers';
-import { UserUpdatable } from '../users';
-import { ResponseSchema } from 'routing-controllers-openapi';
 import { Contact, Permission, Person, User } from '@bokari/entities';
-import { getRepository } from 'typeorm';
 import { plainToClass, plainToClassFromExist } from 'class-transformer';
-import { TypeormQuery } from '../../helpers/typing';
-import { CurrentUserPayload } from '../../middlewares';
+import {
+  Authorized,
+  Body,
+  CurrentUser, Delete, HttpCode,
+  JsonController,
+  NotFoundError, OnUndefined,
+  Param,
+  Patch,
+  Post,
+  UnauthorizedError
+} from "routing-controllers";
+import { ResponseSchema } from 'routing-controllers-openapi';
+import { getRepository } from 'typeorm';
+
 import { existsEntity } from '../../helpers/entities';
+import { CurrentUserPayload } from '../../middlewares';
+
 import { ContactInsertable, ContactUpdatable, PersonUpdatable } from './schemas';
 
 @JsonController('/people')
@@ -27,7 +27,7 @@ export class PeopleController {
 	async editPerson(
 		@CurrentUser() currentUser: CurrentUserPayload,
 		@Param('personId') personId: number,
-		@Body() desiredChanges: UserUpdatable
+		@Body() desiredChanges: PersonUpdatable
 	) {
 		if (!(await existsEntity(Person, { id: personId }))) {
 			throw new NotFoundError('Such person does not exist!');
@@ -84,7 +84,7 @@ export class PeopleController {
 	}
 
 	@Delete('/:personId/:contactId')
-	@HttpCode(201)
+	@OnUndefined(204)
 	async deleteContact(
 		@CurrentUser() currentUser: CurrentUserPayload,
 		@Param('personId') personId: number,
@@ -92,7 +92,7 @@ export class PeopleController {
 	): Promise<void> {
 		await this.checkPermissions(currentUser, personId);
 
-		await getRepository(Contact).delete({ id: contactId });
+		await getRepository(Contact).delete(contactId);
 	}
 
 	private async checkPermissions(currentUser: CurrentUserPayload, desiredPersonId: number) {

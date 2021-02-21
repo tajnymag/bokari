@@ -1,8 +1,10 @@
-import { Currency } from './Currency';
-import { Column, DeepPartial } from 'typeorm';
-import { IsEnum, IsNumber } from 'class-validator';
 import { Transform } from 'class-transformer';
+import { IsEnum, IsNumber } from 'class-validator';
+import { Column, DeepPartial } from 'typeorm';
+
 import { ParseFloat } from '../transformations';
+
+import { Currency } from './Currency';
 
 export class Monetary {
 	@Column({ type: 'decimal', scale: 2 })
