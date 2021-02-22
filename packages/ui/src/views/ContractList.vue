@@ -32,7 +32,11 @@
 					<v-btn icon @click="openContractView(item)">
 						<v-icon>mdi-eye</v-icon>
 					</v-btn>
-					<v-btn icon @click="deleteContract(item)">
+					<v-btn
+						v-if="hasPermission(Permission.GROUPS_WRITE)"
+						icon
+						@click="deleteContract(item)"
+					>
 						<v-icon>mdi-delete</v-icon>
 					</v-btn>
 				</template>
@@ -111,6 +115,7 @@ export default defineComponent({
 		const deleteContract = async (contract: Contract) => {
 			try {
 				await contractsAPIClient.deleteContractByCode(contract.code);
+				contracts.value = contracts.value.filter(c => c.id !== contract.id);
 				showToast({
 					message: `Zakázka ${contract.code} byla úspěšně odebrána`,
 					type: 'success'

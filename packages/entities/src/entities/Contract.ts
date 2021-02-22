@@ -48,7 +48,11 @@ export class Contract {
 	@ValidateNested()
 	metadata!: Metadata;
 
-	@ManyToOne(() => Customer, { eager: true, nullable: false })
+	@ManyToOne(
+		() => Customer,
+		customer => customer.contracts,
+		{ eager: true, nullable: false }
+	)
 	@Type(() => Customer)
 	@ValidateNested()
 	customer!: Customer;

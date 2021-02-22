@@ -1,12 +1,12 @@
 import { Exclude, Expose, Transform, Type } from "class-transformer";
 import {
-	IsEmail,
-	IsOptional,
-	IsPhoneNumber,
-	IsPostalCode,
-	IsString,
-	ValidateNested
-} from 'class-validator';
+  IsEmail, IsNotEmpty,
+  IsOptional,
+  IsPhoneNumber,
+  IsPostalCode,
+  IsString,
+  ValidateNested
+} from "class-validator";
 
 import { EmptyToUndefined } from "../../helpers/transformations";
 
@@ -90,6 +90,7 @@ export class ContactUpdatable {
 export class PersonInsertable {
   @Expose()
 	@IsString()
+  @IsNotEmpty()
 	name!: string;
 
   @Expose()
@@ -103,6 +104,7 @@ export class PersonUpdatable {
   @Expose()
 	@IsOptional()
 	@IsString()
+  @IsNotEmpty()
 	name?: string;
 
   @Expose()

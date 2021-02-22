@@ -14,7 +14,7 @@ interface UnknownObjectWithId {
 export function useValidation(formRef: Ref<VFormElement | null>) {
 	const isPattern = (pattern: RegExp): InputValidationRule => {
 		return (input: string) =>
-			!input || pattern.test(input) || 'Vstup neodpovídá požadovanému formátu RR{n}{n}{n}';
+			!input || pattern.test(input) || 'Vstup neodpovídá požadovanému formátu';
 	};
 
 	const isNumber: InputValidationRule = (input: string) =>
@@ -33,7 +33,27 @@ export function useValidation(formRef: Ref<VFormElement | null>) {
 	const isPhoneNumber: InputValidationRule = (input: string) =>
 		!input ||
 		isValidPhoneNumber(input) ||
-		'Není platné telefonní číslo. Číslo musí například obsahovat předvolbu.';
+		'Není platné telefonní číslo. Číslo musí například obsahovat předvolbu';
+
+	const isUsername: InputValidationRule = (input: string) =>
+		!input ||
+		/^[a-z._-]+$/i.test(input) ||
+		'Uživatelské jméno musí obsahovat pouze znaky abecedy a znaky ".", "_", "-"';
+
+	const isImage: InputValidationRule = (input: File) =>
+		!input || /^image\//.test(input.type) || 'Soubor musí být typu obrázek';
+
+	const hasSizeMax = (sizeInBytes: number): InputValidationRule => {
+		return (input: File) =>
+			!input ||
+			input.size <= sizeInBytes ||
+			`Soubor musí být menší než ${(sizeInBytes / 1000000).toFixed(1)} MB`;
+	};
+
+	const hasEntries: InputValidationRule = (input: unknown) =>
+		!input ||
+		(Array.isArray(input) && input.length > 0) ||
+		'Seznam musí obsahovat alespoň jednu součást';
 
 	const hasNonDefaultId: InputValidationRule = (input: UnknownObjectWithId) =>
 		!input || input.id > 0 || 'Objekt nebyl zvolen';
@@ -49,6 +69,10 @@ export function useValidation(formRef: Ref<VFormElement | null>) {
 		isPostalCode,
 		isEmail,
 		isPhoneNumber,
+		isUsername,
+		isImage,
+		hasSizeMax,
+		hasEntries,
 		hasNonDefaultId,
 		validate,
 		resetValidation,

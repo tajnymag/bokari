@@ -1,6 +1,6 @@
 import { Exclude, Type } from 'class-transformer';
 import { IsInt, IsString, ValidateNested } from 'class-validator';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, DeepPartial, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 import { ContractPhase } from './ContractPhase';
 
@@ -23,4 +23,8 @@ export class Phase {
 	@Type(() => ContractPhase)
 	@ValidateNested({ each: true })
 	contractPhases!: ContractPhase[];
+
+  constructor(props?: DeepPartial<Phase>) {
+    if (props) Object.assign(this, props);
+  }
 }

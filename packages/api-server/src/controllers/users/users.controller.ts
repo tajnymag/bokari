@@ -1,6 +1,7 @@
 import { Permission, User } from '@bokari/entities';
 import * as argon2 from 'argon2';
-import { plainToClass, plainToClassFromExist } from 'class-transformer';
+import { plainToClass } from 'class-transformer';
+import { merge } from "lodash";
 import {
   Authorized,
   Body,
@@ -9,7 +10,7 @@ import {
   HttpError,
   JsonController,
   NotFoundError, OnUndefined,
-  Param, Params,
+  Param,
   Patch,
   Post
 } from "routing-controllers";
@@ -17,7 +18,6 @@ import { ResponseSchema } from 'routing-controllers-openapi';
 import { getRepository } from 'typeorm';
 
 import { existsEntity } from '../../helpers/entities';
-import { TypeormQuery } from '../../helpers/typing';
 import { CurrentUserPayload } from '../../middlewares';
 
 import { UserInsertable, UserUpdatable } from './schemas';
@@ -84,7 +84,7 @@ export class UsersController {
 			{ username },
 			{ relations: ['person', 'person.contacts'] }
 		);
-		const updatedUserEntity = plainToClassFromExist(userEntity, desiredChanges);
+		const updatedUserEntity = merge(userEntity, desiredChanges);
 
 		if (desiredChanges.password) {
 			const newPasswordHash = await argon2.hash(desiredChanges.password);
@@ -96,6 +96,7 @@ export class UsersController {
 
 	@Delete('/:username')
   @Authorized([Permission.USERS_WRITE])
+  @HttpCode(204)
   @OnUndefined(204)
   async deleteUserByUsername(@Param('username') username: string) {
 	  await getRepository(User).softDelete({ username });

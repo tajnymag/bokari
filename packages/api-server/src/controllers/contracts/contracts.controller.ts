@@ -2,6 +2,7 @@ import { Contract, Metadata, Permission } from '@bokari/entities';
 import { plainToClass, plainToClassFromExist } from 'class-transformer';
 import { isNotEmptyObject } from 'class-validator';
 import { Request } from 'express';
+import { merge } from 'lodash';
 import {
   Authorized,
   Body,
@@ -140,7 +141,7 @@ export class ContractsController {
 		@Body() desiredChanges: ContractUpdatable
 	): Promise<Contract> {
 		const contractEntity = await getRepository(Contract).findOneOrFail({ code });
-		const updatedEntity = plainToClassFromExist(contractEntity, desiredChanges);
+		const updatedEntity = merge(contractEntity, desiredChanges);
 
 		const updatedContract = await getRepository(Contract).save(updatedEntity);
 

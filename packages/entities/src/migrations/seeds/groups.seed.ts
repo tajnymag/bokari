@@ -1,17 +1,30 @@
-import { Group, Permission } from '../../entities';
+import { Group, Metadata, Permission, User } from "../../entities";
 
-export const GroupsSeed: Pick<Group, 'name' | 'permissions'>[] = [
-	{ name: 'Accountants', permissions: [Permission.FINANCES_WRITE, Permission.FINANCES_READ] },
-	{
-		name: 'Admin',
-		permissions: [
-			Permission.USERS_WRITE,
-			Permission.USERS_READ,
-			Permission.CONTRACTS_WRITE,
-			Permission.CONTRACTS_READ,
-			Permission.FINANCES_WRITE,
-			Permission.FINANCES_READ
-		]
-	},
-	{ name: 'Employee', permissions: [Permission.CONTRACTS_READ] }
+import { AdminUserSeed } from './admin-user.seed';
+
+export const GroupsSeed = [
+	new Group({
+    name: 'Accountants',
+    users: [],
+    permissions: [Permission.FINANCES_WRITE, Permission.FINANCES_READ]
+  }),
+	new Group({
+    name: 'Admin',
+    users: [AdminUserSeed],
+    permissions: [
+      Permission.USERS_WRITE,
+      Permission.USERS_READ,
+      Permission.CONTRACTS_WRITE,
+      Permission.CONTRACTS_READ,
+      Permission.FINANCES_WRITE,
+      Permission.FINANCES_READ,
+      Permission.GROUPS_WRITE,
+      Permission.GROUPS_READ
+    ]
+  }),
+	new Group({
+    name: 'Employee',
+    users: [],
+    permissions: [Permission.CONTRACTS_READ]
+  })
 ];

@@ -1,5 +1,6 @@
 import { Contact, Permission, Person, User } from '@bokari/entities';
 import { plainToClass, plainToClassFromExist } from 'class-transformer';
+import { merge } from 'lodash';
 import {
   Authorized,
   Body,
@@ -39,7 +40,7 @@ export class PeopleController {
 			{ id: personId },
 			{ relations: ['contacts'] }
 		);
-		const updatedPersonEntity = plainToClassFromExist(personEntity, desiredChanges);
+		const updatedPersonEntity = merge(personEntity, desiredChanges);
 
 		return getRepository(Person).save(updatedPersonEntity);
 	}
@@ -78,7 +79,7 @@ export class PeopleController {
 		await this.checkPermissions(currentUser, personId);
 
 		const contactEntity = await getRepository(Contact).findOneOrFail({ id: contactId });
-		const updatedEntity = plainToClassFromExist(contactEntity, desiredChanges);
+		const updatedEntity = merge(contactEntity, desiredChanges);
 
 		return getRepository(Contact).save(updatedEntity);
 	}

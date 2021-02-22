@@ -1,15 +1,18 @@
-import { Expose, Type } from 'class-transformer';
+import { Exclude, Expose, Type } from "class-transformer";
 import { IsBoolean, IsDate, IsDateString, ValidateNested } from 'class-validator';
 
-@Expose()
+@Exclude()
 export class ContractPhaseInsertable {
+  @Expose()
 	@Type(() => Date)
 	@IsDate()
 	deadlineAt!: Date;
 
+  @Expose()
 	@IsBoolean()
 	isDone!: boolean;
 
+  @Expose()
 	@ValidateNested()
 	phaseId!: number;
 }

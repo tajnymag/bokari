@@ -1,6 +1,6 @@
 <template>
 	<v-card class="pa-5">
-		<v-form @submit.prevent="submit">
+		<v-form ref="customerForm" @submit.prevent="submit">
 			<v-card-text>
 				<v-text-field
 					v-model="customer.person.name"
@@ -23,7 +23,6 @@ import { CustomerInsertable } from '@bokari/api-client';
 import { defineComponent, reactive, ref } from '@vue/composition-api';
 import { useTitle } from '@vueuse/core';
 
-import ContactList from '../components/ContactList.vue';
 import { customersAPIClient } from '../http/api';
 import { VFormElement } from '../plugins/vuetify';
 import { useToastStore } from '../stores/toast.store';
@@ -31,20 +30,17 @@ import { useValidation } from '../utils/validations';
 
 export default defineComponent({
 	name: 'NewCustomerView',
-	components: {
-		ContactList
-	},
 	setup() {
 		useTitle('Nový klient');
 		const toastStore = useToastStore();
-		const form = ref<VFormElement | null>(null);
+		const customerForm = ref<VFormElement | null>(null);
 		const customer = reactive<CustomerInsertable>({
 			person: {
 				name: '',
 				contacts: []
 			}
 		});
-		const { isRequired, validate } = useValidation(form);
+		const { isRequired, validate } = useValidation(customerForm);
 
 		const submit = () => {
 			if (!validate()) {
@@ -74,7 +70,8 @@ export default defineComponent({
 		return {
 			customer,
 			isRequired,
-			submit
+			submit,
+			customerForm
 		};
 	}
 });

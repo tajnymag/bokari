@@ -68,8 +68,9 @@ export class ContractsQueryParams {
   filterMin?: ContractsQueryFilterable
 }
 
-@Expose()
+@Exclude()
 export class ContractJoinable {
+  @Expose()
 	@IsInt()
 	id!: number;
 }

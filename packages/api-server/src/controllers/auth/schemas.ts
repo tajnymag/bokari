@@ -1,33 +1,41 @@
-import { Expose, Transform } from 'class-transformer';
+import { Exclude, Expose, Transform } from "class-transformer";
 import { IsJWT, IsString } from 'class-validator';
 
 import { ToLowercaseAndTrim } from '../../helpers/transformations';
 
-@Expose()
+@Exclude()
 export class LoginRequest {
+  @Expose()
 	@Transform(ToLowercaseAndTrim)
 	@IsString()
 	username!: string;
+
+  @Expose()
 	@IsString()
 	password!: string;
 }
 
-@Expose()
+@Exclude()
 export class LoginResponse {
+  @Expose()
 	@IsJWT()
 	accessToken!: string;
+
+  @Expose()
 	@IsJWT()
 	refreshToken!: string;
 }
 
-@Expose()
+@Exclude()
 export class RefreshRequest {
+  @Expose()
 	@IsJWT()
 	refreshToken!: string;
 }
 
-@Expose()
+@Exclude()
 export class RefreshResponse {
+  @Expose()
 	@IsJWT()
 	accessToken!: string;
 }

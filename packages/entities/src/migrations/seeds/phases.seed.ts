@@ -1,8 +1,8 @@
 import { Phase } from '../../entities';
 
-export const PhasesSeed: Pick<Phase, 'name'>[] = [
-	{ name: 'Planning' },
-	{ name: 'Pre-construction' },
-	{ name: 'Construction' },
-	{ name: 'Close-out' }
+export const PhasesSeed = [
+	new Phase({ name: 'Planning' }),
+	new Phase({ name: 'Pre-construction' }),
+	new Phase({ name: 'Construction' }),
+	new Phase({ name: 'Close-out' })
 ]

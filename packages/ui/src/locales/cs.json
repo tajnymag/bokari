@@ -30,7 +30,7 @@
       "isDone": "Dokončena",
       "price": "Cena",
       "description": "Popis",
-      "deadlineAt": "Deadline",
+      "deadlineAt": "Uzávěrka",
       "startAt": "Začátek"
     }
   },

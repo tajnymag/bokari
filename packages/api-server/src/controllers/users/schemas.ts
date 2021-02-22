@@ -76,7 +76,6 @@ export class UserUpdatable {
 @Exclude()
 export class UserJoinable {
   @Expose()
-	@IsNotEmpty()
 	@IsInt()
 	id!: number;
 }

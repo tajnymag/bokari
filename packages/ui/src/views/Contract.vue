@@ -75,7 +75,7 @@
 
 						<v-card-text>
 							<v-form :readonly="!datesEditable">
-								<v-text-field v-model="deadlineAt" label="Deadline" type="date" />
+								<v-text-field v-model="deadlineAt" label="Uzávěrka" type="date" />
 								<v-text-field v-model="startAt" label="Začátek" type="date" />
 							</v-form>
 						</v-card-text>
@@ -98,7 +98,7 @@
 											<v-text-field
 												v-model="newContractPhase.deadlineAt"
 												:rules="[isRequired]"
-												label="Deadline"
+												label="Uzávěrka"
 												type="date"
 											/>
 											<v-checkbox
@@ -312,11 +312,16 @@ export default defineComponent({
 
 		const loading = ref(true);
 		const contract = asyncComputed<Contract | null>(
-			() =>
-				contractsAPIClient
-					.getContractByCode(contractCode.value)
-					.then(res => res.data)
-					.catch(() => router.push({ name: 'NotFound' }) && null),
+			async () => {
+				try {
+					return contractsAPIClient
+						.getContractByCode(contractCode.value)
+						.then(res => res.data);
+				} catch {
+					await router.push('/404');
+					return null;
+				}
+			},
 			null,
 			loading
 		);
@@ -363,7 +368,7 @@ export default defineComponent({
 				value: 'phase.name'
 			},
 			{
-				text: 'Deadline',
+				text: 'Uzávěrka',
 				value: 'deadlineAt'
 			},
 			{

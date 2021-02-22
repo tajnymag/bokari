@@ -32,6 +32,8 @@
   },
   "devDependencies": {
     "@types/flat": "^5.0.1",
+    "@types/lodash": "^4.14.168",
+    "@types/lodash-es": "^4.17.4",
     "@vue/cli": "^4.5.11",
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-eslint": "~4.5.0",

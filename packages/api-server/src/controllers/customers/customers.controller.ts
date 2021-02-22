@@ -13,7 +13,7 @@ export class CustomersController {
 	@ResponseSchema(Customer, { isArray: true })
 	async getAllCustomers(): Promise<Customer[]> {
 		const customers = await getRepository(Customer).find({
-			relations: ['person', 'person.contacts']
+			relations: ['person', 'person.contacts', 'contracts']
 		});
 
 		return customers;
@@ -23,7 +23,7 @@ export class CustomersController {
 	@ResponseSchema(Customer)
 	async getCustomerById(@Param('id') id: number): Promise<Customer> {
 		const customer = await getRepository(Customer).findOneOrFail(id, {
-			relations: ['person', 'person.contacts']
+			relations: ['person', 'person.contacts', 'contracts']
 		});
 
 		return customer;

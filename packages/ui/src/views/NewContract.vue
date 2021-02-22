@@ -13,15 +13,19 @@
 					:rules="[isPattern(/^\d{5}$/)]"
 					clearable
 					label="Číslo"
+					hint="Ponechte volné pro automatické vygenerování"
 				/>
-				<date-picker
+				<v-text-field
 					v-model="contract.startAt"
 					:rules="[isRequired]"
+					type="date"
+					class="required"
 					label="Datum začátku"
 				/>
-				<date-picker
+				<v-text-field
 					v-model="contract.deadlineAt"
 					:rules="[isRequired]"
+					type="date"
 					class="required"
 					label="Datum odevzdání"
 				/>
