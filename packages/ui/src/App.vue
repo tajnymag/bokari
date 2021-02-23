@@ -1,11 +1,9 @@
 <template>
 	<v-app>
-		<v-app-bar app>
+		<v-app-bar app color="primary" dark>
 			<v-app-bar-nav-icon @click="drawer = !drawer" />
 			<v-toolbar-title>
-				<v-btn text>
-					<h1>{{ title }}</h1>
-				</v-btn>
+				{{ title }}
 			</v-toolbar-title>
 
 			<v-spacer />

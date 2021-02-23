@@ -2,6 +2,7 @@ import Vue from 'vue';
 // @ts-expect-error Vuetify doesn't work well in monorepos afaik
 import Vuetify from 'vuetify/lib/framework';
 import cs from 'vuetify/src/locale/cs';
+import en from 'vuetify/src/locale/en';
 
 Vue.use(Vuetify);
 
@@ -27,18 +28,18 @@ export default new Vuetify({
 		},
 		themes: {
 			light: {
-				primary: '#ee44aa',
-				secondary: '#424242',
-				accent: '#82B1FF',
-				error: '#FF5252',
-				info: '#2196F3',
-				success: '#4CAF50',
-				warning: '#FFC107'
+				primary: '#795548',
+				secondary: '#ff9800',
+				accent: '#607d8b',
+				error: '#f44336',
+				info: '#2196f3',
+				success: '#4caf50',
+				warning: '#ffc107'
 			}
 		}
 	},
 	lang: {
-		locales: { cs },
+		locales: { cs, en },
 		current: 'cs'
 	},
 	icons: {

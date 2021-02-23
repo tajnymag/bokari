@@ -13,17 +13,19 @@ import {
 } from '@bokari/api-client';
 import { AxiosInstance } from 'axios';
 
+import { BOKARI_API_URL } from '../env.config';
+
 import { authHttpClient, httpClient } from './http-client';
 
-const authAPIClientConfig: [undefined, undefined, AxiosInstance] = [
+const authAPIClientConfig: [undefined, string, AxiosInstance] = [
 	undefined,
-	undefined,
+	BOKARI_API_URL,
 	authHttpClient
 ];
 
-const commonAPIClientConfig: [undefined, undefined, AxiosInstance] = [
+const commonAPIClientConfig: [undefined, string, AxiosInstance] = [
 	undefined,
-	undefined,
+	BOKARI_API_URL,
 	httpClient
 ];
 

@@ -21,7 +21,7 @@ import {
 import { OpenAPI, ResponseSchema } from 'routing-controllers-openapi';
 import { getRepository } from 'typeorm';
 
-import { BOKARI_UPLOADS_SERVE_PATH, BOKARI_UPLOADS_STORAGE_DIR } from '../../env.config';
+import { BOKARI_UPLOADS_SERVE_URL, BOKARI_UPLOADS_STORAGE_DIR } from '../../env.config';
 import { existsAsync } from '../../helpers/fs';
 import { TypeormQuery } from '../../helpers/typing';
 import { CurrentUserPayload } from '../../middlewares';
@@ -79,7 +79,7 @@ export class FilesController {
 		const storagePath = path.join(BOKARI_UPLOADS_STORAGE_DIR, hash);
 		const toStoreFilePath = path.join(storagePath, normalizedFilename);
 
-		const urlPath = `${BOKARI_UPLOADS_SERVE_PATH}/${hash}/${normalizedFilename}`;
+		const urlPath = `${BOKARI_UPLOADS_SERVE_URL}/${hash}/${normalizedFilename}`;
 
 		const hashExists = await existsAsync(storagePath);
 		const filenameExists = await existsAsync(storagePath);
