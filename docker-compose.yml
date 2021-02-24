@@ -2,12 +2,54 @@ services:
   api:
     build:
       context: .
-      dockerfile: docker/api.Dockerfile
+      dockerfile: packages/api-server/Dockerfile
+    volumes:
+      - uploads_volume:/app/uploads
+    depends_on:
+      - database
+    environment:
+      NODE_ENV: production
+      BOKARI_UPLOADS_STORAGE_DIR: /app/uploads
+      TYPEORM_CONNECTION: postgres
+      TYPEORM_HOST: database
+      TYPEORM_USERNAME: postgres
+      TYPEORM_PASSWORD: changeme3
+      TYPEORM_DATABASE: bokari
+      TYPEORM_PORT: 5432
+      TYPEORM_SYNCHRONIZE: "true"
+      TYPEORM_LOGGING: "true"
+      JWT_PRIVATE_KEY: changeme1
+      JWT_PUBLIC_KEY: changeme1
   ui:
     build:
       context: .
-      dockerfile: docker/ui.Dockerfile
+      dockerfile: packages/ui/Dockerfile
   uploads:
-    image: nginx:alpine
+    build:
+      context: .
+      dockerfile: packages/uploads/Dockerfile
+    volumes:
+      - uploads_volume:/usr/share/nginx/html
   proxy:
+    ports:
+      - 8080:80
     image: nginx:alpine
+    volumes:
+      - ./nginx:/etc/nginx/templates
+    environment:
+      NGINX_HOST: localhost
+    depends_on:
+      - api
+      - ui
+      - uploads
+    tty: true
+  database:
+    image: postgres
+    volumes:
+      - database_volume:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: bokari
+      POSTGRES_PASSWORD: changeme2
+volumes:
+  uploads_volume:
+  database_volume:

@@ -1,19 +1,23 @@
-import { Permission, User } from '@bokari/entities';
+import { Permission, Person, User } from '@bokari/entities';
 import * as argon2 from 'argon2';
 import { plainToClass } from 'class-transformer';
-import { merge } from "lodash";
+import { merge } from 'lodash';
 import {
-  Authorized,
-  Body,
-  CurrentUser, Delete,
-  Get, HttpCode,
-  HttpError,
-  JsonController,
-  NotFoundError, OnUndefined,
-  Param,
-  Patch,
-  Post
-} from "routing-controllers";
+	Authorized,
+	Body,
+	CurrentUser,
+	Delete,
+	Get,
+	HttpCode,
+	HttpError,
+	JsonController,
+	NotFoundError,
+	OnUndefined,
+	Param,
+	Patch,
+	Post,
+	UnauthorizedError
+} from 'routing-controllers';
 import { ResponseSchema } from 'routing-controllers-openapi';
 import { getRepository } from 'typeorm';
 
@@ -37,9 +41,14 @@ export class UsersController {
 	}
 
 	@Get('/:username')
-	@Authorized([Permission.USERS_READ])
+	@Authorized()
 	@ResponseSchema(User)
-	async getUserByUsername(@Param('username') username: string): Promise<User> {
+	async getUserByUsername(
+		@Param('username') username: string,
+		@CurrentUser() currentUser: CurrentUserPayload
+	): Promise<User> {
+		await this.checkPermissions(currentUser, username, Permission.GROUPS_READ);
+
 		const user = await getRepository(User).findOneOrFail(
 			{ username },
 			{ relations: ['groups', 'workLogs', 'person', 'person.contacts'] }
@@ -74,6 +83,7 @@ export class UsersController {
 	@ResponseSchema(User)
 	async editUser(
 		@Param('username') username: string,
+		@CurrentUser() currentUser: CurrentUserPayload,
 		@Body() desiredChanges: UserUpdatable
 	): Promise<User> {
 		if (!(await existsEntity(User, { username }))) {
@@ -95,10 +105,26 @@ export class UsersController {
 	}
 
 	@Delete('/:username')
-  @Authorized([Permission.USERS_WRITE])
-  @HttpCode(204)
-  @OnUndefined(204)
-  async deleteUserByUsername(@Param('username') username: string) {
-	  await getRepository(User).softDelete({ username });
-  }
+	@Authorized([Permission.USERS_WRITE])
+	@HttpCode(204)
+	@OnUndefined(204)
+	async deleteUserByUsername(@Param('username') username: string) {
+		await getRepository(User).softDelete({ username });
+	}
+
+	private async checkPermissions(
+		currentUser: CurrentUserPayload,
+		desiredUsername: string,
+		permission: Permission
+	) {
+		if (currentUser.username !== desiredUsername) {
+			const hasPermission = currentUser.permissions.includes(permission);
+
+			if (!hasPermission) {
+				throw new UnauthorizedError(
+					"You don't have enough privileges to edit someone else's profile!"
+				);
+			}
+		}
+	}
 }

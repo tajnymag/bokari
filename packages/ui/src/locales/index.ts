@@ -1,4 +1,4 @@
-import csLocale from './cs.json';
-import enLocale from './en.json';
+import csLocale from './cs';
+import enLocale from './en';
 
 export { csLocale, enLocale };

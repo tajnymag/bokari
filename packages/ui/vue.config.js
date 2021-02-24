@@ -2,15 +2,17 @@
 module.exports = {
 	assetsDir: 'static',
 	transpileDependencies: ['vuetify'],
-	devServer: {
-		proxy: {
-			'^/static/uploads': {
-				target: 'http://localhost:5000',
-				changeOrigin: true,
-				pathRewrite: {
-					'^/static/uploads': ''
-				}
-			}
+	pwa: {
+		name: 'Bokari',
+		themeColor: '#795548',
+		msTileColor: '#795548',
+		iconPaths: {
+			faviconSVG: 'favicon.svg',
+			favicon16: 'favicon.ico',
+			favicon32: null,
+			appleTouchIcon: null,
+			maskIcon: null,
+			msTileImage: null
 		}
 	}
 };

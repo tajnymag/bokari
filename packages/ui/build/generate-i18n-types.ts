@@ -1,6 +1,8 @@
 import * as fs from 'fs';
 import * as path from 'path';
+
 import flatten from 'flat';
+
 import * as locales from '../src/locales';
 
 const localePrefixes = process.argv[2].replace(/\s+/g, '').split(',') || [];
@@ -15,16 +17,16 @@ for (const localePrefix of localePrefixes) {
 	if (locale && locale.messages) {
 		const localeMessageKeys: string[] = Object.keys(flatten(locale.messages));
 
-		localeMessageKeys.forEach((localeMessageKey) => messageKeys.add(localeMessageKey));
+		localeMessageKeys.forEach(localeMessageKey => messageKeys.add(localeMessageKey));
 	}
 }
 
 const outputContent = `
 export type TypedLocaleMessagePath = ${Array.from(messageKeys)
-	.map((messageKey) => JSON.stringify(messageKey))
+	.map(messageKey => JSON.stringify(messageKey))
 	.join(' | ')};
 export type TypedLocale = ${localePrefixes
-	.map((localePrefix) => JSON.stringify(localePrefix))
+	.map(localePrefix => JSON.stringify(localePrefix))
 	.join(' | ')};
 `;
 

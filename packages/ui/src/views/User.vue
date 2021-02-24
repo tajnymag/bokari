@@ -19,7 +19,7 @@
 							<v-form ref="detailsForm" :readonly="!detailsEditable">
 								<v-text-field
 									v-model="user.person.name"
-									:rules="[isRequired, isUsername]"
+									:rules="[isRequired]"
 									label="Jméno"
 								/>
 								<v-text-field

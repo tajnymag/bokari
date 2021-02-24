@@ -7,13 +7,13 @@ export const PORT: number = env
 
 export const BOKARI_UPLOADS_STORAGE_DIR: string = env
 	.get('BOKARI_UPLOADS_STORAGE_DIR')
-	.required()
+	.default(__dirname)
 	.asString();
 
 export const BOKARI_UPLOADS_SERVE_URL: string = env
 	.get('BOKARI_UPLOADS_SERVE_URL')
-	.default('http://localhost:5000/static/uploads')
-	.asUrlString();
+	.default('/static/uploads')
+	.asString();
 
 export const BOKARI_GENERATE_API_DOCS: boolean = env
 	.get('BOKARI_GENERATE_API_DOCS')

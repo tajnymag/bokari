@@ -7,7 +7,7 @@ import {
 	IsOptional, IsString,
 	validate,
 	ValidateIf,
-	ValidateNested
+	ValidateNested, ValidationError
 } from 'class-validator';
 import { sign as jwtSign, SignOptions, verify as jwtVerify } from 'jsonwebtoken';
 import { UnauthorizedError } from 'routing-controllers';
@@ -88,7 +88,7 @@ export async function verifyToken(
 		throw new UnauthorizedError('Invalid token provided!');
 	}
 
-	let validationErrors = [];
+	let validationErrors: ValidationError[] = [];
 
 	if (expectedType === JwtType.ACCESS) {
 		validationErrors = await validate(plainToClass(AccessTokenPayload, payload), {

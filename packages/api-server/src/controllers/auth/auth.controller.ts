@@ -64,9 +64,9 @@ export class AuthController {
 		refreshTokenEntity.token = refreshToken;
 		refreshTokenEntity.metadata = new Metadata({ createdBy: user });
 
-		const issuedRefreshToken = await getRepository(RefreshToken).save(refreshTokenEntity);
-
-		if (!issuedRefreshToken) {
+		try {
+			 await getRepository(RefreshToken).save(refreshTokenEntity);
+		} catch {
 			throw new InternalServerError(
 				`Could not save ${username}'s refresh token to the database!`
 			);

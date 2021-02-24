@@ -37,8 +37,8 @@ export function useValidation(formRef: Ref<VFormElement | null>) {
 
 	const isUsername: InputValidationRule = (input: string) =>
 		!input ||
-		/^[a-z._-]+$/i.test(input) ||
-		'Uživatelské jméno musí obsahovat pouze znaky abecedy a znaky ".", "_", "-"';
+		/^[a-z0-9._-]+$/i.test(input) ||
+		'Uživatelské jméno může obsahovat pouze alfanumerické znaky a znaky ".", "_", "-"';
 
 	const isImage: InputValidationRule = (input: File) =>
 		!input || /^image\//.test(input.type) || 'Soubor musí být typu obrázek';
