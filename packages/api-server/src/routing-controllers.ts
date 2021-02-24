@@ -1,3 +1,4 @@
+import helmet from 'helmet';
 import { RoutingControllersOptions } from 'routing-controllers';
 
 import {
@@ -38,7 +39,7 @@ export const routingControllersOptions: RoutingControllersOptions = {
 		WorkLogsController,
 		...conditionalControllers
 	],
-	middlewares: [ErrorHandler],
+	middlewares: [ErrorHandler, helmet()],
 	defaultErrorHandler: false,
 	classTransformer: true,
 	validation: {

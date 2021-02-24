@@ -12,7 +12,8 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "sourceMap": true,
-    "isolatedModules": true
+    "isolatedModules": true,
+    "allowSyntheticDefaultImports": true
   },
   "include": ["src/**/*.ts"]
 }

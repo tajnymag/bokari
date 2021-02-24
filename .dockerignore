@@ -1,10 +1,10 @@
-.DS_Store
-node_modules
-dist
+**/node_modules
+**/dist
+**/.DS_Store
 .git
 
 # Environment files
-.env
+**/*.env
 
 # Log files
 npm-debug.log*

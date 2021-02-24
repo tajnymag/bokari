@@ -1,0 +1,13 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: docker/api.Dockerfile
+  ui:
+    build:
+      context: .
+      dockerfile: docker/ui.Dockerfile
+  uploads:
+    image: nginx:alpine
+  proxy:
+    image: nginx:alpine
