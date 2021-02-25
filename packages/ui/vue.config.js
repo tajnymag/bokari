@@ -2,6 +2,7 @@
 module.exports = {
 	assetsDir: 'static',
 	transpileDependencies: ['vuetify'],
+	lintOnSave: process.env.CI !== 'true',
 	pwa: {
 		name: 'Bokari',
 		themeColor: '#795548',

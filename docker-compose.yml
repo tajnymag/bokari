@@ -3,6 +3,8 @@ services:
     build:
       context: .
       dockerfile: packages/api-server/Dockerfile
+    ports:
+      - 127.0.0.1:8001:3000
     volumes:
       - uploads_volume:/app/uploads
     depends_on:
@@ -24,10 +26,14 @@ services:
     build:
       context: .
       dockerfile: packages/ui/Dockerfile
+    ports:
+      - 127.0.0.1:8002:80
   uploads:
     build:
       context: .
       dockerfile: packages/uploads/Dockerfile
+    ports:
+      - 127.0.0.1:8003:80
     volumes:
       - uploads_volume:/usr/share/nginx/html
   database:

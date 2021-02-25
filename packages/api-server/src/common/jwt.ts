@@ -2,12 +2,15 @@ import { Permission, User } from '@bokari/entities';
 import { plainToClass, Type } from 'class-transformer';
 import {
 	Equals,
-	IsEnum, IsIn,
+	IsEnum,
+	IsIn,
 	IsInt,
-	IsOptional, IsString,
+	IsOptional,
+	IsString,
 	validate,
 	ValidateIf,
-	ValidateNested, ValidationError
+	ValidateNested,
+	ValidationError
 } from 'class-validator';
 import { sign as jwtSign, SignOptions, verify as jwtVerify } from 'jsonwebtoken';
 import { UnauthorizedError } from 'routing-controllers';
@@ -58,7 +61,7 @@ export function issueToken(
 	options: SignOptions
 ): Promise<string> {
 	return new Promise((resolve, reject) => {
-		jwtSign(payload, JWT_PRIVATE_KEY, options, (err, encoded) => {
+		jwtSign(payload, JWT_PRIVATE_KEY, { ...options, algorithm: 'RS256' }, (err, encoded) => {
 			if (err) {
 				reject(err);
 			} else {
@@ -83,7 +86,7 @@ export async function verifyToken(
 	let payload;
 
 	try {
-		payload = jwtVerify(token, JWT_PUBLIC_KEY);
+		payload = jwtVerify(token, JWT_PUBLIC_KEY, { algorithms: ['RS256'] });
 	} catch (err) {
 		throw new UnauthorizedError('Invalid token provided!');
 	}
@@ -106,5 +109,5 @@ export async function verifyToken(
 		throw new UnauthorizedError('Invalid token provided!');
 	}
 
-	return payload as (AccessTokenPayload | RefreshTokenPayload);
+	return payload as AccessTokenPayload | RefreshTokenPayload;
 }
