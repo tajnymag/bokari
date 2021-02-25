@@ -1,0 +1,18 @@
+{
+    email {$ACME_EMAIL}
+}
+
+{$DOMAIN} {
+    route /static/uploads/* {
+        uri strip_prefix /static/uploads
+        reverse_proxy uploads:80
+    }
+
+    route /api/* {
+        reverse_proxy api:3000
+    }
+
+    route {
+        reverse_proxy ui:80
+    }
+}

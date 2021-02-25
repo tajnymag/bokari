@@ -17,7 +17,7 @@ services:
       TYPEORM_DATABASE: bokari
       TYPEORM_PORT: 5432
       TYPEORM_SYNCHRONIZE: "true"
-      TYPEORM_LOGGING: "true"
+      TYPEORM_LOGGING: "false"
       JWT_PRIVATE_KEY: changeme1
       JWT_PUBLIC_KEY: changeme1
   ui:
@@ -33,11 +33,14 @@ services:
   proxy:
     ports:
       - 8080:80
-    image: nginx:alpine
+    image: caddy:alpine
     volumes:
-      - ./nginx:/etc/nginx/templates
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile
+      - proxy_caddy_data:/data
+      - proxy_caddy_config:/config
     environment:
-      NGINX_HOST: localhost
+      ACME_EMAIL: name@example.com
+      DOMAIN: "localhost:80"
     depends_on:
       - api
       - ui
@@ -53,3 +56,5 @@ services:
 volumes:
   uploads_volume:
   database_volume:
+  proxy_caddy_data:
+  proxy_caddy_config:
