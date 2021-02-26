@@ -51,8 +51,8 @@
 									label="Měna"
 									:items="currencies"
 								/>
-								<v-textarea v-model="contract.description" label="Popis" />
 								<v-checkbox v-model="contract.isDone" label="Dokončena" />
+								<v-textarea v-model="contract.description" label="Popis" />
 							</v-form>
 						</v-card-text>
 					</v-card>
