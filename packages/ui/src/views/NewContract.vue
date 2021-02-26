@@ -15,6 +15,16 @@
 					label="Číslo"
 					hint="Ponechte volné pro automatické vygenerování"
 				/>
+				<v-autocomplete
+					v-model="contract.customer"
+					:items="customers"
+					:loading="loadingCustomers"
+					:rules="[hasNonDefaultId]"
+					class="required"
+					item-text="person.name"
+					label="Klient"
+					return-object
+				/>
 				<v-text-field
 					v-model="contract.startAt"
 					:rules="[isRequired]"
@@ -29,7 +39,6 @@
 					class="required"
 					label="Datum odevzdání"
 				/>
-				<v-switch v-model="contract.isDone" label="Hotova" />
 				<v-text-field
 					v-model="contract.price.amount"
 					:rules="[isNumber]"
@@ -43,17 +52,8 @@
 					class="required"
 					label="Měna"
 				/>
-				<v-autocomplete
-					v-model="contract.customer"
-					:items="customers"
-					:loading="loadingCustomers"
-					:rules="[hasNonDefaultId]"
-					class="required"
-					item-text="person.name"
-					label="Klient"
-					return-object
-				/>
 				<v-textarea v-model="contract.description" clearable label="Popis" />
+				<v-switch v-model="contract.isDone" label="Hotova" />
 			</v-card-text>
 
 			<v-card-actions>
