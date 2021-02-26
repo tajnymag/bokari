@@ -17,18 +17,13 @@
 
 						<v-card-text>
 							<v-form :readonly="!detailsEditable">
-								<v-text-field
-									v-model="contract.code"
-									:label="t('contract.code')"
-									readonly
-								/>
+								<v-text-field v-model="contract.name" label="Název" />
+								<v-text-field v-model="contract.code" :label="t('contract.code')" readonly />
 								<v-text-field
 									v-model="contract.metadata.createdBy.username"
 									:label="t('contract.createdBy')"
 									readonly
 								/>
-								<v-text-field v-model="contract.name" label="Název" />
-								<v-checkbox v-model="contract.isDone" label="Dokončena" />
 								<v-autocomplete
 									v-model="contract.customer"
 									label="Klient"
@@ -57,6 +52,7 @@
 									:items="currencies"
 								/>
 								<v-textarea v-model="contract.description" label="Popis" />
+								<v-checkbox v-model="contract.isDone" label="Dokončena" />
 							</v-form>
 						</v-card-text>
 					</v-card>
@@ -75,8 +71,8 @@
 
 						<v-card-text>
 							<v-form :readonly="!datesEditable">
-								<v-text-field v-model="deadlineAt" label="Uzávěrka" type="date" />
 								<v-text-field v-model="startAt" label="Začátek" type="date" />
+								<v-text-field v-model="deadlineAt" label="Uzávěrka" type="date" />
 							</v-form>
 						</v-card-text>
 					</v-card>
@@ -101,10 +97,7 @@
 												label="Uzávěrka"
 												type="date"
 											/>
-											<v-checkbox
-												v-model="newContractPhase.isDone"
-												label="Dokončena"
-											/>
+											<v-checkbox v-model="newContractPhase.isDone" label="Dokončena" />
 											<v-select
 												v-model="newContractPhase.phase"
 												:rules="[hasNonDefaultId]"
@@ -114,10 +107,7 @@
 												return-object
 											>
 												<template v-slot:append-outer>
-													<v-dialog
-														v-model="newPhaseDialogVisible"
-														max-width="350px"
-													>
+													<v-dialog v-model="newPhaseDialogVisible" max-width="350px">
 														<template v-slot:activator="{ on, attrs }">
 															<v-btn v-bind="attrs" icon v-on="on">
 																<v-icon>mdi-plus</v-icon>
@@ -229,10 +219,7 @@
 										append-icon="mdi-paperclip"
 										label="Přiložit soubor"
 									/>
-									<v-textarea
-										v-model="newAttachment.note"
-										label="Komentář k příloze"
-									/>
+									<v-textarea v-model="newAttachment.note" label="Komentář k příloze" />
 								</v-card-text>
 								<v-card-actions>
 									<v-spacer />
@@ -314,9 +301,7 @@ export default defineComponent({
 		const contract = asyncComputed<Contract | null>(
 			async () => {
 				try {
-					return contractsAPIClient
-						.getContractByCode(contractCode.value)
-						.then(res => res.data);
+					return contractsAPIClient.getContractByCode(contractCode.value).then(res => res.data);
 				} catch {
 					await router.push('/404');
 					return null;
