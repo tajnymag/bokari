@@ -5,6 +5,7 @@
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
   "license": "MIT",
+  "sideEffects": false,
   "scripts": {
     "generate": "openapi-generator-cli generate -i ../api-specs/openapi3/bokari.openapi3.json --generator-name typescript-axios -c generator-config.yaml -o src && node build/patch-generated-client.cjs",
     "build": "node build/dist-clean.cjs && tsc -b tsconfig.esm.json"

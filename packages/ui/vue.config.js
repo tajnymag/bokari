@@ -20,13 +20,5 @@ module.exports = {
 			maskIcon: null,
 			msTileImage: null
 		}
-	},
-	configureWebpack: {
-		plugins: [
-			new webpack.NormalModuleReplacementPlugin(
-				/^typeorm/,
-				path.join(__dirname, 'src/polyfills/typeorm.ts')
-			)
-		]
 	}
 };
