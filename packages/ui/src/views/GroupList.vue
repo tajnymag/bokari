@@ -85,7 +85,7 @@ export default defineComponent({
 		const deleteGroup = async (group: Group) => {
 			try {
 				await groupsAPIClient.deleteGroupById(group.id);
-				groups.value = groups.value?.filter(g => g.id !== group.id);
+				groups.value = groups.value?.filter(g => g.id !== group.id) || [];
 				showToast({
 					message: `Skupina ${group.name} byla úspěšna smazána`,
 					type: 'success'
