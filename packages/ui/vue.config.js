@@ -12,6 +12,7 @@ module.exports = {
 		name: 'Bokari',
 		themeColor: '#795548',
 		msTileColor: '#795548',
+		display: 'standalone',
 		iconPaths: {
 			faviconSVG: 'favicon.svg',
 			favicon16: 'favicon.ico',

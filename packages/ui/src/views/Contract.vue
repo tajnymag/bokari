@@ -56,29 +56,8 @@
 							</v-form>
 						</v-card-text>
 					</v-card>
-				</v-col>
-				<v-col cols="12" md="6">
-					<v-card>
-						<v-toolbar>
-							<v-toolbar-title>Data</v-toolbar-title>
-							<v-spacer />
-							<v-btn icon @click="toggleDatesEditable">
-								<v-icon>
-									{{ datesEditable ? 'mdi-content-save' : 'mdi-pencil' }}
-								</v-icon>
-							</v-btn>
-						</v-toolbar>
 
-						<v-card-text>
-							<v-form :readonly="!datesEditable">
-								<v-text-field v-model="startAt" label="Začátek" type="date" />
-								<v-text-field v-model="deadlineAt" label="Uzávěrka" type="date" />
-							</v-form>
-						</v-card-text>
-					</v-card>
-				</v-col>
-				<v-col cols="12" md="6">
-					<v-card>
+					<v-card class="mt-6">
 						<v-toolbar>
 							<v-toolbar-title>Fáze</v-toolbar-title>
 							<v-spacer />
@@ -179,8 +158,27 @@
 						</v-card-text>
 					</v-card>
 				</v-col>
+
 				<v-col cols="12" md="6">
 					<v-card>
+						<v-toolbar>
+							<v-toolbar-title>Data</v-toolbar-title>
+							<v-spacer />
+							<v-btn icon @click="toggleDatesEditable">
+								<v-icon>
+									{{ datesEditable ? 'mdi-content-save' : 'mdi-pencil' }}
+								</v-icon>
+							</v-btn>
+						</v-toolbar>
+						<v-card-text>
+							<v-form :readonly="!datesEditable">
+								<v-text-field v-model="startAt" label="Začátek" type="date" />
+								<v-text-field v-model="deadlineAt" label="Uzávěrka" type="date" />
+							</v-form>
+						</v-card-text>
+					</v-card>
+
+					<v-card class="mt-6">
 						<v-toolbar>
 							<v-toolbar-title>Přílohy</v-toolbar-title>
 						</v-toolbar>
