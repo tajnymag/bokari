@@ -12,8 +12,7 @@ RUN yarn install
 
 COPY . .
 
-ARG BOKARI_API_URL
-ENV VUE_APP_BOKARI_API_URL=$BOKARI_API_URL
+ARG VUE_APP_BOKARI_API_URL
 RUN yarn lerna run --scope "@bokari/{api-client,entities,ui}" --stream build
 
 # Runtime
