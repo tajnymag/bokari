@@ -1,6 +1,6 @@
 {
   "name": "@bokari/api-server",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "The backend API of bokari",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
