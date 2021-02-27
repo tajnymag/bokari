@@ -14,7 +14,13 @@
 					class="required"
 					label="Přihlašovací jméno"
 				/>
-				<v-text-field type="password" label="Heslo" class="required" :rules="[isRequired]" />
+				<v-text-field
+					v-model="user.password"
+					type="password"
+					label="Heslo"
+					class="required"
+					:rules="[isRequired]"
+				/>
 				<v-select
 					v-model="user.groups"
 					label="Skupiny oprávnění"
