@@ -13,6 +13,7 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
+    "@bokari/api-specs": "^1.0.0",
     "@bokari/entities": "^1.0.0",
     "@godaddy/terminus": "^4.4.1",
     "argon2": "^0.27.0",
