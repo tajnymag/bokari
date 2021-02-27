@@ -42,12 +42,7 @@
 							<v-data-iterator :items="group.users" item-key="id" hide-default-footer>
 								<template v-slot:default="{ items }">
 									<v-row>
-										<v-col
-											v-for="user in items"
-											:key="user.id"
-											cols="12"
-											md="6"
-										>
+										<v-col v-for="user in items" :key="user.id" cols="12" md="6">
 											<v-card>
 												<v-list-item two-line>
 													<v-list-item-content>
@@ -61,10 +56,7 @@
 
 													<v-list-item-avatar>
 														<v-avatar size="50" class="ma-3" tile>
-															<v-img
-																v-if="user.avatar"
-																:src="user.avatar.url"
-															/>
+															<v-img v-if="user.avatar" :src="user.avatar.url" />
 														</v-avatar>
 													</v-list-item-avatar>
 												</v-list-item>

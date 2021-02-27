@@ -1,4 +1,4 @@
-import { IsInt, IsOptional, IsString } from "class-validator";
+import { IsInt, IsOptional, IsString } from 'class-validator';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
@@ -24,7 +24,7 @@ export class Address {
 	country!: string;
 
 	@Column({ nullable: true })
-  @IsOptional()
+	@IsOptional()
 	@IsString()
 	state?: string;
 }

@@ -1,15 +1,16 @@
 import { Exclude, Transform, Type } from 'class-transformer';
 import { IsHexadecimal, IsInt, IsLowercase, IsString, ValidateNested } from 'class-validator';
 import {
-  Column, DeepPartial,
-  Entity,
-  JoinColumn,
-  ManyToMany,
-  ManyToOne,
-  OneToMany,
-  OneToOne,
-  PrimaryGeneratedColumn
-} from "typeorm";
+	Column,
+	DeepPartial,
+	Entity,
+	JoinColumn,
+	ManyToMany,
+	ManyToOne,
+	OneToMany,
+	OneToOne,
+	PrimaryGeneratedColumn
+} from 'typeorm';
 
 import { ToLowercaseAndTrim } from '../transformations';
 
@@ -51,35 +52,23 @@ export class User {
 	@ValidateNested()
 	avatar?: File;
 
-	@OneToMany(
-		() => WorkLog,
-		workLog => workLog.user,
-		{ cascade: true }
-	)
+	@OneToMany(() => WorkLog, workLog => workLog.user, { cascade: true })
 	@Type(() => WorkLog)
 	@ValidateNested({ each: true })
 	workLogs!: WorkLog[];
 
-	@OneToMany(
-		() => RefreshToken,
-		refreshToken => refreshToken.user,
-		{ cascade: true }
-	)
+	@OneToMany(() => RefreshToken, refreshToken => refreshToken.user, { cascade: true })
 	@Exclude()
 	@Type(() => RefreshToken)
 	@ValidateNested({ each: true })
 	refreshTokens!: RefreshToken[];
 
-	@ManyToMany(
-		() => Group,
-		group => group.users,
-		{ cascade: true }
-	)
+	@ManyToMany(() => Group, group => group.users, { cascade: true })
 	@Type(() => Group)
 	@ValidateNested({ each: true })
 	groups!: Group[];
 
-  constructor(props?: DeepPartial<User>) {
-    if (props) Object.assign(this, props);
-  }
+	constructor(props?: DeepPartial<User>) {
+		if (props) Object.assign(this, props);
+	}
 }

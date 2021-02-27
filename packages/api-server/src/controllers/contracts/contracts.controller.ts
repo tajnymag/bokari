@@ -4,20 +4,21 @@ import { isNotEmptyObject } from 'class-validator';
 import { Request } from 'express';
 import { merge } from 'lodash';
 import {
-  Authorized,
-  Body,
-  CurrentUser,
-  Delete,
-  Get,
-  HttpCode,
-  HttpError,
-  JsonController, OnUndefined,
-  Param,
-  Patch,
-  Post,
-  QueryParams,
-  Req
-} from "routing-controllers";
+	Authorized,
+	Body,
+	CurrentUser,
+	Delete,
+	Get,
+	HttpCode,
+	HttpError,
+	JsonController,
+	OnUndefined,
+	Param,
+	Patch,
+	Post,
+	QueryParams,
+	Req
+} from 'routing-controllers';
 import { ResponseSchema } from 'routing-controllers-openapi';
 import { FindManyOptions, FindOneOptions, getRepository, Like, SelectQueryBuilder } from 'typeorm';
 
@@ -53,9 +54,7 @@ export class ContractsController {
 		const order: FindOneOptions<Contract>['order'] = {};
 		order[orderBy] = query.order || 'DESC';
 
-		const whereQuery = (
-			qb: SelectQueryBuilder<Contract>
-		): void => {
+		const whereQuery = (qb: SelectQueryBuilder<Contract>): void => {
 			if (query.search) {
 				qb.where('Contract.code = :search', { search: query.search })
 					.orWhere('Contract.name ILIKE :searchLike', { searchLike })
@@ -77,15 +76,15 @@ export class ContractsController {
 					});
 				}
 
-        if (
-          query.filterMin &&
-          isNotEmptyObject(query.filterMin) &&
-          filterProperty in query.filterMin
-        ) {
-          qb.andWhere(`Contract.${filterable} >= :value`, {
-            value: query.filterMin[filterProperty]
-          });
-        }
+				if (
+					query.filterMin &&
+					isNotEmptyObject(query.filterMin) &&
+					filterProperty in query.filterMin
+				) {
+					qb.andWhere(`Contract.${filterable} >= :value`, {
+						value: query.filterMin[filterProperty]
+					});
+				}
 			}
 		};
 
@@ -156,10 +155,7 @@ export class ContractsController {
 	}
 
 	private async nextContractCode(): Promise<string> {
-		const thisYearPrefix = new Date()
-			.getFullYear()
-			.toString()
-			.substr(2, 2);
+		const thisYearPrefix = new Date().getFullYear().toString().substr(2, 2);
 		const numberOfContractsWithThisPrefix = await getRepository(Contract).count({
 			code: Like(`${thisYearPrefix}%`)
 		});

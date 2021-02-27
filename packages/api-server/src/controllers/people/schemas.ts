@@ -1,34 +1,35 @@
-import { Exclude, Expose, Transform, Type } from "class-transformer";
+import { Exclude, Expose, Transform, Type } from 'class-transformer';
 import {
-  IsEmail, IsNotEmpty,
-  IsOptional,
-  IsPhoneNumber,
-  IsPostalCode,
-  IsString,
-  ValidateNested
-} from "class-validator";
+	IsEmail,
+	IsNotEmpty,
+	IsOptional,
+	IsPhoneNumber,
+	IsPostalCode,
+	IsString,
+	ValidateNested
+} from 'class-validator';
 
-import { EmptyToUndefined } from "../../helpers/transformations";
+import { EmptyToUndefined } from '../../helpers/transformations';
 
 @Exclude()
 export class AddressInsertable {
-  @Expose()
+	@Expose()
 	@IsString()
 	street!: string;
 
-  @Expose()
+	@Expose()
 	@IsPostalCode('any')
 	zip!: string;
 
-  @Expose()
+	@Expose()
 	@IsString()
 	city!: string;
 
-  @Expose()
+	@Expose()
 	@IsString()
 	country!: string;
 
-  @Expose()
+	@Expose()
 	@IsOptional()
 	@IsString()
 	state?: string;
@@ -36,25 +37,25 @@ export class AddressInsertable {
 
 @Exclude()
 export class ContactInsertable {
-  @Expose()
+	@Expose()
 	@Type(() => AddressInsertable)
 	@IsOptional()
 	@ValidateNested()
 	address?: AddressInsertable;
 
-  @Expose()
-  @Transform(EmptyToUndefined, { toClassOnly: true })
+	@Expose()
+	@Transform(EmptyToUndefined, { toClassOnly: true })
 	@IsOptional()
 	@IsEmail()
 	email?: string;
 
-  @Expose()
-  @Transform(EmptyToUndefined, { toClassOnly: true })
+	@Expose()
+	@Transform(EmptyToUndefined, { toClassOnly: true })
 	@IsOptional()
 	@IsPhoneNumber()
 	phone?: string;
 
-  @Expose()
+	@Expose()
 	@IsOptional()
 	@IsString()
 	note?: string;
@@ -62,25 +63,25 @@ export class ContactInsertable {
 
 @Exclude()
 export class ContactUpdatable {
-  @Expose()
+	@Expose()
 	@Type(() => AddressInsertable)
 	@IsOptional()
 	@ValidateNested()
 	address?: AddressInsertable;
 
-  @Expose()
-  @Transform(EmptyToUndefined, { toClassOnly: true })
+	@Expose()
+	@Transform(EmptyToUndefined, { toClassOnly: true })
 	@IsOptional()
 	@IsEmail()
 	email?: string;
 
-  @Expose()
-  @Transform(EmptyToUndefined, { toClassOnly: true })
+	@Expose()
+	@Transform(EmptyToUndefined, { toClassOnly: true })
 	@IsOptional()
 	@IsPhoneNumber()
 	phone?: string;
 
-  @Expose()
+	@Expose()
 	@IsOptional()
 	@IsString()
 	note?: string;
@@ -88,12 +89,12 @@ export class ContactUpdatable {
 
 @Exclude()
 export class PersonInsertable {
-  @Expose()
+	@Expose()
 	@IsString()
-  @IsNotEmpty()
+	@IsNotEmpty()
 	name!: string;
 
-  @Expose()
+	@Expose()
 	@Type(() => ContactInsertable)
 	@ValidateNested({ each: true })
 	contacts!: ContactInsertable[];
@@ -101,13 +102,13 @@ export class PersonInsertable {
 
 @Exclude()
 export class PersonUpdatable {
-  @Expose()
+	@Expose()
 	@IsOptional()
 	@IsString()
-  @IsNotEmpty()
+	@IsNotEmpty()
 	name?: string;
 
-  @Expose()
+	@Expose()
 	@Type(() => ContactUpdatable)
 	@ValidateNested({ each: true })
 	contacts?: ContactUpdatable[];

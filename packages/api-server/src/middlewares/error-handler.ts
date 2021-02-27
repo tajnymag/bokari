@@ -37,10 +37,7 @@ export class ErrorHandler implements ExpressErrorMiddlewareInterface {
 		}
 
 		if (err instanceof Error) {
-			console.error(
-				`Encountered an interval server error on ${req.method} ${req.path}:`,
-				err
-			);
+			console.error(`Encountered an interval server error on ${req.method} ${req.path}:`, err);
 
 			return res.status(500).json({
 				message: 'Internal Server Error'

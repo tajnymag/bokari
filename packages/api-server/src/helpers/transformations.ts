@@ -5,6 +5,6 @@ export function ToLowercaseAndTrim(params: TransformFnParams) {
 }
 
 export function EmptyToUndefined(params: TransformFnParams) {
-  if (!params.value) return undefined;
-  return params.value;
+	if (!params.value) return undefined;
+	return params.value;
 }

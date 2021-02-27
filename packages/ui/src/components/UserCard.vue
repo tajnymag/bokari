@@ -42,8 +42,8 @@
 
 									<v-list-item-content>
 										<v-list-item-title>
-											{{ contact.address.street }},
-											{{ contact.address.city }}, {{ contact.address.zip }},
+											{{ contact.address.street }}, {{ contact.address.city }},
+											{{ contact.address.zip }},
 											{{ contact.address.country }}
 										</v-list-item-title>
 										<v-list-item-subtitle>Adresa</v-list-item-subtitle>

@@ -18,11 +18,7 @@
 					<v-btn icon :to="{ name: 'Group', params: { groupId: item.id } }">
 						<v-icon>mdi-eye</v-icon>
 					</v-btn>
-					<v-btn
-						v-if="hasPermission(Permission.GROUPS_WRITE)"
-						icon
-						@click="deleteGroup(item)"
-					>
+					<v-btn v-if="hasPermission(Permission.GROUPS_WRITE)" icon @click="deleteGroup(item)">
 						<v-icon>mdi-delete</v-icon>
 					</v-btn>
 				</template>

@@ -8,12 +8,7 @@
 					class="required"
 					label="Název skupiny"
 				/>
-				<v-select
-					v-model="group.permissions"
-					label="Oprávnění"
-					multiple
-					:items="permissions"
-				/>
+				<v-select v-model="group.permissions" label="Oprávnění" multiple :items="permissions" />
 			</v-card-text>
 
 			<v-card-actions>

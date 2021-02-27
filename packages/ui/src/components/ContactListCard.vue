@@ -18,17 +18,13 @@
 									<v-list>
 										<v-list-item v-if="contact.phone">
 											<v-list-item-icon>
-												<v-icon>
-													mdi-phone
-												</v-icon>
+												<v-icon>mdi-phone</v-icon>
 											</v-list-item-icon>
 											<v-list-item-content>
 												<v-list-item-title>
 													{{ formatPhoneNumber(contact.phone) }}
 												</v-list-item-title>
-												<v-list-item-subtitle>
-													Telefon
-												</v-list-item-subtitle>
+												<v-list-item-subtitle>Telefon</v-list-item-subtitle>
 											</v-list-item-content>
 										</v-list-item>
 
@@ -36,17 +32,13 @@
 											<v-divider inset />
 											<v-list-item>
 												<v-list-item-icon>
-													<v-icon>
-														mdi-email
-													</v-icon>
+													<v-icon>mdi-email</v-icon>
 												</v-list-item-icon>
 												<v-list-item-content>
 													<v-list-item-title>
 														{{ contact.email }}
 													</v-list-item-title>
-													<v-list-item-subtitle>
-														E-mail
-													</v-list-item-subtitle>
+													<v-list-item-subtitle>E-mail</v-list-item-subtitle>
 												</v-list-item-content>
 											</v-list-item>
 										</template>
@@ -55,17 +47,13 @@
 											<v-divider inset />
 											<v-list-item>
 												<v-list-item-icon>
-													<v-icon>
-														mdi-clipboard-text
-													</v-icon>
+													<v-icon>mdi-clipboard-text</v-icon>
 												</v-list-item-icon>
 												<v-list-item-content>
 													<v-list-item-title>
 														{{ contact.note }}
 													</v-list-item-title>
-													<v-list-item-subtitle>
-														Poznámka
-													</v-list-item-subtitle>
+													<v-list-item-subtitle>Poznámka</v-list-item-subtitle>
 												</v-list-item-content>
 											</v-list-item>
 										</template>
@@ -74,9 +62,7 @@
 											<v-divider inset />
 											<v-list-item>
 												<v-list-item-icon>
-													<v-icon>
-														mdi-map-marker
-													</v-icon>
+													<v-icon>mdi-map-marker</v-icon>
 												</v-list-item-icon>
 
 												<v-list-item-content>
@@ -93,17 +79,11 @@
 									</v-list>
 								</v-card-text>
 								<v-card-actions>
-									<v-btn
-										text
-										color="danger"
-										@click="handleContactDeleteButton(contact)"
-									>
+									<v-btn text color="danger" @click="handleContactDeleteButton(contact)">
 										Smazat
 									</v-btn>
 									<v-spacer />
-									<v-btn text @click.stop="openEditContactDialog(contact)">
-										Upravit
-									</v-btn>
+									<v-btn text @click.stop="openEditContactDialog(contact)">Upravit</v-btn>
 								</v-card-actions>
 							</v-card>
 						</v-col>
@@ -156,19 +136,14 @@
 								:rules="[isRequired]"
 								label="Země"
 							/>
-							<v-text-field
-								v-model="editableContact.address.state"
-								label="Kraj/Stát"
-							/>
+							<v-text-field v-model="editableContact.address.state" label="Kraj/Stát" />
 						</template>
 					</v-form>
 				</v-card-text>
 
 				<v-card-actions>
 					<v-spacer />
-					<v-btn text color="primary" @click="handleContactUpsertButton">
-						Uložit
-					</v-btn>
+					<v-btn text color="primary" @click="handleContactUpsertButton">Uložit</v-btn>
 				</v-card-actions>
 			</v-card>
 		</v-dialog>

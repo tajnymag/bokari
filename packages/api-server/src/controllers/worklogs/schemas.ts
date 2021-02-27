@@ -1,5 +1,5 @@
 import { WorkLog } from '@bokari/entities';
-import { Exclude, Expose, Type } from "class-transformer";
+import { Exclude, Expose, Type } from 'class-transformer';
 import { IsDate, IsDateString, IsInt, IsOptional, IsString, ValidateNested } from 'class-validator';
 
 import { ContractJoinable } from '../contracts';
@@ -7,33 +7,33 @@ import { UserJoinable } from '../users';
 
 @Exclude()
 export class WorkLogsQueryParams implements Partial<WorkLog> {
-  @Expose()
+	@Expose()
 	@IsOptional()
 	@IsString()
 	'contract.code'?: string;
 
-  @Expose()
+	@Expose()
 	@IsOptional()
 	@IsInt()
 	'contract.id'?: number;
 
-  @Expose()
+	@Expose()
 	@IsOptional()
 	@IsString()
 	'user.username'?: string;
 
-  @Expose()
+	@Expose()
 	@IsOptional()
 	@IsInt()
 	'user.id'?: number;
 
-  @Expose()
+	@Expose()
 	@Type(() => Date)
 	@IsOptional()
 	@IsDate()
 	from?: Date;
 
-  @Expose()
+	@Expose()
 	@Type(() => Date)
 	@IsOptional()
 	@IsDate()
@@ -42,27 +42,27 @@ export class WorkLogsQueryParams implements Partial<WorkLog> {
 
 @Exclude()
 export class WorkLogInsertable {
-  @Expose()
+	@Expose()
 	@Type(() => Date)
 	@IsDate()
 	from!: Date;
 
-  @Expose()
+	@Expose()
 	@Type(() => Date)
 	@IsDate()
 	to!: Date;
 
-  @Expose()
+	@Expose()
 	@IsOptional()
 	@IsString()
 	description?: string;
 
-  @Expose()
+	@Expose()
 	@Type(() => UserJoinable)
 	@ValidateNested()
 	user!: UserJoinable;
 
-  @Expose()
+	@Expose()
 	@Type(() => ContractJoinable)
 	@IsOptional()
 	@ValidateNested()

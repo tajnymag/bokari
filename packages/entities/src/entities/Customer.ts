@@ -1,15 +1,15 @@
-import { Exclude, Type } from "class-transformer";
-import { IsInt, IsOptional, ValidateNested } from "class-validator";
+import { Exclude, Type } from 'class-transformer';
+import { IsInt, IsOptional, ValidateNested } from 'class-validator';
 import {
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  OneToMany,
-  OneToOne,
-  PrimaryGeneratedColumn
-} from "typeorm";
+	Entity,
+	JoinColumn,
+	ManyToOne,
+	OneToMany,
+	OneToOne,
+	PrimaryGeneratedColumn
+} from 'typeorm';
 
-import { Contract } from "./Contract";
+import { Contract } from './Contract';
 import { Person } from './Person';
 
 @Entity()
@@ -25,9 +25,9 @@ export class Customer {
 	person!: Person;
 
 	@OneToMany(() => Contract, contract => contract.customer)
-  @Exclude({ toClassOnly: true })
-  @Type(() => Contract)
-  @IsOptional()
-  @ValidateNested({ each: true })
+	@Exclude({ toClassOnly: true })
+	@Type(() => Contract)
+	@IsOptional()
+	@ValidateNested({ each: true })
 	contracts?: Contract;
 }

@@ -17,23 +17,14 @@
 
 						<v-card-text>
 							<v-form ref="detailsForm" :readonly="!detailsEditable">
-								<v-text-field
-									v-model="user.person.name"
-									:rules="[isRequired]"
-									label="Jméno"
-								/>
+								<v-text-field v-model="user.person.name" :rules="[isRequired]" label="Jméno" />
 								<v-text-field
 									v-if="detailsEditable"
 									v-model="user.password"
 									type="password"
 									label="Heslo"
 								/>
-								<v-text-field
-									v-else
-									value="password"
-									type="password"
-									label="Heslo"
-								/>
+								<v-text-field v-else value="password" type="password" label="Heslo" />
 								<v-select
 									v-model="user.groups"
 									multiple
@@ -67,12 +58,7 @@
 										accept="image/*"
 										:rules="[isImage, hasSizeMax(1000000)]"
 									/>
-									<v-btn
-										text
-										color="primary"
-										class="ml-4"
-										@click="handleUploadAvatarButton"
-									>
+									<v-btn text color="primary" class="ml-4" @click="handleUploadAvatarButton">
 										Nahrát
 									</v-btn>
 								</v-form>

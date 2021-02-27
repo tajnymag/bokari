@@ -21,10 +21,7 @@ import { LoginRequest, LoginResponse, RefreshRequest, RefreshResponse } from './
 export class AuthController {
 	@Post('/login')
 	@ResponseSchema(LoginResponse)
-	async login(
-		@Req() request: Request,
-		@Body() credentials: LoginRequest
-	): Promise<LoginResponse> {
+	async login(@Req() request: Request, @Body() credentials: LoginRequest): Promise<LoginResponse> {
 		const { username, password } = credentials;
 
 		const user = await getRepository(User).findOne({
@@ -65,11 +62,9 @@ export class AuthController {
 		refreshTokenEntity.metadata = new Metadata({ createdBy: user });
 
 		try {
-			 await getRepository(RefreshToken).save(refreshTokenEntity);
+			await getRepository(RefreshToken).save(refreshTokenEntity);
 		} catch {
-			throw new InternalServerError(
-				`Could not save ${username}'s refresh token to the database!`
-			);
+			throw new InternalServerError(`Could not save ${username}'s refresh token to the database!`);
 		}
 
 		return {

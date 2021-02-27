@@ -2,16 +2,19 @@ import { Contact, Permission, Person, User } from '@bokari/entities';
 import { plainToClass, plainToClassFromExist } from 'class-transformer';
 import { merge } from 'lodash';
 import {
-  Authorized,
-  Body,
-  CurrentUser, Delete, HttpCode,
-  JsonController,
-  NotFoundError, OnUndefined,
-  Param,
-  Patch,
-  Post,
-  UnauthorizedError
-} from "routing-controllers";
+	Authorized,
+	Body,
+	CurrentUser,
+	Delete,
+	HttpCode,
+	JsonController,
+	NotFoundError,
+	OnUndefined,
+	Param,
+	Patch,
+	Post,
+	UnauthorizedError
+} from 'routing-controllers';
 import { ResponseSchema } from 'routing-controllers-openapi';
 import { getRepository } from 'typeorm';
 
@@ -101,9 +104,7 @@ export class PeopleController {
 		const currentPerson = await getRepository(Person).findOneOrFail({ id: currentUser.id });
 
 		if (isUser && currentPerson.id !== desiredPersonId) {
-			const hasUserWritePermissions = currentUser.permissions.includes(
-				Permission.USERS_WRITE
-			);
+			const hasUserWritePermissions = currentUser.permissions.includes(Permission.USERS_WRITE);
 
 			if (!hasUserWritePermissions) {
 				throw new UnauthorizedError(

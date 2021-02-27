@@ -32,20 +32,12 @@ export class WorkLog {
 	@ValidateNested()
 	metadata!: Metadata;
 
-	@ManyToOne(
-		() => User,
-		user => user.workLogs,
-		{ nullable: false }
-	)
+	@ManyToOne(() => User, user => user.workLogs, { nullable: false })
 	@Type(() => User)
 	@ValidateNested()
 	user!: User;
 
-	@ManyToOne(
-		() => Contract,
-		contract => contract.workLogs,
-		{ nullable: true }
-	)
+	@ManyToOne(() => Contract, contract => contract.workLogs, { nullable: true })
 	@Type(() => Contract)
 	contract?: Contract;
 }

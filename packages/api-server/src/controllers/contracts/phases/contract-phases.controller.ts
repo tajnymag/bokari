@@ -23,7 +23,7 @@ export class ContractPhasesController {
 		@Body({
 			type: ContractPhaseInsertable
 		})
-			desiredPhases: ContractPhaseInsertable[]
+		desiredPhases: ContractPhaseInsertable[]
 	): Promise<ContractPhase[]> {
 		const contract = await getRepository(Contract).findOneOrFail({
 			where: { code },

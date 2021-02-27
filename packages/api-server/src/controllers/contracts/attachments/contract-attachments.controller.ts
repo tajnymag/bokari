@@ -36,10 +36,7 @@ export class ContractAttachmentsController {
 		attachmentEntity.metadata = new Metadata({ createdBy: currentUser });
 		attachmentEntity.contract = contractEntity;
 
-		const createdAttachment = await getRepository(ContractAttachment).save(
-			attachmentEntity,
-			{}
-		);
+		const createdAttachment = await getRepository(ContractAttachment).save(attachmentEntity, {});
 
 		return getRepository(ContractAttachment).findOneOrFail(createdAttachment.id, {
 			relations: ['metadata.createdBy']

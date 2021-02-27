@@ -8,6 +8,7 @@ import { VFormElement } from '../plugins/vuetify';
 
 interface UnknownObjectWithId {
 	id: number;
+
 	[key: string]: unknown;
 }
 

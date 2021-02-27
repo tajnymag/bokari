@@ -24,11 +24,7 @@ export class RefreshToken {
 	@ValidateNested()
 	metadata!: Metadata;
 
-	@ManyToOne(
-		() => User,
-		user => user.refreshTokens,
-		{ eager: true }
-	)
+	@ManyToOne(() => User, user => user.refreshTokens, { eager: true })
 	@Type(() => User)
 	@ValidateNested()
 	user!: User;

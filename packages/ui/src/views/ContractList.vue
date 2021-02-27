@@ -32,11 +32,7 @@
 					<v-btn icon @click="openContractView(item)">
 						<v-icon>mdi-eye</v-icon>
 					</v-btn>
-					<v-btn
-						v-if="hasPermission(Permission.GROUPS_WRITE)"
-						icon
-						@click="deleteContract(item)"
-					>
+					<v-btn v-if="hasPermission(Permission.GROUPS_WRITE)" icon @click="deleteContract(item)">
 						<v-icon>mdi-delete</v-icon>
 					</v-btn>
 				</template>

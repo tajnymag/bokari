@@ -6,10 +6,5 @@ export function ToLowercaseAndTrim(params: TransformFnParams) {
 
 export function ParseFloat(params: TransformFnParams) {
 	if (params.value)
-		return parseFloat(
-			params.value
-				.toString()
-				.replace(/\s/g, '')
-				.replace(/,/g, '.')
-		);
+		return parseFloat(params.value.toString().replace(/\s/g, '').replace(/,/g, '.'));
 }

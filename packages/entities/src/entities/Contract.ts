@@ -48,11 +48,7 @@ export class Contract {
 	@ValidateNested()
 	metadata!: Metadata;
 
-	@ManyToOne(
-		() => Customer,
-		customer => customer.contracts,
-		{ eager: true, nullable: false }
-	)
+	@ManyToOne(() => Customer, customer => customer.contracts, { eager: true, nullable: false })
 	@Type(() => Customer)
 	@ValidateNested()
 	customer!: Customer;
@@ -62,28 +58,17 @@ export class Contract {
 	@ValidateNested()
 	price!: Monetary;
 
-	@OneToMany(
-		() => ContractAttachment,
-		attachment => attachment.contract,
-		{ cascade: true }
-	)
+	@OneToMany(() => ContractAttachment, attachment => attachment.contract, { cascade: true })
 	@Type(() => ContractAttachment)
 	@ValidateNested({ each: true })
 	attachments!: ContractAttachment[];
 
-	@OneToMany(
-		() => WorkLog,
-		workLog => workLog.contract
-	)
+	@OneToMany(() => WorkLog, workLog => workLog.contract)
 	@Type(() => WorkLog)
 	@ValidateNested({ each: true })
 	workLogs!: WorkLog[];
 
-	@OneToMany(
-		() => ContractPhase,
-		phase => phase.contract,
-		{ eager: true, cascade: true }
-	)
+	@OneToMany(() => ContractPhase, phase => phase.contract, { eager: true, cascade: true })
 	@Type(() => ContractPhase)
 	@ValidateNested({ each: true })
 	contractPhases!: ContractPhase[];

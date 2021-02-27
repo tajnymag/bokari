@@ -5,6 +5,6 @@ export enum Permission {
 	FINANCES_WRITE = 'finances_write',
 	CONTRACTS_READ = 'contracts_read',
 	CONTRACTS_WRITE = 'contracts_write',
-  GROUPS_READ = 'groups_read',
-  GROUPS_WRITE = 'groups_write'
+	GROUPS_READ = 'groups_read',
+	GROUPS_WRITE = 'groups_write'
 }

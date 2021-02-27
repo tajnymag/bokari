@@ -5,7 +5,7 @@ import { routingControllersToSpec } from 'routing-controllers-openapi';
 
 import { routingControllersOptions } from './routing-controllers';
 
-export type OpenAPISpecDocumentObject = ReturnType<typeof routingControllersToSpec>
+export type OpenAPISpecDocumentObject = ReturnType<typeof routingControllersToSpec>;
 
 export async function getBokariOpenAPISpecs(): Promise<OpenAPISpecDocumentObject> {
 	const storage = getMetadataArgsStorage();
@@ -14,21 +14,17 @@ export async function getBokariOpenAPISpecs(): Promise<OpenAPISpecDocumentObject
 		classTransformerMetadataStorage: defaultMetadataStorage
 	});
 
-	const spec = routingControllersToSpec(
-		storage,
-		routingControllersOptions,
-		{
-			components: { schemas },
-			info: {
-				title: 'Bokari REST API',
-				version: process.env.npm_package_version ?? '0.0.0'
-			},
-			servers: [
-				{ url: 'http://localhost:3000', description: 'Local dev server' },
-				{ url: 'https://bokari.t4t.cz', description: 'T4T production instance' }
-			]
-		}
-	);
+	const spec = routingControllersToSpec(storage, routingControllersOptions, {
+		components: { schemas },
+		info: {
+			title: 'Bokari REST API',
+			version: process.env.npm_package_version ?? '0.0.0'
+		},
+		servers: [
+			{ url: 'http://localhost:3000', description: 'Local dev server' },
+			{ url: 'https://bokari.t4t.cz', description: 'T4T production instance' }
+		]
+	});
 
 	/** Temporarily remove controller name from operation ids until codegen implements a better way **/
 	for (const apiPath in spec.paths) {
@@ -42,10 +38,7 @@ export async function getBokariOpenAPISpecs(): Promise<OpenAPISpecDocumentObject
 			}
 
 			const handlerInfo = spec.paths[apiPath][method];
-			handlerInfo.operationId = handlerInfo.operationId.replace(
-				/^\w+Controller\./,
-				''
-			);
+			handlerInfo.operationId = handlerInfo.operationId.replace(/^\w+Controller\./, '');
 		}
 	}
 

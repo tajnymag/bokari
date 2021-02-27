@@ -1,9 +1,9 @@
-import { Exclude, Expose } from "class-transformer";
+import { Exclude, Expose } from 'class-transformer';
 import { IsInt } from 'class-validator';
 
 @Exclude()
 export class FileJoinable {
-  @Expose()
+	@Expose()
 	@IsInt()
 	id!: number;
 }

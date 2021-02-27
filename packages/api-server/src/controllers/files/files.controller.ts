@@ -72,9 +72,7 @@ export class FilesController {
 	): Promise<File> {
 		const hash = await hasha.fromFile(uploadedFile.path, { algorithm: 'sha256' });
 
-		const normalizedFilename = uploadedFile.originalname
-			.replace(/[^a-z0-9.]/gi, '_')
-			.toLowerCase();
+		const normalizedFilename = uploadedFile.originalname.replace(/[^a-z0-9.]/gi, '_').toLowerCase();
 
 		const storagePath = path.join(BOKARI_UPLOADS_STORAGE_DIR, hash);
 		const toStoreFilePath = path.join(storagePath, normalizedFilename);

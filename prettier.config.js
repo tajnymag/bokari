@@ -5,6 +5,7 @@ module.exports = {
 	trailingComma: 'none',
 	tabWidth: 2,
 	htmlWhitespaceSensitivity: 'ignore',
+	arrowParens: 'avoid',
 	overrides: [
 		{
 			files: '*.html',

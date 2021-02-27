@@ -1,11 +1,5 @@
-import { Exclude, Expose, Transform, Type } from "class-transformer";
-import {
-	IsInt,
-	IsNotEmpty,
-	IsOptional,
-	IsString,
-	ValidateNested
-} from 'class-validator';
+import { Exclude, Expose, Transform, Type } from 'class-transformer';
+import { IsInt, IsNotEmpty, IsOptional, IsString, ValidateNested } from 'class-validator';
 
 import { ToLowercaseAndTrim } from '../../helpers/transformations';
 import { FileJoinable } from '../files';
@@ -14,27 +8,27 @@ import { PersonInsertable, PersonUpdatable } from '../people';
 
 @Exclude()
 export class UserInsertable {
-  @Expose()
+	@Expose()
 	@Transform(ToLowercaseAndTrim)
 	@IsString()
 	username!: string;
 
-  @Expose()
+	@Expose()
 	@IsString()
 	password!: string;
 
-  @Expose()
+	@Expose()
 	@Type(() => PersonInsertable)
 	@ValidateNested()
 	person!: PersonInsertable;
 
-  @Expose()
+	@Expose()
 	@Type(() => FileJoinable)
 	@IsOptional()
 	@ValidateNested()
 	avatar?: FileJoinable;
 
-  @Expose()
+	@Expose()
 	@IsOptional()
 	@Type(() => GroupJoinable)
 	@ValidateNested({ each: true })
@@ -43,30 +37,30 @@ export class UserInsertable {
 
 @Exclude()
 export class UserUpdatable {
-  @Expose()
+	@Expose()
 	@Type(() => PersonUpdatable)
 	@IsOptional()
 	@ValidateNested()
 	person?: PersonUpdatable;
 
-  @Expose()
+	@Expose()
 	@Transform(ToLowercaseAndTrim)
 	@IsOptional()
 	@IsString()
 	username?: string;
 
-  @Expose()
+	@Expose()
 	@IsOptional()
 	@IsString()
 	password?: string;
 
-  @Expose()
+	@Expose()
 	@Type(() => FileJoinable)
 	@IsOptional()
 	@ValidateNested()
 	avatar?: FileJoinable;
 
-  @Expose()
+	@Expose()
 	@Type(() => GroupJoinable)
 	@IsOptional()
 	@ValidateNested({ each: true })
@@ -75,7 +69,7 @@ export class UserUpdatable {
 
 @Exclude()
 export class UserJoinable {
-  @Expose()
+	@Expose()
 	@IsInt()
 	id!: number;
 }

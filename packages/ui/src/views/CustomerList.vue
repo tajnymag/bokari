@@ -17,12 +17,7 @@
 				singe-line
 			/>
 
-			<v-data-table
-				:loading="loading"
-				:items="customers"
-				:headers="headers"
-				:search="searchInput"
-			>
+			<v-data-table :loading="loading" :items="customers" :headers="headers" :search="searchInput">
 				<template v-slot:item.contracts="{ item }">
 					<span>{{ item.contracts.length }}</span>
 				</template>

@@ -14,10 +14,7 @@
 		<v-navigation-drawer v-model="drawer" app>
 			<v-list-item>
 				<v-list-item-avatar>
-					<v-img
-						v-if="isCurrentUserLoaded && currentUser.avatar"
-						:src="currentUser.avatar.url"
-					/>
+					<v-img v-if="isCurrentUserLoaded && currentUser.avatar" :src="currentUser.avatar.url" />
 				</v-list-item-avatar>
 
 				<v-list-item-content>
@@ -119,7 +116,7 @@ export default defineComponent({
 
 		reloadProfile();
 
-		new MutationObserver(function(mutations) {
+		new MutationObserver(function (mutations) {
 			title.value = mutations[0].target.textContent;
 		}).observe(document.querySelector('title') as HTMLTitleElement, {
 			characterData: true,

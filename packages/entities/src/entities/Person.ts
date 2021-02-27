@@ -15,11 +15,7 @@ export class Person {
 	@IsString()
 	name!: string;
 
-	@OneToMany(
-		() => Contact,
-		contact => contact.person,
-		{ eager: true, cascade: true }
-	)
+	@OneToMany(() => Contact, contact => contact.person, { eager: true, cascade: true })
 	@Type(() => Contact)
 	@ValidateNested({ each: true })
 	contacts!: Contact[];

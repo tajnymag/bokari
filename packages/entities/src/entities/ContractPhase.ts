@@ -27,21 +27,13 @@ export class ContractPhase {
 	@IsBoolean()
 	isDone!: boolean;
 
-	@ManyToOne(
-		() => Contract,
-		contract => contract.contractPhases,
-		{ primary: true }
-	)
+	@ManyToOne(() => Contract, contract => contract.contractPhases, { primary: true })
 	@Exclude()
 	@Type(() => Contract)
 	@ValidateNested()
 	contract!: Contract;
 
-	@ManyToOne(
-		() => Phase,
-		phase => phase.contractPhases,
-		{ eager: true, primary: true }
-	)
+	@ManyToOne(() => Phase, phase => phase.contractPhases, { eager: true, primary: true })
 	@Type(() => Phase)
 	@ValidateNested()
 	phase!: Phase;

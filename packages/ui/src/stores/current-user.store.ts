@@ -47,8 +47,7 @@ export function useCurrentUserStore() {
 		return foundPermissions;
 	});
 
-	const hasPermission = (permission: Permission): boolean =>
-		permissions.value.includes(permission);
+	const hasPermission = (permission: Permission): boolean => permissions.value.includes(permission);
 
 	const reloadProfile = async () => {
 		if ((!state.user?.username && !storedUsername.value) || !getRefreshToken()) {

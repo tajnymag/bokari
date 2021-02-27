@@ -9,28 +9,15 @@
 						</v-card-title>
 
 						<v-card-text>
-							<v-text-field
-								v-model="username"
-								label="Uživatelské jméno"
-								outlined
-								required
-							/>
-							<v-text-field
-								v-model="password"
-								label="Heslo"
-								outlined
-								required
-								type="password"
-							/>
+							<v-text-field v-model="username" label="Uživatelské jméno" outlined required />
+							<v-text-field v-model="password" label="Heslo" outlined required type="password" />
 						</v-card-text>
 
 						<v-divider />
 
 						<v-card-actions>
 							<v-spacer />
-							<v-btn :loading="isLoggingIn" color="primary" text type="submit">
-								Přihlásit se
-							</v-btn>
+							<v-btn :loading="isLoggingIn" color="primary" text type="submit">Přihlásit se</v-btn>
 						</v-card-actions>
 					</v-card>
 				</v-col>

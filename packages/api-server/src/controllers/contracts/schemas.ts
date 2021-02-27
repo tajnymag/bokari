@@ -1,10 +1,14 @@
-import { Contract, Monetary } from "@bokari/entities";
-import { Exclude, Expose, Type } from "class-transformer";
+import { Contract, Monetary } from '@bokari/entities';
+import { Exclude, Expose, Type } from 'class-transformer';
 import {
-	IsBoolean, IsDate, IsIn,
-	IsInt, IsNotEmpty,
+	IsBoolean,
+	IsDate,
+	IsIn,
+	IsInt,
+	IsNotEmpty,
 	IsOptional,
-	IsString, Min,
+	IsString,
+	Min,
 	ValidateNested
 } from 'class-validator';
 
@@ -12,106 +16,106 @@ import { CustomerJoinable } from '../customers';
 
 @Exclude()
 export class ContractsQueryFilterable {
-  @Expose()
-  @Type(() => Date)
-  @IsOptional()
-  @IsDate()
-  deadlineAt?: Date;
+	@Expose()
+	@Type(() => Date)
+	@IsOptional()
+	@IsDate()
+	deadlineAt?: Date;
 
-  @Expose()
-  @Type(() => Date)
-  @IsOptional()
-  @IsDate()
-  startAt?: Date;
+	@Expose()
+	@Type(() => Date)
+	@IsOptional()
+	@IsDate()
+	startAt?: Date;
 }
 
 @Exclude()
 export class ContractsQueryParams {
-  @Expose()
+	@Expose()
 	@IsOptional()
 	@IsInt()
 	limit?: number;
 
-  @Expose()
+	@Expose()
 	@IsOptional()
 	@IsInt()
 	@Min(1)
 	page?: number;
 
-  @Expose()
+	@Expose()
 	@IsOptional()
 	@IsString()
 	search?: string;
 
-  @Expose()
+	@Expose()
 	@IsOptional()
 	@IsString()
-  @IsIn(Object.keys(new Contract()))
+	@IsIn(Object.keys(new Contract()))
 	orderBy?: keyof Contract;
 
-  @Expose()
+	@Expose()
 	@IsOptional()
-  @IsString()
-  @IsIn(['ASC', 'DESC'])
-  order?: 'ASC' | 'DESC';
+	@IsString()
+	@IsIn(['ASC', 'DESC'])
+	order?: 'ASC' | 'DESC';
 
-  @Expose()
+	@Expose()
 	@IsOptional()
-  @Type(() => ContractsQueryFilterable)
-  @ValidateNested()
-	filterMax?: ContractsQueryFilterable
+	@Type(() => ContractsQueryFilterable)
+	@ValidateNested()
+	filterMax?: ContractsQueryFilterable;
 
-  @Expose()
-  @IsOptional()
-  @Type(() => ContractsQueryFilterable)
-  @ValidateNested()
-  filterMin?: ContractsQueryFilterable
+	@Expose()
+	@IsOptional()
+	@Type(() => ContractsQueryFilterable)
+	@ValidateNested()
+	filterMin?: ContractsQueryFilterable;
 }
 
 @Exclude()
 export class ContractJoinable {
-  @Expose()
+	@Expose()
 	@IsInt()
 	id!: number;
 }
 
 @Exclude()
 export class ContractInsertable {
-  @Expose()
+	@Expose()
 	@IsOptional()
 	@IsString()
 	code?: string;
 
-  @Expose()
+	@Expose()
 	@IsString()
 	name!: string;
 
-  @Expose()
+	@Expose()
 	@Type(() => CustomerJoinable)
 	@ValidateNested()
 	customer!: CustomerJoinable;
 
-  @Expose()
+	@Expose()
 	@Type(() => Date)
 	@IsDate()
 	startAt!: Date;
 
-  @Expose()
+	@Expose()
 	@Type(() => Date)
 	@IsDate()
 	deadlineAt!: Date;
 
-  @Expose()
+	@Expose()
 	@IsOptional()
 	@IsString()
 	description?: string;
 
-  @Expose()
+	@Expose()
 	@IsOptional()
 	@IsBoolean()
 	isDone?: boolean;
 
-  @Expose()
+	@Expose()
 	@Type(() => Monetary)
 	@ValidateNested()
 	price!: Monetary;
@@ -119,30 +123,30 @@ export class ContractInsertable {
 
 @Exclude()
 export class ContractUpdatable {
-  @Expose()
+	@Expose()
 	@IsOptional()
 	code?: string;
 
-  @Expose()
+	@Expose()
 	@IsOptional()
 	name?: string;
 
-  @Expose()
+	@Expose()
 	@Type(() => Date)
 	@IsOptional()
 	startAt?: Date;
 
-  @Expose()
+	@Expose()
 	@Type(() => Date)
 	@IsOptional()
 	deadlineAt?: Date;
 
-  @Expose()
+	@Expose()
 	@Type(() => CustomerJoinable)
 	@IsOptional()
 	customer?: CustomerJoinable;
 
-  @Expose()
+	@Expose()
 	@Type(() => Monetary)
 	@IsOptional()
 	price?: Monetary;

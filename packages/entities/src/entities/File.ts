@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { IsInt, IsHash, IsString, IsMimeType, ValidateNested } from 'class-validator';
+import { IsHash, IsInt, IsMimeType, IsString, ValidateNested } from 'class-validator';
 import { Column, Entity, PrimaryGeneratedColumn, Unique } from 'typeorm';
 
 import { Metadata } from './Metadata';

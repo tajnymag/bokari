@@ -31,21 +31,14 @@ interface TypedVueI18n extends VueI18n {
 		locale?: TypedLocale
 	): VueI18n.DateTimeFormatResult;
 
-	d(
-		value: number | string | Date,
-		args?: { [key: string]: string }
-	): VueI18n.DateTimeFormatResult;
+	d(value: number | string | Date, args?: { [key: string]: string }): VueI18n.DateTimeFormatResult;
 
 	d(
 		value: number | string | Date,
 		options?: VueI18n.DateTimeFormatOptions
 	): VueI18n.DateTimeFormatResult;
 
-	n(
-		value: number,
-		key?: TypedLocaleMessagePath,
-		locale?: TypedLocale
-	): VueI18n.NumberFormatResult;
+	n(value: number, key?: TypedLocaleMessagePath, locale?: TypedLocale): VueI18n.NumberFormatResult;
 
 	n(value: number, args?: { [key: string]: string }): VueI18n.NumberFormatResult;
 

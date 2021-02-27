@@ -24,10 +24,7 @@
 				</v-col>
 
 				<v-col cols="12" md="6">
-					<contact-list-card
-						v-model="customer.person.contacts"
-						:person-id="customer.person.id"
-					/>
+					<contact-list-card v-model="customer.person.contacts" :person-id="customer.person.id" />
 				</v-col>
 
 				<v-col cols="12">
@@ -96,9 +93,7 @@ export default defineComponent({
 		const customer = asyncComputed<Customer | null>(
 			async () => {
 				try {
-					return customersAPIClient
-						.getCustomerById(props.customerId)
-						.then(res => res.data);
+					return customersAPIClient.getCustomerById(props.customerId).then(res => res.data);
 				} catch {
 					await router.push('/404');
 					return null;
@@ -114,10 +109,7 @@ export default defineComponent({
 
 			if (!detailsEditable.value && customer.value?.person) {
 				try {
-					await peopleAPIClient.editPerson(
-						customer.value.person.id,
-						customer.value.person
-					);
+					await peopleAPIClient.editPerson(customer.value.person.id, customer.value.person);
 					showToast({
 						message: 'Jméno klienta bylo úspěšně aktualizováno.',
 						type: 'success'
