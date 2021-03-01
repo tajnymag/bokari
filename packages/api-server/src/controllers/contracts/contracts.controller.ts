@@ -64,26 +64,22 @@ export class ContractsController {
 			}
 
 			const filterable: (keyof ContractsQueryFilterable)[] = ['deadlineAt', 'startAt'];
+			const filters: { filter?: ContractsQueryFilterable; operator: '<=' | '>=' }[] = [
+				{ filter: query.filterMax, operator: '<=' },
+				{ filter: query.filterMin, operator: '>=' }
+			];
 
 			for (const filterProperty of filterable) {
-				if (
-					query.filterMax &&
-					isNotEmptyObject(query.filterMax) &&
-					filterProperty in query.filterMax
-				) {
-					qb.andWhere(`Contract.${filterable} <= :value`, {
-						value: query.filterMax[filterProperty]
-					});
-				}
-
-				if (
-					query.filterMin &&
-					isNotEmptyObject(query.filterMin) &&
-					filterProperty in query.filterMin
-				) {
-					qb.andWhere(`Contract.${filterable} >= :value`, {
-						value: query.filterMin[filterProperty]
-					});
+				for (const filterObject of filters) {
+					if (
+						filterObject.filter &&
+						isNotEmptyObject(filterObject.filter) &&
+						filterProperty in filterObject.filter
+					) {
+						qb.andWhere(`Contract.${filterable} ${filterObject.operator} :value`, {
+							value: filterObject.filter[filterProperty]
+						});
+					}
 				}
 			}
 		};
