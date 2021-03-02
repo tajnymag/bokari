@@ -1,14 +1,16 @@
-# bokari
+# Bokari
 
 Contract tracking app for small businesses
 
-## UI Screenshots (strongly WIP)
+![Contract detail](contract-screen.readme.png)
 
-![Login screen](https://i.imgur.com/LW1fqFe.png)
+## Quick run
 
-![Contract list](https://i.imgur.com/MAGKLAa.png)
-
-![Contract detail](https://i.imgur.com/Oq7JHxR.png)
+1. make sure docker and docker-compose are installed on your system
+2. edit the file `./docker-compose.yml` based on your environment
+    * these variables are **REQUIRED** to be changed or passed while running docker-compose up:
+        * JWT_PRIVATE_KEY
+        * JWT_PUBLIC_KEY
 
 ## Development setup
 
@@ -20,26 +22,72 @@ Contract tracking app for small businesses
 
 ### 2. Setup your postgres instance
 
-1. In your postgres instance, run create and insert script from the `packages/database/sql` directory. This should setup the database structure as needed.
+Create an empty database in your Postgres instance. By default the server expects it to be named "bokari" with a "public" schema.
 
-    BE CAREFUL, create.sql automatically drops the `public` scheme and recreates it. Be sure to run it in an isolated database.
+### 3. Setup your API server configuration
+1. Configure and pass these environment variables to your API server either by adding them to `packages/api-server/.env` or passing them manually to the process
+   * Pay attention to the JWT_(PRIVATE|PUBLIC)_KEY variables. The server expects them to be a valid RSA256 keys and will either not verify tokens correctly or won't start at all if correct values are not provided.
 
-2. Make a copy of the file `packages/database/.env.example`, name it as `packages/database/.env` and edit its contents based on your postgres instance info.
+```sh
+# with current server implementation, can be postgres or mysql
+# only postgres is tested
+TYPEORM_CONNECTION=postgres
+# address or hostname of your database instance
+TYPEORM_HOST=database_address
+# database user credentials
+TYPEORM_USERNAME=postgres
+TYPEORM_PASSWORD=changeme
+# name of the database in your database instance
+TYPEORM_DATABASE=bokari
+# port on which the database listens on
+TYPEORM_PORT=5432
+# whether to ALTER target schema to match local ORM entities
+TYPEORM_SYNCHRONIZE=true
+# whether to log executed SQL queries to STDOUT
+TYPEORM_LOGGING=true
+# absolute path where to persistently store 
+BOKARI_UPLOADS_STORAGE_DIR=/app/uploads
+# RSA256 private ky in PEM format
+JWT_PRIVATE_KEY=changeme
+# RSA256 public key in PEM format
+JWT_PUBLIC_KEY=changeme
+# port on which the API server will listen on
+PORT=3000
+```
 
-### 3. Install projects node dependencies
+### 5. Set the URL your API server listens on
+
+Create a file `packages/ui/.env` with this variable set to your desired URL.
+
+```sh
+VUE_APP_BOKARI_API_URL="http://localhost:3000"
+```
+
+### 4. Install projects node dependencies
 
 In the root project folder run this command:
 
 ```bash
-yarn install && yarn lerna run generate:client --scope @bokari/database && yarn lerna bootstrap
+yarn install
 ```
 
 It should have installed all the needed js libraries/tools and nest it in the project's node_modules directories. No need to worry about polluting your system files.
 
-### 4. Build the project
+### 5. Build the project
 
 #### Build all subprojects at once
 
 ```bash
 yarn build
+```
+
+### 6. Start the services
+
+From the repo's directory run these commands in their own shell instances
+
+```bash
+# Start the webpack dev server to serve the UI
+yarn workspace @bokari/ui serve
+# Start the API server
+yarn workspace @bokari/api-server start
 ```
