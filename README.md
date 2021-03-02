@@ -2,7 +2,7 @@
 
 Contract tracking app for small businesses
 
-![Contract detail](contract-screen.readme.png)
+![Contract detail](https://i.imgur.com/Xg4m16V.png)
 
 ## Quick run
 
