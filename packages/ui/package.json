@@ -16,7 +16,7 @@
     "@mdi/font": "^5.9.55",
     "@vue/composition-api": "^1.0.0-rc.1",
     "@vueuse/core": "^4.1.1",
-    "axios": "^0.21.1",
+    "axios": "^1.8.2",
     "axios-auth-refresh": "^3.1.0",
     "babel-loader": "^8.2.2",
     "core-js": "^3.6.5",
